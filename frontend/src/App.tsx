@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import Component from '@/components/Component';
+
 import reactLogo from '@/assets/react.svg';
 
 import './App.css';
@@ -11,6 +13,7 @@ const App = () => {
   return (
     <>
       <div>
+        <Component />
         <a href="https://vite.dev" target="_blank" rel="noreferrer">
           <img src={viteLogo} className="logo" alt="Vite logo" />
         </a>
