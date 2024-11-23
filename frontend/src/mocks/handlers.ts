@@ -1,5 +1,7 @@
 import { HttpResponse, http } from 'msw';
 
+import mockFeeds from './feeds.json';
+
 export const handlers = [
   // Intercept "GET https://example.com/user" requests...
   http.get('https://example.com/user', () => {
@@ -9,5 +11,9 @@ export const handlers = [
       firstName: 'John',
       lastName: 'Maverick',
     });
+  }),
+
+  http.get('example.com/feeds', () => {
+    return HttpResponse.json(mockFeeds);
   }),
 ];
