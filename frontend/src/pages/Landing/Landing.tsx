@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import { Outlet } from 'react-router-dom';
 
-import FeedList from '@/components/Feed/FeedList';
 import ModalLayout from '@/components/_common/Modal/ModalLayout';
 
 const Landing = () => {
@@ -8,9 +8,9 @@ const Landing = () => {
 
   return (
     <div>
-      <button onClick={() => setIsOpen(true)}>트리 에셋</button>
+      <button onClick={() => setIsOpen(!isOpen)}>트리 에셋</button>
       <ModalLayout isOpen={isOpen}>
-        <FeedList />
+        <Outlet />
       </ModalLayout>
     </div>
   );

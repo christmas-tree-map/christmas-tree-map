@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import App from './App.tsx';
+import FeedList from './components/Feed/FeedList/FeedList.tsx';
+import FeedSubmit from './components/Feed/FeedSubmit/FeedSubmit.tsx';
 import Landing from './pages/Landing/Landing.tsx';
 
 async function enableMocking() {
@@ -26,6 +28,16 @@ const router = createBrowserRouter([
       {
         path: '',
         element: <Landing />,
+        children: [
+          {
+            path: '',
+            element: <FeedList />,
+          },
+          {
+            path: 'submit',
+            element: <FeedSubmit />,
+          },
+        ],
       },
     ],
   },

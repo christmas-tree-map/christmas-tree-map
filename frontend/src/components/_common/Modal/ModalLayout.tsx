@@ -1,5 +1,7 @@
 import { createPortal } from 'react-dom';
 
+import * as S from './ModalLayout.css';
+
 interface ModalProps {
   children: React.ReactNode;
   isOpen: boolean;
@@ -12,7 +14,7 @@ const ModalLayout = ({ children, isOpen }: ModalProps) => {
     return null;
   }
 
-  return createPortal(<>{children}</>, portalElement);
+  return createPortal(<div className={S.modalLayoutStyle}>{children}</div>, portalElement);
 };
 
 export default ModalLayout;

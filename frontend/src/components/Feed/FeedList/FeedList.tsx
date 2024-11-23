@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { getFeeds } from '@/apis/Feed';
 
-import FeedItem from './FeedItem/FeedItem';
-import type { FeedItemType } from './FeedItem/FeedItem.type';
+import FloatingButton from '../../_common/FloatingButton/FloatingButton';
+import FeedItem from '../FeedItem/FeedItem';
+import type { FeedItemType } from '../FeedItem/FeedItem.type';
 
 const FeedList = () => {
+  const navigate = useNavigate();
   const [feeds, setFeeds] = useState<FeedItemType[]>([]);
 
   useEffect(() => {
@@ -16,6 +19,10 @@ const FeedList = () => {
 
     fetchFeeds();
   }, []);
+
+  const handleClickFloatingButton = () => {
+    navigate('/submit');
+  };
 
   return (
     <>
@@ -34,6 +41,8 @@ const FeedList = () => {
       ) : (
         <>피드가 없습니다.</>
       )}
+
+      <FloatingButton onHandleClick={handleClickFloatingButton} />
     </>
   );
 };
