@@ -5,7 +5,7 @@ import { getFeeds } from '@/apis/Feed';
 
 import FloatingButton from '../../_common/FloatingButton/FloatingButton';
 import FeedItem from '../FeedItem/FeedItem';
-import type { FeedItemType } from '../FeedItem/FeedItem.type';
+import { FeedItemType } from '../FeedItem/FeedItem.type';
 
 const FeedList = () => {
   const navigate = useNavigate();
