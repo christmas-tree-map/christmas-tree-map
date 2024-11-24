@@ -10,6 +10,7 @@ export const Layout = style({
 
 export const Label = style({
   font: vars.fonts.label,
+  color: vars.colors.grey[700],
 });
 
 export const Textarea = style({
