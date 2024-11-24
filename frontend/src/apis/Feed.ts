@@ -6,3 +6,15 @@ export const getFeeds = async () => {
   const data = await fetch(`${API_URL}/feeds`).then((response) => response.json());
   return data;
 };
+
+interface PostFeedRequest {
+  imageUrl: string;
+  content: string;
+}
+
+export const postFeed = async ({ imageUrl, content }: PostFeedRequest) => {
+  await fetch(`${API_URL}/feed`, {
+    method: 'POST',
+    body: JSON.stringify({ imageUrl, content }),
+  });
+};
