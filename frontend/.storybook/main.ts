@@ -12,5 +12,9 @@ const config: StorybookConfig = {
     name: '@storybook/react-vite',
     options: {},
   },
+  previewBody: (body) => `
+    ${body}
+    <div id="modal" />
+  `,
 };
 export default config;

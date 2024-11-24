@@ -10,7 +10,7 @@ interface ModalProps {
 const portalElement = document.getElementById('modal') as HTMLElement;
 
 const ModalLayout = ({ children, isOpen }: ModalProps) => {
-  if (!isOpen) {
+  if (!isOpen || !portalElement) {
     return null;
   }
 
