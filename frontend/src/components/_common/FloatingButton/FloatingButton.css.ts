@@ -6,7 +6,7 @@ export const floatingButtonStyle = style({
   alignItems: 'center',
 
   position: 'fixed',
-  bottom: '20px',
+  bottom: '112px',
   right: '20px',
 
   width: '45px',

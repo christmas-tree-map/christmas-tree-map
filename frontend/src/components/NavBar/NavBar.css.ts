@@ -8,6 +8,7 @@ export const Layout = style({
   position: 'fixed',
   bottom: 0,
   left: 0,
+  zIndex: 1,
 
   width: '100%',
   height: '92px',
