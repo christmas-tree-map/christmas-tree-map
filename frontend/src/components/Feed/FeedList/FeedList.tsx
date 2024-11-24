@@ -7,6 +7,8 @@ import FloatingButton from '../../_common/FloatingButton/FloatingButton';
 import FeedItem from '../FeedItem/FeedItem';
 import { FeedItemType } from '../FeedItem/FeedItem.type';
 
+import * as S from './FeedList.css';
+
 const FeedList = () => {
   const navigate = useNavigate();
   const [feeds, setFeeds] = useState<FeedItemType[]>([]);
@@ -25,7 +27,7 @@ const FeedList = () => {
   };
 
   return (
-    <>
+    <div className={S.Layout}>
       {feeds.length > 0 ? (
         feeds.map((feed) => (
           <FeedItem
@@ -43,7 +45,7 @@ const FeedList = () => {
       )}
 
       <FloatingButton onHandleClick={handleClickFloatingButton} />
-    </>
+    </div>
   );
 };
 
