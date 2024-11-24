@@ -1,36 +1,27 @@
-import { useState } from 'react';
+import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import Component from '@/components/Component';
-
-import reactLogo from '@/assets/react.svg';
-
-import './App.css';
-import viteLogo from '/vite.svg';
+import TreeMap from '@/pages/TreeMap/TreeMap';
 
 const App = () => {
-  const [count, setCount] = useState(0);
-
-  return (
-    <>
-      <div>
-        <Component />
-        <a href="https://vite.dev" target="_blank" rel="noreferrer">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" rel="noreferrer">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
-    </>
+  const router = createBrowserRouter(
+    [
+      {
+        path: '/',
+        element: <TreeMap />,
+      },
+    ],
+    {
+      future: {
+        v7_relativeSplatPath: true,
+        v7_fetcherPersist: true,
+        v7_normalizeFormMethod: true,
+        v7_partialHydration: true,
+        v7_skipActionErrorRevalidation: true,
+      },
+    },
   );
+
+  return <RouterProvider router={router} future={{ v7_startTransition: true }} />;
 };
 
 export default App;
