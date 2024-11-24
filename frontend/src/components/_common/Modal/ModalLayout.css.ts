@@ -20,6 +20,7 @@ export const ModalLayoutStyle = style({
 
   borderRadius: '30px 30px 0 0',
 
+  boxShadow: '6px 0 30px 0 rgba(0, 0, 0, 0.12), 12px 0px 38px 0 rgba(0, 0, 0, 0.08)',
   backgroundColor: vars.colors.white,
 });
 
