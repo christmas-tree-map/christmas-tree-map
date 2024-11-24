@@ -1,5 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
+import { vars } from '@/styles/theme.css';
+
 export const Layout = style({
   display: 'flex',
   flexDirection: 'column',
@@ -14,4 +16,6 @@ export const ImageUploadBox = style({
   gap: '8px',
 });
 
-export const Label = style({}); // 추후 스타일 코드 추가
+export const Label = style({
+  font: vars.fonts.label,
+});

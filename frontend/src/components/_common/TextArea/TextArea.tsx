@@ -9,7 +9,7 @@ const TextAreaMain = ({ children, onChange, value }: TextAreaMainProps) => {
   return (
     <div className={S.Layout}>
       {children}
-      <textarea onChange={onChange} value={value} />
+      <textarea className={S.Textarea} onChange={onChange} value={value} />
     </div>
   );
 };
