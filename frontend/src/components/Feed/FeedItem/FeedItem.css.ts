@@ -1,5 +1,7 @@
 import { style } from '@vanilla-extract/css';
 
+import { vars } from '@/styles/theme.css';
+
 export const Layout = style({
   display: 'flex',
   flexDirection: 'column',
@@ -17,13 +19,13 @@ export const Header = style({
 });
 
 export const Body = style({
-  fontSize: '16px',
+  font: vars.fonts.body,
   wordBreak: 'break-all',
 });
 
 export const CreatedAt = style({
-  fontSize: '12px',
-  color: 'gray', // 임시 색상
+  font: vars.fonts.tiny,
+  color: vars.colors.grey[500],
 });
 
 export const Image = style({
