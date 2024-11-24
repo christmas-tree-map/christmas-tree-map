@@ -4,7 +4,7 @@ const FeedItem = ({ name, createdAt, imageUrl, likeCount, content }: FeedItemTyp
   return (
     <div>
       {name}
-      {/* {createdAt.toLocaleTimeString()} */}
+      {createdAt}
       <img src={imageUrl} alt="feed" />
       {likeCount}
       {content}
