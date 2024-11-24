@@ -4,4 +4,6 @@ export interface LabelProps {
 
 export interface TextAreaMainProps {
   children?: React.ReactNode;
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  value: string;
 }

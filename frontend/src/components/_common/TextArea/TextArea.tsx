@@ -5,11 +5,11 @@ const Label = ({ children }: LabelProps) => {
   return <p className={S.Label}>{children}</p>;
 };
 
-const TextAreaMain = ({ children }: TextAreaMainProps) => {
+const TextAreaMain = ({ children, onChange, value }: TextAreaMainProps) => {
   return (
     <div className={S.Layout}>
       {children}
-      <textarea />
+      <textarea onChange={onChange} value={value} />
     </div>
   );
 };
