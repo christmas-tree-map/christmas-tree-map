@@ -13,19 +13,30 @@ const TreeMap = () => {
   useEffect(() => {
     const container = document.getElementById('map');
 
-    const options = {
-      center: new window.kakao.maps.LatLng(33.450701, 126.570667),
-      level: 3,
-    };
+    if (!navigator.geolocation) {
+      const options = {
+        center: new window.kakao.maps.LatLng(37.5503, 126.9971),
+        level: 3,
+      };
 
-    new window.kakao.maps.Map(container, options);
+      new window.kakao.maps.Map(container, options);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition((position) => {
+      const latitude = position.coords.latitude;
+      const longitude = position.coords.longitude;
+
+      const options = {
+        center: new window.kakao.maps.LatLng(latitude, longitude),
+        level: 3,
+      };
+
+      new window.kakao.maps.Map(container, options);
+    });
   }, []);
 
-  return (
-    <div id="map" className={S.Layout}>
-      Hello World!
-    </div>
-  );
+  return <div id="map" className={S.Layout} />;
 };
 
 export default TreeMap;
