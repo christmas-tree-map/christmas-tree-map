@@ -14,7 +14,15 @@ const ModalLayout = ({ children, isOpen }: ModalProps) => {
     return null;
   }
 
-  return createPortal(<div className={S.modalLayoutStyle}>{children}</div>, portalElement);
+  return createPortal(
+    <div className={S.ModalLayoutStyle}>
+      <div className={S.BarContainer}>
+        <div className={S.Bar} />
+      </div>
+      {children}
+    </div>,
+    portalElement,
+  );
 };
 
 export default ModalLayout;

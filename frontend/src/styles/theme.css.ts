@@ -42,6 +42,7 @@ export const vars = createThemeContract({
       800: null,
       900: null,
     },
+    white: null,
   },
   fonts: {
     body: null,
@@ -89,6 +90,7 @@ createGlobalTheme(':root', vars, {
       800: '#383838',
       900: '#181818',
     },
+    white: '#FFFFFF',
   },
   fonts: {
     body: '16px Pretendard',
