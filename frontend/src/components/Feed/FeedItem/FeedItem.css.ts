@@ -18,12 +18,12 @@ export const Header = style({
   width: '100%',
 });
 
-export const Body = style({
+export const BodyText = style({
   font: vars.fonts.body,
   wordBreak: 'break-all',
 });
 
-export const CreatedAt = style({
+export const CreatedAtText = style({
   font: vars.fonts.tiny,
   color: vars.colors.grey[500],
 });
@@ -34,8 +34,8 @@ export const Image = style({
   objectFit: 'cover',
 });
 
-export const LikeCount = style([
-  Body,
+export const LikeCountText = style([
+  BodyText,
   {
     textAlign: 'right',
   },
