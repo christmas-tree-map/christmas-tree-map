@@ -1,8 +1,8 @@
 import * as S from './TextArea.css';
 import { LabelProps, TextAreaMainProps } from './TextArea.type';
 
-const Label = ({ children }: LabelProps) => {
-  return <p className={S.Label}>{children}</p>;
+const Label = ({ label }: LabelProps) => {
+  return <p className={S.Label}>{label}</p>;
 };
 
 const TextAreaMain = ({ children, onChange, value }: React.PropsWithChildren<TextAreaMainProps>) => {

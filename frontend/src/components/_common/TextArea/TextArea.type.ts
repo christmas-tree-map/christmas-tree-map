@@ -1,5 +1,5 @@
 export interface LabelProps {
-  children: string;
+  label: string;
 }
 
 export interface TextAreaMainProps {

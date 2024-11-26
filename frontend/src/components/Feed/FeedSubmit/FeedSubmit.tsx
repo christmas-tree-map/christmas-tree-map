@@ -24,10 +24,10 @@ const FeedSubmit = () => {
       {/* 이미지 업로드 방식 논의 필요 */}
       <div className={S.ImageUploadBox}>
         <p className={S.Label}>업로드 할 이미지를 선택해 주세요.</p>
-        <img src="" alt="이미지 업로드" /> 
+        <img src="" alt="이미지 업로드" />
       </div>
       <TextArea value={content} onChange={(e) => setContent(e.target.value)}>
-        <TextArea.Label>설명</TextArea.Label>
+        <TextArea.Label label="설명" />
       </TextArea>
       <button type="submit">제출</button>
     </form>
