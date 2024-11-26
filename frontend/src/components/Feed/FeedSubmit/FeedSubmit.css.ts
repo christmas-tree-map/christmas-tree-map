@@ -16,6 +16,6 @@ export const ImageUploadBox = style({
   gap: '8px',
 });
 
-export const Label = style({
+export const LabelText = style({
   font: vars.fonts.label,
 });

@@ -23,7 +23,7 @@ const FeedSubmit = () => {
     <form className={S.Layout} onSubmit={handleSubmit}>
       {/* 이미지 업로드 방식 논의 필요 */}
       <div className={S.ImageUploadBox}>
-        <p className={S.Label}>업로드 할 이미지를 선택해 주세요.</p>
+        <p className={S.LabelText}>업로드 할 이미지를 선택해 주세요.</p>
         <img src="" alt="이미지 업로드" />
       </div>
       <TextArea value={content} onChange={(e) => setContent(e.target.value)}>

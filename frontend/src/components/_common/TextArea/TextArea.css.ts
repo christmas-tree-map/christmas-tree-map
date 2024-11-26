@@ -8,7 +8,7 @@ export const Layout = style({
   gap: '8px',
 });
 
-export const Label = style({
+export const LabelText = style({
   font: vars.fonts.label,
   color: vars.colors.grey[700],
 });
