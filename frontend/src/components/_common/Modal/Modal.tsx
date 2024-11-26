@@ -1,6 +1,6 @@
 import { createPortal } from 'react-dom';
 
-import * as S from './ModalLayout.css';
+import * as S from './Modal.css';
 
 interface ModalProps {
   isOpen: boolean;
@@ -8,13 +8,13 @@ interface ModalProps {
 
 const portalElement = document.getElementById('modal') as HTMLElement;
 
-const ModalLayout = ({ children, isOpen }: React.PropsWithChildren<ModalProps>) => {
+const Modal = ({ children, isOpen }: React.PropsWithChildren<ModalProps>) => {
   if (!isOpen || !portalElement) {
     return null;
   }
 
   return createPortal(
-    <div className={S.ModalLayoutStyle}>
+    <div className={S.ModalLayout}>
       <div className={S.BarContainer}>
         <div className={S.Bar} />
       </div>
@@ -24,4 +24,4 @@ const ModalLayout = ({ children, isOpen }: React.PropsWithChildren<ModalProps>) 
   );
 };
 
-export default ModalLayout;
+export default Modal;
