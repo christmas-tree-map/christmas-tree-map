@@ -1,18 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import ModalLayout from './ModalLayout';
+import Modal from './Modal';
 
 const meta = {
-  title: 'Common/Modal/ModalLayout',
-  component: ModalLayout,
+  title: 'Common/Modal/Modal',
+  component: Modal,
   parameters: {
     layout: 'centered',
   },
   tags: ['autodocs'],
-} satisfies Meta<typeof ModalLayout>;
+} satisfies Meta<typeof Modal>;
 
 export default meta;
-type Story = StoryObj<typeof ModalLayout>;
+type Story = StoryObj<typeof Modal>;
 
 export const Default: Story = {
   args: {

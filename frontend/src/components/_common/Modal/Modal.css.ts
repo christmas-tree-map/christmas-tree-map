@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 
 import { vars } from '@/styles/theme.css';
 
-export const ModalLayoutStyle = style({
+export const ModalLayout = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
