@@ -5,7 +5,7 @@ const Label = ({ children }: LabelProps) => {
   return <p className={S.Label}>{children}</p>;
 };
 
-const TextAreaMain = ({ children, onChange, value }: TextAreaMainProps) => {
+const TextAreaMain = ({ children, onChange, value }: React.PropsWithChildren<TextAreaMainProps>) => {
   return (
     <div className={S.Layout}>
       {children}
