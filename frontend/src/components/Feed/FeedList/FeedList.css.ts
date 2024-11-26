@@ -1,5 +1,5 @@
 import { style } from '@vanilla-extract/css';
 
-export const Text = style({
-  color: 'red',
+export const Layout = style({
+  height: '1px',
 });
