@@ -24,7 +24,7 @@ public class TreeEntity extends TimestampEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "location", nullable = false, columnDefinition = "GEOMETRY")
+    @Column(name = "location", nullable = false)
     private Point location;
 
     @Column(name = "image_code", nullable = false)
