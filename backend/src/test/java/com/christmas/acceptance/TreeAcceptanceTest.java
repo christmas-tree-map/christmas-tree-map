@@ -4,15 +4,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 
@@ -22,16 +18,7 @@ import com.christmas.tree.dto.TreeGetResponse;
 import io.restassured.RestAssured;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-class TreeAcceptanceTest {
-
-    @LocalServerPort
-    private int port;
-
-    @BeforeEach
-    void setUp() {
-        RestAssured.port = port;
-    }
+class TreeAcceptanceTest extends AcceptanceFixture {
 
     @Order(1)
     @DisplayName("1. 트리 생성 api를 호출한다.")
@@ -56,14 +43,14 @@ class TreeAcceptanceTest {
     @DisplayName("2. 트리 조회 api를 호출한다.")
     @Test
     void get_tree() {
-        final Double latitude = 127.1;
-        final Double longitude = 37.5;
+        final Double longitude = 127.1;
+        final Double latitude = 37.5;
         final List<TreeGetResponse> response =
                 RestAssured
                         .given()
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .param("latitude", latitude)
                         .param("longitude", longitude)
+                        .param("latitude", latitude)
 
                         .when()
                         .log()
