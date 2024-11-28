@@ -9,11 +9,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.christmas.tree.dto.TreeCreateRequest;
 import com.christmas.tree.dto.TreeGetRequest;
 import com.christmas.tree.dto.TreeGetResponse;
 
+@Transactional
 @SpringBootTest
 class TreeServiceTest {
 
@@ -24,9 +26,9 @@ class TreeServiceTest {
     @Test
     void create_tree() {
         // given
-        final Double latitude = 127.1;
-        final Double longitude = 37.5;
-        final TreeCreateRequest treeCreateRequest = new TreeCreateRequest(latitude, longitude, "test");
+        final Double longitude = 127.1;
+        final Double latitude = 37.5;
+        final TreeCreateRequest treeCreateRequest = new TreeCreateRequest(longitude, latitude, "test");
 
         // when & then
         assertThatCode(() -> treeService.createTree(treeCreateRequest)).doesNotThrowAnyException();
@@ -37,10 +39,10 @@ class TreeServiceTest {
     void get_tree_by_range() {
         // given
         createTree(127.12, 37.52);  // 2km 밖
-        createTree(127.07, 37.47);  // 2km 안
-        final Double latitude = 127.1;
-        final Double longitude = 37.5;
-        final TreeGetRequest request = new TreeGetRequest(latitude, longitude);
+        createTree(127.09, 37.49);  // 2km 안
+        final Double longitude = 127.1;
+        final Double latitude = 37.5;
+        final TreeGetRequest request = new TreeGetRequest(longitude, latitude);
 
         // when
         final List<TreeGetResponse> actual = treeService.getTreeByRange(request);
@@ -49,8 +51,8 @@ class TreeServiceTest {
         assertThat(actual).hasSize(1);
     }
 
-    private void createTree(final Double latitude, final Double longitude) {
-        final TreeCreateRequest treeCreateRequest = new TreeCreateRequest(latitude, longitude, "test");
+    private void createTree(final Double longitude, final Double latitude) {
+        final TreeCreateRequest treeCreateRequest = new TreeCreateRequest(longitude, latitude, "test");
         treeService.createTree(treeCreateRequest);
     }
 }
