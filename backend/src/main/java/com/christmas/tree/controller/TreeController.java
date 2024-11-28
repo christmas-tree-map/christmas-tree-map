@@ -22,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-public class TreeController {
+public class TreeController implements TreeControllerDocs {
 
     private final TreeService treeService;
 

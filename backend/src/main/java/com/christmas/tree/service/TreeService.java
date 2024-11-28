@@ -23,13 +23,13 @@ public class TreeService {
     private final TreeRepository treeRepository;
 
     public long createTree(final TreeCreateRequest request) {
-        final Point location = PointGenerator.generate(request.latitude(), request.longitude());
+        final Point location = PointGenerator.generate(request.longitude(), request.latitude());
         final TreeEntity tree = treeRepository.save(new TreeEntity(location, request.imageCode()));
         return tree.getId();
     }
 
     public List<TreeGetResponse> getTreeByRange(final TreeGetRequest request) {
-        final Point location = PointGenerator.generate(request.latitude(), request.longitude());
+        final Point location = PointGenerator.generate(request.longitude(), request.latitude());
         List<TreeEntity> trees = treeRepository.findByLocationInRange(location, SEARCH_RADIUS_KM);
         return trees.stream()
                 .map(tree -> {
