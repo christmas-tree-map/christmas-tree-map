@@ -13,8 +13,10 @@
     "^react",
     "<THIRD_PARTY_MODULES>",
     "^@/pages/(.*)$",
+    "^@/components/_common/(.*)$",
     "^@/components/(.*)$",
     "^@/apis/(.*)$",
+    "^@/hooks/_common/(.*)$",
     "^@/hooks/(.*)$",
     "^@/queries/(.*)$",
     "^@/utils/(.*)$",
@@ -24,6 +26,5 @@
     "^@/styles/(.*)$",
     "^[./]"
   ],
-  "importOrderSeparation": true,
   "importOrderSortSpecifiers": true
 }

@@ -1,11 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-
-import App from './App.tsx';
-import FeedList from './components/Feed/FeedList/FeedList.tsx';
-import FeedSubmit from './components/Feed/FeedSubmit/FeedSubmit.tsx';
-import Landing from './pages/Landing/Landing.tsx';
+import App from '@/App';
+import './styles/global.css';
 
 async function enableMocking() {
   return;
@@ -20,33 +16,10 @@ async function enableMocking() {
   // return worker.start();
 }
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <App />,
-    children: [
-      {
-        path: '',
-        element: <Landing />,
-        children: [
-          {
-            path: '',
-            element: <FeedList />,
-          },
-          {
-            path: 'submit',
-            element: <FeedSubmit />,
-          },
-        ],
-      },
-    ],
-  },
-]);
-
 enableMocking().then(() =>
   createRoot(document.getElementById('root')!).render(
     <StrictMode>
-      <RouterProvider router={router} />
+      <App />
     </StrictMode>,
   ),
 );

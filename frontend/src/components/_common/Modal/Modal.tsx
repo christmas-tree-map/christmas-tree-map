@@ -1,5 +1,4 @@
 import { createPortal } from 'react-dom';
-
 import * as S from './Modal.css';
 
 interface ModalProps {

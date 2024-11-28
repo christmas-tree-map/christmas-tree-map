@@ -1,5 +1,4 @@
 import { HttpResponse, http } from 'msw';
-
 import mockFeeds from './feeds.json';
 
 export const handlers = [

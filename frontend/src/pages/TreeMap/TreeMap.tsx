@@ -1,30 +1,36 @@
 import { useEffect } from 'react';
-
+import { Outlet, useNavigate } from 'react-router-dom';
+import Modal from '@/components/_common/Modal/Modal';
+import useModal from '@/hooks/_common/useModal';
+import useTreeMap from '@/hooks/TreeMap/useTreeMap';
 import * as S from './TreeMap.css';
 
-declare global {
-  interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    kakao: any;
-  }
-}
-
 const TreeMap = () => {
+  const navigate = useNavigate();
+
+  const { isModalOpen, openModal } = useModal();
+  const { map, mapRef, addMarker } = useTreeMap();
+
+  const handleMarkerClick = () => {
+    openModal();
+    navigate('/');
+  };
+
   useEffect(() => {
-    const container = document.getElementById('map');
+    if (map === null) return;
 
-    const options = {
-      center: new window.kakao.maps.LatLng(33.450701, 126.570667),
-      level: 3,
-    };
-
-    new window.kakao.maps.Map(container, options);
-  }, []);
+    navigator.geolocation.getCurrentPosition((position) =>
+      addMarker(map, position.coords.latitude, position.coords.longitude, handleMarkerClick),
+    );
+  }, [map]);
 
   return (
-    <div id="map" className={S.Layout}>
-      Hello World!
-    </div>
+    <>
+      <div ref={mapRef} className={S.Layout} />
+      <Modal isOpen={isModalOpen}>
+        <Outlet />
+      </Modal>
+    </>
   );
 };
 

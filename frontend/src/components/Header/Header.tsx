@@ -1,12 +1,7 @@
 import * as S from './Header.css';
 
 const Header = () => {
-  return (
-    <>
-      <nav className={S.Layout}>Header</nav>
-      <div className={S.Spacer} />
-    </>
-  );
+  return <header className={S.Layout}>Header</header>;
 };
 
 export default Header;
