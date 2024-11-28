@@ -1,7 +1,7 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.4.0'
-	id 'io.spring.dependency-management' version '1.1.6'
+	id 'org.springframework.boot' version '3.3.1'
+	id 'io.spring.dependency-management' version '1.1.5'
 }
 
 group = 'com'
@@ -43,15 +43,12 @@ dependencies {
 	// Hibernate-Spatial(geometry 지원)
 	implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '6.6.2.Final'
 
-	// MySQL - prod
+	// MySQL
 	runtimeOnly 'com.mysql:mysql-connector-j'
-
-	// H2 - local
-	runtimeOnly 'com.h2database:h2'
 
 	// Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testImplementation 'io.rest-assured:rest-assured:5.3.1'
+	testImplementation 'io.rest-assured:rest-assured:5.5.0'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
