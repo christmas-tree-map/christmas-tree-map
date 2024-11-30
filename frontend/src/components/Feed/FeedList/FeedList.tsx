@@ -27,7 +27,7 @@ const FeedList = () => {
 
   return (
     <div className={S.Layout}>
-      {feeds.length > 0 ? (
+      {feeds && feeds.length > 0 ? (
         feeds.map((feed) => (
           <FeedItem
             key={feed.id}
