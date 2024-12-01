@@ -1,10 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import TextArea from '@/components/_common/TextArea/TextArea';
-
 import { postFeed } from '@/apis/feed';
-
 import * as S from './FeedSubmit.css';
 
 const FeedSubmit = () => {

@@ -8,16 +8,15 @@ export const Layout = style({
   position: 'fixed',
   top: 0,
   left: 0,
-  zIndex: 1,
+  zIndex: 100,
 
   width: '100%',
-  height: '48px',
-  padding: '13px 16px',
+  height: '60px',
 
   backgroundColor: '#ffffff',
 });
 
 export const Spacer = style({
   width: '100%',
-  height: '48px',
+  height: '60px',
 });

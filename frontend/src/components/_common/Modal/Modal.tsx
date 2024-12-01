@@ -1,5 +1,4 @@
 import { createPortal } from 'react-dom';
-
 import * as S from './Modal.css';
 
 interface ModalProps {
@@ -14,7 +13,7 @@ const Modal = ({ children, isOpen }: React.PropsWithChildren<ModalProps>) => {
   }
 
   return createPortal(
-    <div className={S.ModalLayout}>
+    <div className={S.Layout}>
       <div className={S.BarContainer}>
         <div className={S.Bar} />
       </div>

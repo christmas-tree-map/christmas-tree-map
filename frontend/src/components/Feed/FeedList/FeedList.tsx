@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { getFeeds } from '@/apis/feed';
-
 import FloatingButton from '../../_common/FloatingButton/FloatingButton';
 import FeedItem from '../FeedItem/FeedItem';
 import { FeedItemType } from '../FeedItem/FeedItem.type';

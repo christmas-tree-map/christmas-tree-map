@@ -3,7 +3,7 @@ import * as S from './Header.css';
 const Header = () => {
   return (
     <>
-      <nav className={S.Layout}>Header</nav>
+      <header className={S.Layout}>Header</header>
       <div className={S.Spacer} />
     </>
   );

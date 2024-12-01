@@ -1,6 +1,5 @@
 // reset.css.ts
 import { globalStyle } from '@vanilla-extract/css';
-
 import * as layers from './layers.css.ts';
 
 globalStyle('body', {
