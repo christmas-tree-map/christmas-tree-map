@@ -1,4 +1,4 @@
-const API_URL = 'https://example.com'; // TODO: 주소 수정하기
+const API_URL = '/api'; // TODO: 주소 수정하기
 
 interface ApiMethodsProps {
   method: 'GET' | 'POST' | 'PATCH' | 'DELETE';
