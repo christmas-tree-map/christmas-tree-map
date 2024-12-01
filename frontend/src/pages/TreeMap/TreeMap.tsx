@@ -13,7 +13,7 @@ const TreeMap = () => {
 
   const handleMarkerClick = () => {
     openModal();
-    navigate('/');
+    navigate('/feeds');
   };
 
   useEffect(() => {
