@@ -8,11 +8,10 @@ export const Layout = style({
   position: 'fixed',
   bottom: 0,
   left: 0,
-  zIndex: 1,
+  zIndex: 100,
 
   width: '100%',
-  height: '92px',
-  padding: '13px 16px',
+  height: '60px',
 
   backgroundColor: '#ffffff',
 });

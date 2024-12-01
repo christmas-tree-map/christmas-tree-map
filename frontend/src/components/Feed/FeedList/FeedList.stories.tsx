@@ -1,7 +1,5 @@
 import { BrowserRouter as Router } from 'react-router-dom';
-
 import { Meta, StoryFn } from '@storybook/react';
-
 import FeedList from './FeedList';
 
 export default {

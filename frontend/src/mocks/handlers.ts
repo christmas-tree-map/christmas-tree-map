@@ -1,15 +1,12 @@
 import { HttpResponse, http } from 'msw';
-
 import mockFeeds from './feeds.json';
 
-const API_URL = 'https://example.com'; // TODO: 주소 수정하기
-
 export const handlers = [
-  http.get(`${API_URL}/feeds`, () => {
+  http.get('/api/feeds', () => {
     return HttpResponse.json({ status: 200, data: mockFeeds });
   }),
 
-  http.post(`${API_URL}/feed`, async ({ request }) => {
+  http.post('/api/feed', async ({ request }) => {
     const data = (await request.json()) as { imageUrl: string; content: string };
     const newData = {
       id: mockFeeds.length + 1,
