@@ -15,3 +15,8 @@ export const Layout = style({
 
   backgroundColor: '#ffffff',
 });
+
+export const Spacer = style({
+  width: '100%',
+  height: '60px',
+});
