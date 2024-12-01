@@ -3,6 +3,7 @@ import Layout from '@/pages/Layout/Layout';
 import TreeMap from '@/pages/TreeMap/TreeMap';
 import FeedList from '@/components/Feed/FeedList/FeedList';
 import FeedSubmit from '@/components/Feed/FeedSubmit/FeedSubmit';
+import Error from './components/_common/Error/Error';
 
 const App = () => {
   const router = createBrowserRouter(
@@ -18,14 +19,18 @@ const App = () => {
               {
                 path: 'feeds',
                 element: <FeedList />,
+                errorElement: <Error />,
               },
               {
                 path: 'submit',
                 element: <FeedSubmit />,
+                errorElement: <Error />,
               },
             ],
+            errorElement: <Error />,
           },
         ],
+        errorElement: <Error />,
       },
     ],
     {
