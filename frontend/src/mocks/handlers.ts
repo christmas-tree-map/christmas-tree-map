@@ -3,7 +3,7 @@ import mockFeeds from './feeds.json';
 
 export const handlers = [
   http.get('/api/feeds', () => {
-    return HttpResponse.json(mockFeeds);
+    return HttpResponse.json({ status: 200, data: mockFeeds });
   }),
 
   http.post('/api/feed', async ({ request }) => {

@@ -13,7 +13,7 @@ const FeedSubmit = () => {
     e.preventDefault();
 
     await postFeed({ imageUrl, content });
-    navigate('/');
+    navigate('/feeds');
   };
 
   return (

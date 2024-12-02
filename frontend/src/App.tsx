@@ -1,6 +1,7 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Layout from '@/pages/Layout/Layout';
 import TreeMap from '@/pages/TreeMap/TreeMap';
+import Error from '@/pages/Error/Error';
 import FeedList from '@/components/Feed/FeedList/FeedList';
 import FeedSubmit from '@/components/Feed/FeedSubmit/FeedSubmit';
 
@@ -10,6 +11,7 @@ const App = () => {
       {
         path: '/',
         element: <Layout />,
+        errorElement: <Error />,
         children: [
           {
             path: '',
