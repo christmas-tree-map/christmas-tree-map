@@ -11,6 +11,7 @@ const App = () => {
       {
         path: '/',
         element: <Layout />,
+        errorElement: <Error />,
         children: [
           {
             path: '',
@@ -19,18 +20,14 @@ const App = () => {
               {
                 path: 'feeds',
                 element: <FeedList />,
-                errorElement: <Error />,
               },
               {
                 path: 'submit',
                 element: <FeedSubmit />,
-                errorElement: <Error />,
               },
             ],
-            errorElement: <Error />,
           },
         ],
-        errorElement: <Error />,
       },
     ],
     {
