@@ -4,13 +4,13 @@ import FloatingButton from './FloatingButton';
 const meta = {
   title: 'Common/FloatingButton',
   component: FloatingButton,
-  parameters: {
-    layout: 'centered',
-  },
   tags: ['autodocs'],
+  parameters: {
+    controls: { exclude: 'onClick' },
+  },
   decorators: [
     (Story) => (
-      <div style={{ position: 'relative', height: '200px', overflow: 'hidden' }}>
+      <div style={{ height: '300px', overflow: 'hidden' }}>
         <Story />
       </div>
     ),
@@ -18,10 +18,11 @@ const meta = {
 } satisfies Meta<typeof FloatingButton>;
 
 export default meta;
+
 type Story = StoryObj<typeof FloatingButton>;
 
 export const Default: Story = {
   args: {
-    onHandleClick: () => alert('버튼이 클릭되었습니다!'),
+    onClick: () => alert('버튼이 클릭되었습니다!'),
   },
 };

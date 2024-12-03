@@ -1,12 +1,12 @@
 import * as S from './FloatingButton.css';
 
 interface FloatingButtonProps {
-  onHandleClick: () => void;
+  onClick: () => void;
 }
 
-const FloatingButton = ({ onHandleClick }: FloatingButtonProps) => {
+const FloatingButton = ({ onClick }: FloatingButtonProps) => {
   return (
-    <button className={S.floatingButtonStyle} onClick={onHandleClick}>
+    <button className={S.Layout} onClick={onClick}>
       작성
     </button>
   );
