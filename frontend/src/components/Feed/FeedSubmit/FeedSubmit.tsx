@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TextArea from '@/components/_common/TextArea/TextArea';
-import { postFeed } from '@/apis/feed';
+import useFeedMutation from '@/hooks/Feed/useFeedMutation';
 import * as S from './FeedSubmit.css';
 
 const FeedSubmit = () => {
   const [imageUrl, setImageUrl] = useState('');
   const [content, setContent] = useState('');
   const navigate = useNavigate();
+  const { addFeedMutation } = useFeedMutation();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await postFeed({ imageUrl, content });
+    addFeedMutation({ imageUrl, content });
     navigate('/feeds');
   };
 
