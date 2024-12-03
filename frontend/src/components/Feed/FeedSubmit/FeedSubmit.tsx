@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Button from '@/components/_common/Button/Button';
 import TextArea from '@/components/_common/TextArea/TextArea';
 import { postFeed } from '@/apis/feed';
 import * as S from './FeedSubmit.css';
@@ -26,7 +27,9 @@ const FeedSubmit = () => {
       <TextArea value={content} onChange={(e) => setContent(e.target.value)}>
         <TextArea.Label label="설명" />
       </TextArea>
-      <button type="submit">제출</button>
+      <Button type="submit" color="primary">
+        제출
+      </Button>
     </form>
   );
 };
