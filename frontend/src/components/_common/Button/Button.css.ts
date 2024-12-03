@@ -7,7 +7,7 @@ export const Base = style({
   alignItems: 'center',
 
   width: '100%',
-  height: '45px',
+  height: '44px',
   borderRadius: '15px',
 
   font: vars.fonts.button,
