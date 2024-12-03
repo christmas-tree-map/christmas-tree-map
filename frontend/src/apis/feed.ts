@@ -10,8 +10,8 @@ interface Feeds {
 }
 
 export const getFeeds = async () => {
-  const { data } = await requestAPI.get('/feeds');
-  return data as Feeds[];
+  const { data } = await requestAPI.get<{ data: Feeds[] }>('/feeds');
+  return data;
 };
 
 interface PostFeedRequest {
@@ -20,5 +20,5 @@ interface PostFeedRequest {
 }
 
 export const postFeed = async ({ imageUrl, content }: PostFeedRequest) => {
-  await requestAPI.post('/feed', { imageUrl, content });
+  await requestAPI.post<{ data: PostFeedRequest }>('/feed', { imageUrl, content });
 };

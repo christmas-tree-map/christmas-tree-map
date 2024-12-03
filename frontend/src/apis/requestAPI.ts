@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 const API_URL = '/api'; // TODO: 주소 수정하기
 
 interface ApiMethodsProps {
@@ -6,7 +7,7 @@ interface ApiMethodsProps {
   body?: object;
 }
 
-const apiMethods = async ({ method, endpoint, body }: ApiMethodsProps) => {
+const apiMethods = async <T>({ method, endpoint, body }: ApiMethodsProps): Promise<T> => {
   const options: RequestInit = {
     method,
     headers: {
@@ -33,10 +34,12 @@ const apiMethods = async ({ method, endpoint, body }: ApiMethodsProps) => {
 };
 
 const requestAPI = {
-  get: (endpoint: string) => apiMethods({ method: 'GET', endpoint }),
-  post: (endpoint: string, body: object) => apiMethods({ method: 'POST', endpoint, body }),
-  patch: (endpoint: string, body: object) => apiMethods({ method: 'PATCH', endpoint, body }),
-  delete: (endpoint: string) => apiMethods({ method: 'DELETE', endpoint }),
+  get: <T>(endpoint: string): Promise<T> => apiMethods<T>({ method: 'GET', endpoint }),
+  post: <T>(endpoint: string, body: Record<string, any>): Promise<T> =>
+    apiMethods<T>({ method: 'POST', endpoint, body }),
+  patch: <T>(endpoint: string, body: Record<string, any>): Promise<T> =>
+    apiMethods<T>({ method: 'PATCH', endpoint, body }),
+  delete: (endpoint: string): Promise<void> => apiMethods({ method: 'DELETE', endpoint }),
 };
 
 export default requestAPI;
