@@ -9,6 +9,7 @@ export const Layout = style({
   position: 'fixed',
   bottom: '112px',
   right: '20px',
+  zIndex: 100,
 
   width: '45px',
   height: '45px',

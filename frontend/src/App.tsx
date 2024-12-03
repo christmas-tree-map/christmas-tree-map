@@ -17,14 +17,8 @@ const App = () => {
             path: '',
             element: <TreeMap />,
             children: [
-              {
-                path: 'feeds',
-                element: <FeedList />,
-              },
-              {
-                path: 'submit',
-                element: <FeedSubmit />,
-              },
+              { path: 'feeds', element: <FeedList /> },
+              { path: 'submit', element: <FeedSubmit /> },
             ],
           },
         ],
