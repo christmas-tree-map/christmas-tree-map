@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 import { getFeeds } from '@/apis/feed';
-import { FEED_KEYS } from '@/hooks/queryKeys';
+import { FEED_KEYS } from '@/queries/queryKeys';
 
-const useFeeds = () => {
+const useFeedsQuery = () => {
   const { data, ...rest } = useQuery({
     queryKey: [FEED_KEYS.FEEDS],
     queryFn: () => getFeeds(),
@@ -11,4 +11,4 @@ const useFeeds = () => {
   return { feeds: data ?? [], ...rest };
 };
 
-export default useFeeds;
+export default useFeedsQuery;

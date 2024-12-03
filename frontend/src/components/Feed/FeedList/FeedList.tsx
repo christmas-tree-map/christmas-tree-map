@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
-import useFeeds from '@/hooks/Feed/useFeeds';
+import useFeedsQuery from '@/queries/Feed/useFeedsQuery';
 import FloatingButton from '../../_common/FloatingButton/FloatingButton';
 import FeedItem from '../FeedItem/FeedItem';
 import * as S from './FeedList.css';
 
 const FeedList = () => {
   const navigate = useNavigate();
-  const { feeds } = useFeeds();
+  const { feeds } = useFeedsQuery();
 
   const handleClickFloatingButton = () => {
     navigate('/submit');

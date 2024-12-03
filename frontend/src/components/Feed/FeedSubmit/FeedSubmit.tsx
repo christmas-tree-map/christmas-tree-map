@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TextArea from '@/components/_common/TextArea/TextArea';
-import useFeedMutation from '@/hooks/Feed/useFeedMutation';
+import useFeedMutation from '@/queries/Feed/useFeedMutation';
 import * as S from './FeedSubmit.css';
 
 const FeedSubmit = () => {
