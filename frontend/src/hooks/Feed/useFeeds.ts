@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 import { getFeeds } from '@/apis/feed';
+import { FEED_KEYS } from '@/hooks/queryKeys';
 
 const useFeeds = () => {
   const { data, ...rest } = useQuery({
-    queryKey: ['feeds'],
+    queryKey: [FEED_KEYS.FEEDS],
     queryFn: () => getFeeds(),
   });
 
