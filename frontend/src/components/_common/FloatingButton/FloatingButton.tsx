@@ -1,3 +1,4 @@
+import EditIcon from '@/assets/edit.svg';
 import * as S from './FloatingButton.css';
 
 interface FloatingButtonProps {
@@ -7,7 +8,7 @@ interface FloatingButtonProps {
 const FloatingButton = ({ onClick }: FloatingButtonProps) => {
   return (
     <button className={S.Layout} onClick={onClick}>
-      작성
+      <img src={EditIcon} className={S.EditIcon} />
     </button>
   );
 };

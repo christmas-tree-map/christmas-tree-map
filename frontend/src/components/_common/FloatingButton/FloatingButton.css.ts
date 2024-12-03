@@ -17,3 +17,8 @@ export const Layout = style({
 
   backgroundColor: vars.colors.primary[800],
 });
+
+export const EditIcon = style({
+  width: '18px',
+  height: '18px',
+});
