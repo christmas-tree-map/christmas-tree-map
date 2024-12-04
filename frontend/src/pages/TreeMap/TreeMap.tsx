@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import FloatingButton from '@/components/_common/FloatingButton/FloatingButton';
 import Modal from '@/components/_common/Modal/Modal';
 import useModal from '@/hooks/_common/useModal';
 import useTreeMap from '@/hooks/TreeMap/useTreeMap';
 import * as S from './TreeMap.css';
 
 const TreeMap = () => {
+  const location = useLocation();
   const navigate = useNavigate();
 
   const { isModalOpen, openModal } = useModal();
@@ -14,6 +16,11 @@ const TreeMap = () => {
   const handleMarkerClick = () => {
     openModal();
     navigate('/feeds');
+  };
+
+  const handleButtonClick = () => {
+    openModal();
+    navigate('/submit');
   };
 
   useEffect(() => {
@@ -27,6 +34,7 @@ const TreeMap = () => {
   return (
     <>
       <div ref={mapRef} className={S.Layout} />
+      {location.pathname !== '/submit' && <FloatingButton onClick={handleButtonClick} />}
       <Modal isOpen={isModalOpen}>
         <Outlet />
       </Modal>
