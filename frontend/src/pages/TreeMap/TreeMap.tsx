@@ -8,7 +8,7 @@ import * as S from './TreeMap.css';
 const TreeMap = () => {
   const navigate = useNavigate();
 
-  const { isModalOpen, openModal } = useModal();
+  const { isModalOpen, openModal, closeModal } = useModal();
   const { map, mapRef, addMarker } = useTreeMap();
 
   const handleMarkerClick = () => {
@@ -24,10 +24,15 @@ const TreeMap = () => {
     );
   }, [map]);
 
+  const handleCloseModal = () => {
+    closeModal();
+    navigate('/');
+  };
+
   return (
     <>
       <div ref={mapRef} className={S.Layout} />
-      <Modal isOpen={isModalOpen}>
+      <Modal isOpen={isModalOpen} handleClose={handleCloseModal}>
         <Outlet />
       </Modal>
     </>
