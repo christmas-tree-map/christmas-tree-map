@@ -1,16 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import useFeedsQuery from '@/queries/Feed/useFeedsQuery';
-import FloatingButton from '../../_common/FloatingButton/FloatingButton';
 import FeedItem from '../FeedItem/FeedItem';
 import * as S from './FeedList.css';
 
 const FeedList = () => {
   const navigate = useNavigate();
   const { feeds } = useFeedsQuery();
-
-  const handleClickFloatingButton = () => {
-    navigate('/submit');
-  };
 
   return (
     <div className={S.Layout}>
@@ -29,8 +24,6 @@ const FeedList = () => {
       ) : (
         <>피드가 없습니다.</>
       )}
-
-      <FloatingButton onHandleClick={handleClickFloatingButton} />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import { style } from '@vanilla-extract/css';
+import { vars } from '@/styles/theme.css';
 
-export const floatingButtonStyle = style({
+export const Layout = style({
   display: 'flex',
   justifyContent: 'center',
   alignItems: 'center',
@@ -8,11 +9,16 @@ export const floatingButtonStyle = style({
   position: 'fixed',
   bottom: '112px',
   right: '20px',
+  zIndex: 100,
 
   width: '45px',
   height: '45px',
-  padding: '4px 5px',
   borderRadius: '50%',
 
-  backgroundColor: 'red',
+  backgroundColor: vars.colors.primary[800],
+});
+
+export const EditIcon = style({
+  width: '18px',
+  height: '18px',
 });
