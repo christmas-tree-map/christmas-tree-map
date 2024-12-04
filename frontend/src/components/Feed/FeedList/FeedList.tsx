@@ -1,20 +1,11 @@
-import { useEffect, useState } from 'react';
-import { getFeeds } from '@/apis/feed';
+import { useNavigate } from 'react-router-dom';
+import useFeedsQuery from '@/queries/Feed/useFeedsQuery';
 import FeedItem from '../FeedItem/FeedItem';
-import { FeedItemType } from '../FeedItem/FeedItem.type';
 import * as S from './FeedList.css';
 
 const FeedList = () => {
-  const [feeds, setFeeds] = useState<FeedItemType[]>([]);
-
-  useEffect(() => {
-    const fetchFeeds = async () => {
-      const response = await getFeeds();
-      setFeeds(response);
-    };
-
-    fetchFeeds();
-  }, []);
+  const navigate = useNavigate();
+  const { feeds } = useFeedsQuery();
 
   return (
     <div className={S.Layout}>
