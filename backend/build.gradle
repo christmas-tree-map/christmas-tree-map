@@ -46,6 +46,9 @@ dependencies {
 	// MySQL
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
+	// AWS
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
 	// Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.rest-assured:rest-assured:5.5.0'
