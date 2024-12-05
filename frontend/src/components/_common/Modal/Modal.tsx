@@ -12,10 +12,11 @@ const Modal = ({ children, isOpen, handleClose, backgroundColor = 'red' }: React
   const portalElement = document.getElementById('modal') as HTMLElement;
 
   if (!isOpen || !portalElement) {
+    console.error('모달이 열려있지 않습니다.')
     return null;
   }
 
-  return createPortal(
+  const modalLayout = (
     <div className={S.Layout}>
       <div className={S.Backdrop} onClick={handleClose} />
       <div className={S.Container[backgroundColor]}>
@@ -25,9 +26,10 @@ const Modal = ({ children, isOpen, handleClose, backgroundColor = 'red' }: React
 
         <div className={S.ContentWrapper}>{children}</div>
       </div>
-    </div>,
-    portalElement,
+    </div>
   );
+
+  return createPortal(modalLayout, portalElement);
 };
 
 Modal.BackgroundSnowBall = ModalBackgroundSnowBall;
