@@ -1,4 +1,4 @@
-import { style } from '@vanilla-extract/css';
+import { style, styleVariants } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 
 export const Layout = style({
@@ -42,7 +42,7 @@ export const Backdrop = style({
   height: '100%',
 });
 
-export const Container = style({
+const ContainerBase = style({
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -59,7 +59,10 @@ export const Container = style({
   borderRadius: '30px 30px 0 0',
 
   boxShadow: '6px 0 30px 0 rgba(0, 0, 0, 0.12), 12px 0px 38px 0 rgba(0, 0, 0, 0.08)',
-  backgroundColor: vars.colors.primary[900],
+});
+
+export const Container = styleVariants({
+  red: [ContainerBase, { backgroundColor: vars.colors.primary[900] }],
 });
 
 export const ContentWrapper = style({

@@ -5,11 +5,12 @@ import ModalBackgroundSnowBall from './ModalBackgroundSnowBall/ModalBackgroundSn
 interface ModalProps {
   isOpen: boolean;
   handleClose: () => void;
+  backgroundColor?: 'red';
 }
 
-const portalElement = document.getElementById('modal') as HTMLElement;
+const Modal = ({ children, isOpen, handleClose, backgroundColor = 'red' }: React.PropsWithChildren<ModalProps>) => {
+  const portalElement = document.getElementById('modal') as HTMLElement;
 
-const Modal = ({ children, isOpen, handleClose }: React.PropsWithChildren<ModalProps>) => {
   if (!isOpen || !portalElement) {
     return null;
   }
@@ -17,8 +18,7 @@ const Modal = ({ children, isOpen, handleClose }: React.PropsWithChildren<ModalP
   return createPortal(
     <div className={S.Layout}>
       <div className={S.Backdrop} onClick={handleClose} />
-      <div className={S.Container}>
-        <ModalBackgroundSnowBall />
+      <div className={S.Container[backgroundColor]}>
         <div className={S.BarContainer}>
           <div className={S.Bar} />
         </div>
@@ -29,5 +29,7 @@ const Modal = ({ children, isOpen, handleClose }: React.PropsWithChildren<ModalP
     portalElement,
   );
 };
+
+Modal.BackgroundSnowBall = ModalBackgroundSnowBall;
 
 export default Modal;
