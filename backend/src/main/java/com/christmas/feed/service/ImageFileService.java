@@ -20,6 +20,7 @@ public class ImageFileService {
     private final ImageFileRepository imageFileRepository;
     private final S3ImageManager s3ImageManager;
 
+    // todo 메서드명 간단하게 변경
     public ImageFileEntity createImage(MultipartFile image) {
         String key = UUID.randomUUID() + image.getOriginalFilename();
         s3ImageManager.upload(key, image);
@@ -29,6 +30,14 @@ public class ImageFileService {
     public URL getImageUrl(ImageFileEntity imageFileEntity) {
         String s3Key = imageFileEntity.getImageKey();
         return s3ImageManager.getUrlByKey(s3Key);
+    }
+
+    public void updateImage(ImageFileEntity imageFileEntity, MultipartFile image) {
+        String oldKey = imageFileEntity.getImageKey();
+        String newKey = UUID.randomUUID() + image.getOriginalFilename();
+        s3ImageManager.upload(newKey, image);
+        imageFileEntity.updateImageKey(newKey);
+        s3ImageManager.deleteByKey(oldKey);
     }
 
     public void deleteImage(ImageFileEntity imageFileEntity) {
