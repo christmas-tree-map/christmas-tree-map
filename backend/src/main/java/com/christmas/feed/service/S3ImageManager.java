@@ -2,6 +2,7 @@ package com.christmas.feed.service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -54,10 +55,10 @@ public class S3ImageManager {
         }
     }
 
-    public String getUrlByKey(String key) {
+    public URL getUrlByKey(String key) {
         if (!amazonS3.doesObjectExist(bucketName, key)) {
             throw new NotFoundS3ImageException(FeedErrorCode.IMAGE_NOT_FOUND, Map.of("image key", key));
         }
-        return amazonS3.getUrl(bucketName, key).toString();
+        return amazonS3.getUrl(bucketName, key);
     }
 }

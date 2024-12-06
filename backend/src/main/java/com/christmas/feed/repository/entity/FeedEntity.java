@@ -14,8 +14,10 @@ import com.christmas.common.application.TimestampEntity;
 import com.christmas.tree.repository.TreeEntity;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "feed")
@@ -40,4 +42,12 @@ public class FeedEntity extends TimestampEntity {
 
     @Column(name = "like_count", nullable = false)
     private Long likeCount;
+
+    public FeedEntity(TreeEntity treeEntity, String nickname, String password, String content, Long likeCount) {
+        this.treeEntity = treeEntity;
+        this.nickname = nickname;
+        this.password = password;
+        this.content = content;
+        this.likeCount = likeCount;
+    }
 }
