@@ -30,4 +30,9 @@ public class ImageFileService {
         String s3Key = imageFileEntity.getImageKey();
         return s3ImageManager.getUrlByKey(s3Key);
     }
+
+    public void deleteImage(ImageFileEntity imageFileEntity) {
+        imageFileRepository.deleteById(imageFileEntity.getId());
+        s3ImageManager.deleteByKey(imageFileEntity.getImageKey());
+    }
 }

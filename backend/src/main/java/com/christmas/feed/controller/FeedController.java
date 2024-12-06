@@ -5,7 +5,9 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,9 +36,13 @@ public class FeedController {
                 .body(feedId);
     }
 
-    // todo 2. 피드 삭제하기
+    @DeleteMapping("/feed/{id}")
+    public ResponseEntity<Void> deleteFeed(@PathVariable("id") long id, @RequestBody String password) {
+        feedService.deleteFeed(id, password);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .build();
+    }
 
-    // todo 3. 피드 불러오기
     @GetMapping("/feed")
     public ResponseEntity<List<FeedGetResponse>> getAllFeed(@RequestParam("tree") long treeId) {
         List<FeedGetResponse> response = feedService.getAllFeedByTree(treeId);

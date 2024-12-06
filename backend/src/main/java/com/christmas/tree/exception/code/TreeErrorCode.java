@@ -11,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum TreeErrorCode implements CustomErrorCode {
 
-    NOT_FOUND_TREE(HttpStatus.NOT_FOUND, "트리를 찾을 수 없습니다."),
+    TREE_NOT_FOUND(HttpStatus.NOT_FOUND, "트리를 찾을 수 없습니다."),
     INVALID_LOCATION(HttpStatus.BAD_REQUEST, "위도 혹은 경도가 범위에 맞지 않습니다.");
 
     private final HttpStatus status;

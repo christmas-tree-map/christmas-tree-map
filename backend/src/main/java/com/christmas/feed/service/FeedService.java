@@ -12,6 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.christmas.feed.domain.NicknameGenerator;
 import com.christmas.feed.dto.FeedCreateRequest;
 import com.christmas.feed.dto.FeedGetResponse;
+import com.christmas.feed.exception.InvalidPasswordException;
+import com.christmas.feed.exception.code.FeedErrorCode;
 import com.christmas.feed.repository.FeedImageFileRepository;
 import com.christmas.feed.repository.FeedRepository;
 import com.christmas.feed.repository.entity.FeedEntity;
@@ -37,7 +39,7 @@ public class FeedService {
     public long createFeed(FeedCreateRequest request, MultipartFile image) {
         TreeEntity treeEntity = treeRepository.findById(request.treeId())
                 .orElseThrow(() -> new NotFoundTreeException(
-                        TreeErrorCode.NOT_FOUND_TREE,
+                        TreeErrorCode.TREE_NOT_FOUND,
                         Map.of("tree id", String.valueOf(request.treeId())))
                 );
         String nickname = generateUniqueNickname(NicknameGenerator.generate());
@@ -59,7 +61,7 @@ public class FeedService {
     public List<FeedGetResponse> getAllFeedByTree(long treeId) {
         TreeEntity treeEntity = treeRepository.findById(treeId)
                 .orElseThrow(() -> new NotFoundTreeException(
-                        TreeErrorCode.NOT_FOUND_TREE,
+                        TreeErrorCode.TREE_NOT_FOUND,
                         Map.of("tree id", String.valueOf(treeId)))
                 );
         List<FeedEntity> feedEntities = feedRepository.findAllByTreeEntityOrderByCreatedAtDesc(treeEntity);
@@ -77,5 +79,20 @@ public class FeedService {
             );
         }
         return response;
+    }
+
+    public void deleteFeed(long id, String password) {
+        FeedEntity feedEntity = feedRepository.findById(id)
+                .orElseThrow(() -> new NotFoundTreeException(
+                        FeedErrorCode.FEED_NOT_FOUND,
+                        Map.of("id", String.valueOf(id)))
+                );
+        if (feedEntity.getPassword().equals(password)) {
+            FeedImageFileEntity feedImageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity);
+            feedImageFileRepository.deleteByFeedEntity(feedEntity);
+            imageFileService.deleteImage(feedImageFileEntity.getImageFileEntity());
+            feedRepository.deleteById(id);
+        }
+        throw new InvalidPasswordException(FeedErrorCode.INVALID_PASSWORD, Map.of("password", password));
     }
 }
