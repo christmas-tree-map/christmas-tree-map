@@ -29,4 +29,8 @@ public class ImageFileEntity extends TimestampEntity {
     public ImageFileEntity(String imageKey) {
         this.imageKey = imageKey;
     }
+
+    public void updateImageKey(String imageKey) {
+        this.imageKey = imageKey;
+    }
 }
