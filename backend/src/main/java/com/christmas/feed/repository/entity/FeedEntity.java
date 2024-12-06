@@ -50,4 +50,8 @@ public class FeedEntity extends TimestampEntity {
         this.content = content;
         this.likeCount = likeCount;
     }
+
+    public long addLike() {
+        return likeCount + 1;
+    }
 }
