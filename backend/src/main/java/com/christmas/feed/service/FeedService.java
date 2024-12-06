@@ -74,14 +74,13 @@ public class FeedService {
                         TreeErrorCode.NOT_FOUND_TREE,
                         Map.of("tree id", String.valueOf(treeId)))
                 );
-        // 모든 피드 엔티티 불러옴.
         List<FeedEntity> feedEntities = feedRepository.findAllByTreeEntityOrderByCreatedAtDesc(treeEntity);
-        // 이제 각 피드 엔티티의 이미지를 불러와야 함.
         List<FeedGetResponse> response = new ArrayList<>();
         for (FeedEntity feedEntity : feedEntities) {
             FeedImageFileEntity feedImageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity);
             URL imageUrl = imageFileService.getImageUrl(feedImageFileEntity.getImageFileEntity());
             response.add(new FeedGetResponse(
+                    treeEntity.getImageCode(),
                     feedEntity.getNickname(),
                     feedEntity.getCreatedAt(),
                     imageUrl.toString(),
