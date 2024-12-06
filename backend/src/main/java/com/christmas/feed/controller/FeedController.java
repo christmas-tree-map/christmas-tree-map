@@ -36,6 +36,14 @@ public class FeedController {
                 .body(feedId);
     }
 
+    @PostMapping("/feed/{id}/like")
+    public ResponseEntity<Long> createLike(@PathVariable("id") long id) {
+        long likeCount = feedService.createLike(id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(likeCount);
+    }
+
+
     @DeleteMapping("/feed/{id}")
     public ResponseEntity<Void> deleteFeed(@PathVariable("id") long id, @RequestBody String password) {
         feedService.deleteFeed(id, password);
@@ -52,6 +60,5 @@ public class FeedController {
 
     // todo 4. 피드 수정
 
-    // todo 5. 특정 피드 좋아요
 
 }

@@ -95,4 +95,13 @@ public class FeedService {
         }
         throw new InvalidPasswordException(FeedErrorCode.INVALID_PASSWORD, Map.of("password", password));
     }
+
+    public long createLike(long id) {
+        FeedEntity feedEntity = feedRepository.findById(id)
+                .orElseThrow(() -> new NotFoundTreeException(
+                        FeedErrorCode.FEED_NOT_FOUND,
+                        Map.of("id", String.valueOf(id)))
+                );
+        return feedEntity.addLike();
+    }
 }
