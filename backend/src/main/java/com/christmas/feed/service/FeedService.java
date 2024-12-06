@@ -35,28 +35,16 @@ public class FeedService {
     private final ImageFileService imageFileService;
 
     public long createFeed(FeedCreateRequest request, MultipartFile image) {
-        // todo 1. 트리 id로 트리 찾기.
         TreeEntity treeEntity = treeRepository.findById(request.treeId())
                 .orElseThrow(() -> new NotFoundTreeException(
                         TreeErrorCode.NOT_FOUND_TREE,
                         Map.of("tree id", String.valueOf(request.treeId())))
                 );
-        // todo 2. 닉네임 생성 및 중복검사
         String nickname = generateUniqueNickname(NicknameGenerator.generate());
-
-        // todo 3. 피드 객체 만들기
         FeedEntity feedEntity = new FeedEntity(treeEntity, nickname, request.password(), request.content(), 0L);
-
-        // todo 4. 피드 객체 저장
         FeedEntity savedFeedEntity = feedRepository.save(feedEntity);
-
-        // todo 5. 이미지 서비스 호출해서 이미지 엔티티 저장 및 s3 업로드
         ImageFileEntity imageFileEntity = imageFileService.createImage(image);
-
-        // todo: 피드이미지 저장
         feedImageFileRepository.save(new FeedImageFileEntity(feedEntity, imageFileEntity));
-
-        // todo 6. 피드 id 반환
         return savedFeedEntity.getId();
     }
 
