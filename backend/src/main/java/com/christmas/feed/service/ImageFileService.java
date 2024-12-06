@@ -1,6 +1,7 @@
 package com.christmas.feed.service;
 
 import java.net.URL;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,8 +21,7 @@ public class ImageFileService {
     private final S3ImageManager s3ImageManager;
 
     public ImageFileEntity createImage(MultipartFile image) {
-        // todo: key 어떻게 설정할지 생각
-        String key = null;
+        String key = UUID.randomUUID() + image.getOriginalFilename();
         s3ImageManager.upload(key, image);
         return imageFileRepository.save(new ImageFileEntity(key));
     }

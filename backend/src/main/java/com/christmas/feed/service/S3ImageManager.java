@@ -26,10 +26,9 @@ public class S3ImageManager {
 
     private final AmazonS3 amazonS3;
 
-    public String upload(String key, MultipartFile image) {
+    public String upload(String s3Key, MultipartFile image) {
         String imageName = image.getOriginalFilename();
         String extension = image.getContentType();
-        String s3Key = "images/" + key;
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(extension);
