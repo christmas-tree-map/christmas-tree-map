@@ -3,7 +3,10 @@ package com.christmas.feed.controller;
 import java.net.URI;
 import java.util.List;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,10 +32,10 @@ public class FeedController implements FeedControllerDocs {
 
     private final FeedService feedService;
 
-    @PostMapping("/feed")
+    @PostMapping(value = "/feed", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Long> createFeed(
-            @RequestParam("image") MultipartFile image,
-            @RequestBody FeedCreateRequest request
+            @RequestPart("image") MultipartFile image,
+            @Valid @RequestPart FeedCreateRequest request
     ) {
         final long id = feedService.createFeed(request, image);
         return ResponseEntity.created(URI.create("/"))
@@ -46,7 +50,7 @@ public class FeedController implements FeedControllerDocs {
     }
 
     @GetMapping("/feed")
-    public ResponseEntity<List<FeedGetResponse>> getAllFeed(@RequestParam("tree") long treeId) {
+    public ResponseEntity<List<FeedGetResponse>> getAllFeed(@RequestParam("treeId") long treeId) {
         List<FeedGetResponse> response = feedService.getAllFeedByTree(treeId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(response);
@@ -55,7 +59,7 @@ public class FeedController implements FeedControllerDocs {
     @PatchMapping("/feed/{id}")
     public ResponseEntity<Void> updateFeed(
             @PathVariable("id") long id,
-            @RequestBody FeedUpdateRequest feedUpdateRequest
+            @Valid @RequestBody FeedUpdateRequest feedUpdateRequest
     ) {
         feedService.updateFeed(id, feedUpdateRequest);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
