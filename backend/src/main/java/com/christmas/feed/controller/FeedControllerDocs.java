@@ -13,6 +13,7 @@ import com.christmas.feed.dto.FeedUpdateRequest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,9 +30,9 @@ public interface FeedControllerDocs {
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponse.class))
     )
     ResponseEntity<Long> createFeed(
-            @Parameter(description = "피드 이미지", required = true)
+            @Parameter(description = "이미지 파일", required = true, content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
             MultipartFile image,
-            @Parameter(description = "피드 생성에 필요한 정보(트리 id, 피드 내용, 비밀번호)", required = true)
+            @Parameter(description = "피드 생성 요청 바디", required = true)
             FeedCreateRequest request
     );
 
@@ -42,16 +43,16 @@ public interface FeedControllerDocs {
     @ApiResponse(responseCode = "4XX", description = "좋아요 실패 시 에외를 반환한다.",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponse.class))
     )
-    ResponseEntity<Long> createLike(@Parameter(description = "피드 id", required = true) long id);
+    ResponseEntity<Long> createLike(@Parameter(description = "feedId", required = true, example = "1") long id);
 
     @Operation(summary = "특정 트리의 모든 피드를 반환한다.")
     @ApiResponse(responseCode = "200", description = "피드 조회 성공 시 트리의 모든 피드를 반환한다.",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = List.class))
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = FeedGetResponse.class)))
     )
     @ApiResponse(responseCode = "4XX", description = "피드 조회 실패 시 에외를 반환한다.",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponse.class))
     )
-    ResponseEntity<List<FeedGetResponse>> getAllFeed(@Parameter(description = "트리 id", required = true) long treeId);
+    ResponseEntity<List<FeedGetResponse>> getAllFeed(@Parameter(description = "treeId", required = true) long treeId);
 
     @Operation(summary = "피드를 수정한다.")
     @ApiResponse(responseCode = "204", description = "피드 수정에 성공한다.")
@@ -59,10 +60,8 @@ public interface FeedControllerDocs {
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponse.class))
     )
     ResponseEntity<Void> updateFeed(
-            @Parameter(description = "피드 id", required = true)
-            long id,
-            @Parameter(description = "수정된 피드 정보와 비밀번호", required = true)
-            FeedUpdateRequest feedUpdateRequest
+            @Parameter(description = "피드 id", required = true) long id,
+            @Parameter(description = "피드 수정 결과", required = true) FeedUpdateRequest feedUpdateRequest
     );
 
     @Operation(summary = "피드를 삭제한다.")
@@ -73,7 +72,7 @@ public interface FeedControllerDocs {
     ResponseEntity<Void> deleteFeed(
             @Parameter(description = "피드 id", required = true)
             long id,
-            @Parameter(description = "비밀번호", required = true)
+            @Parameter(description = "비밀번호", example = "abs123", required = true)
             String password
     );
 }
