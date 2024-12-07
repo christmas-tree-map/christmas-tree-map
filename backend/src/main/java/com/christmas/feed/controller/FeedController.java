@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-public class FeedController {
+public class FeedController implements FeedControllerDocs {
 
     private final FeedService feedService;
 

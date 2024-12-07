@@ -21,10 +21,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 public interface TreeControllerDocs {
 
     @Operation(summary = "트리 마커를 생성한다.")
-    @ApiResponse(responseCode = "201", description = "트리 마커 생성 성공",
+    @ApiResponse(responseCode = "201", description = "트리 마커 생성 성공 시 트리 id를 반환한다.",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Long.class))
     )
-    @ApiResponse(responseCode = "400", description = "트리 마커 생성 실패",
+    @ApiResponse(responseCode = "400", description = "트리 마커 생성 실패 시 예외를 반환한다.",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponse.class))
     )
     ResponseEntity<Long> createTree(
@@ -33,9 +33,9 @@ public interface TreeControllerDocs {
     );
 
     @Operation(summary = "트리 마커를 조회한다.")
-    @ApiResponse(responseCode = "200", description = "트리 마커 조회 성공",
+    @ApiResponse(responseCode = "200", description = "트리 마커 조회 성공 시 현재 위치 주변에 있는 트리 마커를 모두 반환한다.",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = List.class)))
-    @ApiResponse(responseCode = "400", description = "트리 마커 조회 실패",
+    @ApiResponse(responseCode = "400", description = "트리 마커 조회 실패 시 예외를 반환한다.",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponse.class))
     )
     ResponseEntity<List<TreeGetResponse>> getTreeByRange(
