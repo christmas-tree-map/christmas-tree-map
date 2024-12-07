@@ -91,28 +91,26 @@ public class FeedService {
         return response;
     }
 
-    public void updateFeed(long id, FeedUpdateRequest feedUpdateRequest) {
+    public void updateFeed(long id, FeedUpdateRequest request) {
         FeedEntity feedEntity = feedRepository.findById(id)
                 .orElseThrow(() -> new NotFoundTreeException(
                         FeedErrorCode.FEED_NOT_FOUND,
                         Map.of("id", String.valueOf(id)))
                 );
-        if (feedEntity.getPassword().equals(feedUpdateRequest.password())) {
-            feedEntity.updateContent(feedUpdateRequest.content());
-            checkAndUpdateImage(feedEntity, feedUpdateRequest.image());
+        if (invalidPassword(feedEntity, request.password())) {
+            throw new InvalidPasswordException(FeedErrorCode.INVALID_PASSWORD, Map.of("password", request.password()));
         }
-        throw new InvalidPasswordException(
-                FeedErrorCode.INVALID_PASSWORD,
-                Map.of("password", feedUpdateRequest.password())
-        );
+        if (request.content() != null) {
+            feedEntity.updateContent(request.content());
+        }
+        if (request.image() != null) {
+            FeedImageFileEntity feedImageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity);
+            imageFileService.updateImage(feedImageFileEntity.getImageFileEntity(), request.image());
+        }
     }
 
-    private void checkAndUpdateImage(FeedEntity feedEntity, MultipartFile image) {
-        if (image == null) {
-            return;
-        }
-        FeedImageFileEntity feedImageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity);
-        imageFileService.updateImage(feedImageFileEntity.getImageFileEntity(), image);
+    private boolean invalidPassword(FeedEntity feedEntity, String password) {
+        return !feedEntity.getPassword().equals(password);
     }
 
     public void deleteFeed(long id, String password) {
@@ -121,10 +119,10 @@ public class FeedService {
                         FeedErrorCode.FEED_NOT_FOUND,
                         Map.of("id", String.valueOf(id)))
                 );
-        if (feedEntity.getPassword().equals(password)) {
-            deleteFeedCascade(id, feedEntity);
+        if (invalidPassword(feedEntity, password)) {
+            throw new InvalidPasswordException(FeedErrorCode.INVALID_PASSWORD, Map.of("password", password));
         }
-        throw new InvalidPasswordException(FeedErrorCode.INVALID_PASSWORD, Map.of("password", password));
+        deleteFeedCascade(id, feedEntity);
     }
 
     private void deleteFeedCascade(long id, FeedEntity feedEntity) {
