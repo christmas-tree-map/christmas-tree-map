@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.christmas.feed.exception.NotFoundS3ImageException;
 import com.christmas.feed.exception.S3Exception;
 import com.christmas.feed.exception.code.FeedErrorCode;
@@ -21,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 @Component
 public class S3ImageManager {
 
-    @Value("${cloud.aws.s3.bucket-name}")
+    @Value("${cloud.aws.s3.bucket}")
     private String bucketName;
 
     private final AmazonS3 amazonS3;
@@ -32,9 +34,10 @@ public class S3ImageManager {
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(extension);
-        try {
-            final InputStream inputStream = image.getInputStream();
-            amazonS3.putObject(bucketName, s3Key, inputStream, metadata);
+        metadata.setContentLength(image.getSize());
+        try (InputStream inputStream = image.getInputStream()) {
+            amazonS3.putObject(new PutObjectRequest(bucketName, s3Key, inputStream, metadata)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (IOException e) {
             throw new S3Exception(FeedErrorCode.IMAGE_READ_FAIL, Map.of("image", imageName));
         } catch (Exception e) {
