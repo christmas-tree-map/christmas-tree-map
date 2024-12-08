@@ -52,6 +52,7 @@ dependencies {
 	// Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.rest-assured:rest-assured:5.5.0'
+	testImplementation 'io.findify:s3mock_2.12:0.2.4'	// S3 mock 테스트
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
