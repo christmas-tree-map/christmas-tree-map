@@ -1,5 +1,27 @@
-import { style, styleVariants } from '@vanilla-extract/css';
+import { keyframes, style, styleVariants } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
+
+const slideIn = keyframes({
+  from: {
+    transform: 'translateY(100%)',
+    opacity: 0,
+  },
+  to: {
+    transform: 'translateY(0)',
+    opacity: 1,
+  },
+});
+
+const slideOut = keyframes({
+  from: {
+    transform: 'translateY(0)',
+    opacity: 1,
+  },
+  to: {
+    transform: 'translateY(100%)',
+    opacity: 0,
+  },
+});
 
 export const Layout = style({
   height: '100%',
@@ -52,13 +74,18 @@ const ContainerBase = style({
   zIndex: 200,
 
   width: '100%',
-  height: '100%',
+  height: 'calc(100vh - 20vh)',
 
   padding: '33px 24px',
 
   borderRadius: '30px 30px 0 0',
 
   boxShadow: '6px 0 30px 0 rgba(0, 0, 0, 0.12), 12px 0px 38px 0 rgba(0, 0, 0, 0.08)',
+  animation: `${slideIn} 0.2s ease-out`,
+});
+
+export const ContainerClosing = style({
+  animation: `${slideOut} 0.2s ease-in`,
 });
 
 export const Container = styleVariants({

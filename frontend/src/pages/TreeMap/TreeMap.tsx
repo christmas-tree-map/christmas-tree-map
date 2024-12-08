@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import FloatingButton from '@/components/_common/FloatingButton/FloatingButton';
 import Modal from '@/components/_common/Modal/Modal';
@@ -31,10 +31,10 @@ const TreeMap = () => {
     );
   }, [map]);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     closeModal();
     navigate('/');
-  };
+  }, []);
 
   return (
     <>
