@@ -15,7 +15,7 @@ const FeedSubmit = () => {
     e.preventDefault();
 
     addFeedMutation({ imageUrl, content });
-    navigate('/feeds');
+    navigate('/?modal=feeds');
   };
 
   return (
