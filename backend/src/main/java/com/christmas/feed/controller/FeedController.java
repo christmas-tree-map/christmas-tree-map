@@ -19,9 +19,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.christmas.feed.dto.ContentUpdateRequest;
 import com.christmas.feed.dto.FeedCreateRequest;
 import com.christmas.feed.dto.FeedGetResponse;
-import com.christmas.feed.dto.FeedUpdateRequest;
 import com.christmas.feed.service.FeedService;
 
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class FeedController implements FeedControllerDocs {
     @PostMapping(value = "/feed", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<Long> createFeed(
             @RequestPart("image") MultipartFile image,
-            @Valid @RequestPart FeedCreateRequest request
+            @Valid @RequestPart("request") FeedCreateRequest request
     ) {
         final long id = feedService.createFeed(request, image);
         return ResponseEntity.created(URI.create("/"))
@@ -56,12 +56,26 @@ public class FeedController implements FeedControllerDocs {
                 .body(response);
     }
 
-    @PatchMapping("/feed/{id}")
-    public ResponseEntity<Void> updateFeed(
+    @PatchMapping(
+            value = "/feed/{id}/image",
+            consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE}
+    )
+    public ResponseEntity<Void> updateImage(
             @PathVariable("id") long id,
-            @Valid @RequestBody FeedUpdateRequest feedUpdateRequest
+            @RequestPart("image") MultipartFile image,
+            @RequestPart("password") String password
     ) {
-        feedService.updateFeed(id, feedUpdateRequest);
+        feedService.updateImage(id, image, password);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+    @PatchMapping(value = "/feed/{id}/content")
+    public ResponseEntity<Void> updateContent(
+            @PathVariable("id") long id,
+            @Valid @RequestPart("request") ContentUpdateRequest request
+    ) {
+        feedService.updateContent(id, request);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .build();
     }

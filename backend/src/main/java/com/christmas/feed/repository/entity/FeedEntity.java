@@ -43,7 +43,7 @@ public class FeedEntity extends TimestampEntity {
     private String password;
 
     @Length(max = 300, message = "피드 내용은 최대 300자를 넘을 수 없습니다.")
-    @Column(name = "content", nullable = false)
+    @Column(name = "content")
     private String content;
 
     @Column(name = "like_count", nullable = false)
