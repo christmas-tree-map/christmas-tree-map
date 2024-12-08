@@ -31,7 +31,7 @@ public class FeedEntity extends TimestampEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tree_id")
+    @JoinColumn(name = "tree_id", nullable = false)
     private TreeEntity treeEntity;
 
     @Column(name = "nickname", unique = true, nullable = false)
