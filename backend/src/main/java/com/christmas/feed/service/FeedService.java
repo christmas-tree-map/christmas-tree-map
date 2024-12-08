@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.christmas.feed.domain.NicknameGenerator;
 import com.christmas.feed.dto.FeedCreateRequest;
 import com.christmas.feed.dto.FeedGetResponse;
-import com.christmas.feed.dto.FeedUpdateRequest;
+import com.christmas.feed.dto.ContentUpdateRequest;
 import com.christmas.feed.exception.InvalidPasswordException;
 import com.christmas.feed.exception.code.FeedErrorCode;
 import com.christmas.feed.repository.FeedImageFileRepository;
@@ -91,7 +91,20 @@ public class FeedService {
         return response;
     }
 
-    public void updateFeed(long id, FeedUpdateRequest request) {
+    public void updateImage(long id, MultipartFile image, String password) {
+        FeedEntity feedEntity = feedRepository.findById(id)
+                .orElseThrow(() -> new NotFoundTreeException(
+                        FeedErrorCode.FEED_NOT_FOUND,
+                        Map.of("id", String.valueOf(id)))
+                );
+        if (invalidPassword(feedEntity, password)) {
+            throw new InvalidPasswordException(FeedErrorCode.INVALID_PASSWORD, Map.of("password", password));
+        }
+        FeedImageFileEntity feedImageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity);
+        imageFileService.updateImage(feedImageFileEntity.getImageFileEntity(), image);
+    }
+
+    public void updateContent(long id, ContentUpdateRequest request) {
         FeedEntity feedEntity = feedRepository.findById(id)
                 .orElseThrow(() -> new NotFoundTreeException(
                         FeedErrorCode.FEED_NOT_FOUND,
@@ -100,13 +113,7 @@ public class FeedService {
         if (invalidPassword(feedEntity, request.password())) {
             throw new InvalidPasswordException(FeedErrorCode.INVALID_PASSWORD, Map.of("password", request.password()));
         }
-        if (request.content() != null) {
-            feedEntity.updateContent(request.content());
-        }
-        if (request.image() != null) {
-            FeedImageFileEntity feedImageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity);
-            imageFileService.updateImage(feedImageFileEntity.getImageFileEntity(), request.image());
-        }
+        feedEntity.updateContent(request.content());
     }
 
     private boolean invalidPassword(FeedEntity feedEntity, String password) {
