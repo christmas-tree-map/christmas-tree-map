@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.christmas.feed.dto.ContentUpdateRequest;
 import com.christmas.feed.dto.FeedCreateRequest;
+import com.christmas.feed.dto.FeedDeleteRequest;
 import com.christmas.feed.dto.FeedGetResponse;
 import com.christmas.feed.service.FeedService;
 
@@ -73,7 +74,7 @@ public class FeedController implements FeedControllerDocs {
     @PatchMapping(value = "/feed/{id}/content")
     public ResponseEntity<Void> updateContent(
             @PathVariable("id") long id,
-            @Valid @RequestPart("request") ContentUpdateRequest request
+            @Valid @RequestBody ContentUpdateRequest request
     ) {
         feedService.updateContent(id, request);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
@@ -81,8 +82,8 @@ public class FeedController implements FeedControllerDocs {
     }
 
     @DeleteMapping("/feed/{id}")
-    public ResponseEntity<Void> deleteFeed(@PathVariable("id") long id, @RequestBody String password) {
-        feedService.deleteFeed(id, password);
+    public ResponseEntity<Void> deleteFeed(@PathVariable("id") long id, @RequestBody FeedDeleteRequest request) {
+        feedService.deleteFeed(id, request.password());
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .build();
     }

@@ -2,20 +2,15 @@ package com.christmas.feed.controller;
 
 import java.util.List;
 
-import jakarta.validation.Valid;
-
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.christmas.common.exception.ExceptionResponse;
-import com.christmas.feed.dto.FeedCreateRequest;
-import com.christmas.feed.dto.FeedGetResponse;
 import com.christmas.feed.dto.ContentUpdateRequest;
+import com.christmas.feed.dto.FeedCreateRequest;
+import com.christmas.feed.dto.FeedDeleteRequest;
+import com.christmas.feed.dto.FeedGetResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -95,6 +90,6 @@ public interface FeedControllerDocs {
             @Parameter(description = "피드 id", required = true)
             long id,
             @Parameter(description = "비밀번호", example = "abs123", required = true)
-            String password
+            FeedDeleteRequest password
     );
 }
