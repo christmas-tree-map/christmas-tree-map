@@ -1,7 +1,7 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
 import useEscapeKey from '@/hooks/_common/useEscapeKey';
-import useModalAnimation from '@/hooks/useModalAnimation';
+import useModalAnimation from '@/hooks/_common/useModalAnimation';
 import * as S from './Modal.css';
 import ModalBackdrop from './ModalBackdrop/ModalBackdrop';
 import ModalBackgroundSnowBall from './ModalBackgroundSnowBall/ModalBackgroundSnowBall';
