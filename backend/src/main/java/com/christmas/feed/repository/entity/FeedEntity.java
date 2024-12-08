@@ -58,7 +58,7 @@ public class FeedEntity extends TimestampEntity {
     }
 
     public long addLike() {
-        return likeCount + 1;
+        return ++likeCount;
     }
 
     public void updateContent(String content) {
