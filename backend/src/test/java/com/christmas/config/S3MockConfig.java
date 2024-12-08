@@ -3,11 +3,13 @@ package com.christmas.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.AnonymousAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
 import io.findify.s3mock.S3Mock;
@@ -30,7 +32,8 @@ public class S3MockConfig {
     }
 
     @Bean
-    public AmazonS3 amazonS3() {
+    @Primary
+    public AmazonS3Client amazonS3Client() {
         s3Mock().start();
         EndpointConfiguration endpoint = new EndpointConfiguration("http://localhost:8001", region);
 
@@ -40,6 +43,6 @@ public class S3MockConfig {
                 .withEndpointConfiguration(endpoint)
                 .build();
         client.createBucket(bucketName);
-        return client;
+        return (AmazonS3Client) client;
     }
 }
