@@ -1,5 +1,6 @@
 import { createPortal } from 'react-dom';
 import * as S from './Modal.css';
+import ModalBackdrop from './ModalBackdrop/ModalBackdrop';
 import ModalBackgroundSnowBall from './ModalBackgroundSnowBall/ModalBackgroundSnowBall';
 
 interface ModalProps {
@@ -11,14 +12,16 @@ interface ModalProps {
 const Modal = ({ children, isOpen, handleClose, backgroundColor = 'red' }: React.PropsWithChildren<ModalProps>) => {
   const portalElement = document.getElementById('modal') as HTMLElement;
 
-  if (!isOpen || !portalElement) {
-    console.error('모달이 열려있지 않습니다.')
+  if (!portalElement) {
+    console.error('모달이 열려있지 않아요!');
     return null;
   }
 
+  if (!isOpen) return null;
+
   const modalLayout = (
     <div className={S.Layout}>
-      <div className={S.Backdrop} onClick={handleClose} />
+      <ModalBackdrop onClick={handleClose} />
       <div className={S.Container[backgroundColor]}>
         <div className={S.BarContainer}>
           <div className={S.Bar} />
