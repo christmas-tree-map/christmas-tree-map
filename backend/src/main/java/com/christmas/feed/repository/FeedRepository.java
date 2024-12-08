@@ -10,8 +10,7 @@ import com.christmas.tree.repository.TreeEntity;
 
 public interface FeedRepository extends JpaRepository<FeedEntity, Long> {
 
-    @Query("SELECT f FROM FeedEntity AS f WHERE f.nickname LIKE :nickname%")
-    boolean existsByNickname(String nickname);
+    boolean existsByNicknameStartingWith(String nickname);
 
     @Query("SELECT COUNT(f) FROM FeedEntity AS f WHERE f.nickname LIKE :nickname%")
     int countAllByNickname(String nickname);

@@ -52,7 +52,7 @@ public class FeedService {
     }
 
     private String generateUniqueNickname(String randomNickname) {
-        if (feedRepository.existsByNickname(randomNickname)) {
+        if (feedRepository.existsByNicknameStartingWith(randomNickname)) {
             int count = feedRepository.countAllByNickname(randomNickname);
             return NicknameGenerator.addCountForDuplicate(randomNickname, count);
         }
