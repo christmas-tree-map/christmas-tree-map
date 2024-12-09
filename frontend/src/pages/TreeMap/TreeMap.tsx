@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import FloatingButton from '@/components/_common/FloatingButton/FloatingButton';
 import Modal from '@/components/_common/Modal/Modal';
 import useModal from '@/hooks/_common/useModal';
-import useModalContent from '@/hooks/_common/useModalContent';
+import useModalContent from '@/hooks/TreeMap/useModalContent';
 import useTreeMap from '@/hooks/TreeMap/useTreeMap';
 import * as S from './TreeMap.css';
 
