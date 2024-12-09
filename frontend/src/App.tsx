@@ -2,8 +2,6 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Error from '@/pages/Error/Error';
 import Layout from '@/pages/Layout/Layout';
 import TreeMap from '@/pages/TreeMap/TreeMap';
-import FeedList from '@/components/Feed/FeedList/FeedList';
-import FeedSubmit from '@/components/Feed/FeedSubmit/FeedSubmit';
 
 const App = () => {
   const router = createBrowserRouter(
@@ -16,10 +14,6 @@ const App = () => {
           {
             path: '',
             element: <TreeMap />,
-            children: [
-              { path: 'feeds', element: <FeedList /> },
-              { path: 'submit', element: <FeedSubmit /> },
-            ],
           },
         ],
       },

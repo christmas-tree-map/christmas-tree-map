@@ -1,10 +1,8 @@
-import { useNavigate } from 'react-router-dom';
 import useFeedsQuery from '@/queries/Feed/useFeedsQuery';
 import FeedItem from '../FeedItem/FeedItem';
 import * as S from './FeedList.css';
 
 const FeedList = () => {
-  const navigate = useNavigate();
   const { feeds } = useFeedsQuery();
 
   return (

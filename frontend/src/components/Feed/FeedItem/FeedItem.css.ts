@@ -7,6 +7,10 @@ export const Layout = style({
   gap: '10px',
 
   width: '100%',
+  padding: '27px 12px',
+  borderRadius: '20px',
+
+  backgroundColor: vars.colors.white,
 });
 
 export const Header = style({
