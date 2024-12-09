@@ -8,15 +8,15 @@ import ModalBackgroundSnowBall from './ModalBackgroundSnowBall/ModalBackgroundSn
 
 interface ModalProps {
   isOpen: boolean;
-  handleClose: () => void;
+  onClose: () => void;
   backgroundColor?: 'red';
 }
 
-const Modal = ({ children, isOpen, handleClose, backgroundColor = 'red' }: React.PropsWithChildren<ModalProps>) => {
+const Modal = ({ children, isOpen, onClose, backgroundColor = 'red' }: React.PropsWithChildren<ModalProps>) => {
   const portalElement = document.getElementById('modal') as HTMLElement;
-  const isClosing = useModalAnimation(isOpen, handleClose, 200);
+  const isClosing = useModalAnimation(isOpen, onClose, 200);
 
-  useEscapeKey(handleClose);
+  useEscapeKey(onClose);
 
   if (!portalElement) {
     console.error('모달이 열려있지 않아요!');
@@ -27,7 +27,7 @@ const Modal = ({ children, isOpen, handleClose, backgroundColor = 'red' }: React
 
   const modalLayout = (
     <div className={S.Layout}>
-      <ModalBackdrop onClick={handleClose} />
+      <ModalBackdrop onClick={onClose} />
       <div className={`${S.Container[backgroundColor]} ${isClosing ? S.ContainerClosing : ''}`}>
         <div className={S.BarContainer}>
           <div className={S.Bar} />
