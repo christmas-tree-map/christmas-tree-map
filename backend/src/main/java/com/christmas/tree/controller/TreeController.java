@@ -33,7 +33,7 @@ public class TreeController implements TreeControllerDocs {
                 .body(id);
     }
 
-    @GetMapping("/tree/filter")
+    @GetMapping("/tree")
     public ResponseEntity<List<TreeGetResponse>> getTreeByRange(
             @Valid @ModelAttribute final TreeGetRequest treeGetRequest) {
         final List<TreeGetResponse> trees = treeService.getTreeByRange(treeGetRequest);
