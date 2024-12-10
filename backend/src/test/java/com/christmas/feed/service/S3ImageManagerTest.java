@@ -41,7 +41,7 @@ class S3ImageManagerTest {
         String key = "testkey";
 
         // when
-        String actual = s3ImageManager.upload(key, image);
+        String actual = s3ImageManager.upload(key, image).toString();
 
         // then
         assertThat(actual).contains(key);

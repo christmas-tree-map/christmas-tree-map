@@ -28,7 +28,7 @@ public class S3ImageManager {
 
     private final AmazonS3 amazonS3;
 
-    public String upload(String s3Key, MultipartFile image) {
+    public URL upload(String s3Key, MultipartFile image) {
         String imageName = image.getOriginalFilename();
         String extension = image.getContentType();
 
@@ -43,7 +43,7 @@ public class S3ImageManager {
         } catch (Exception e) {
             throw new S3Exception(FeedErrorCode.IMAGE_UPLOAD_FAIL, Map.of("image", imageName));
         }
-        return amazonS3.getUrl(bucketName, s3Key).toString();
+        return amazonS3.getUrl(bucketName, s3Key);
     }
 
     public void deleteByKey(String key) {
