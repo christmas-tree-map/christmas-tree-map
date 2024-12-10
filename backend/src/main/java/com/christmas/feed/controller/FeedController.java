@@ -23,6 +23,8 @@ import com.christmas.feed.dto.ContentUpdateRequest;
 import com.christmas.feed.dto.FeedCreateRequest;
 import com.christmas.feed.dto.FeedDeleteRequest;
 import com.christmas.feed.dto.FeedGetResponse;
+import com.christmas.feed.dto.FeedUpdateRequest;
+import com.christmas.feed.dto.FeedUpdateResponse;
 import com.christmas.feed.service.FeedService;
 
 import lombok.RequiredArgsConstructor;
@@ -57,30 +59,24 @@ public class FeedController implements FeedControllerDocs {
                 .body(response);
     }
 
+    // todo: 비밀번호 헤더에 담에서 보내기
     @PatchMapping(
-            value = "/feed/{id}/image",
+            value = "/feed/{id}",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE}
     )
-    public ResponseEntity<Void> updateImage(
+    public ResponseEntity<FeedUpdateResponse> updateFeed(
             @PathVariable("id") long id,
-            @RequestPart("image") MultipartFile image,
-            @RequestPart("password") String password
+            @RequestPart(value = "image", required = false) MultipartFile image,
+            @RequestPart("request") FeedUpdateRequest request
     ) {
-        feedService.updateImage(id, image, password);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .build();
+        feedService.updateFeed(id, image, request);
+        FeedGetResponse getFeed = feedService.getFeed(id);
+        FeedUpdateResponse response = FeedUpdateResponse.from(getFeed);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(response);
     }
 
-    @PatchMapping(value = "/feed/{id}/content")
-    public ResponseEntity<Void> updateContent(
-            @PathVariable("id") long id,
-            @Valid @RequestBody ContentUpdateRequest request
-    ) {
-        feedService.updateContent(id, request);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .build();
-    }
-
+    // todo: 비밀번호 헤더에 담아서 보내기
     @DeleteMapping("/feed/{id}")
     public ResponseEntity<Void> deleteFeed(@PathVariable("id") long id, @RequestBody FeedDeleteRequest request) {
         feedService.deleteFeed(id, request.password());
