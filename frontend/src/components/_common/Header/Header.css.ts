@@ -27,4 +27,6 @@ export const Button = style({
 
   backgroundColor: vars.colors.white,
   color: vars.colors.primary[800],
+
+  cursor: 'pointer',
 });
