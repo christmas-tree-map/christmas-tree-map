@@ -1,3 +1,4 @@
+import useAutoResize from '@/hooks/_common/useAutoResize';
 import * as S from './TextArea.css';
 import { LabelProps, TextAreaMainProps } from './TextArea.type';
 
@@ -12,10 +13,12 @@ const TextAreaMain = ({
   errorMessage,
   status = 'default',
 }: React.PropsWithChildren<TextAreaMainProps>) => {
+  const { textAreaRef } = useAutoResize(value ?? '');
+
   return (
     <div className={S.Layout}>
       {children}
-      <textarea className={S.Textarea[status]} onChange={onChange} value={value} />
+      <textarea className={S.Textarea[status]} onChange={onChange} value={value} ref={textAreaRef} />
       {/*  TODO: 에러 아이콘 추가 필요 */}
       {status === 'error' && errorMessage && <p className={S.ErrorMessage}>{errorMessage}</p>}
     </div>
