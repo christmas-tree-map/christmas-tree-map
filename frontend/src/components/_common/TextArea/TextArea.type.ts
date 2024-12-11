@@ -7,4 +7,5 @@ export interface TextAreaMainProps {
   value: string;
   errorMessage?: string;
   status?: 'default' | 'error';
+  maxLength?: number;
 }
