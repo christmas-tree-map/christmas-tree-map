@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import TreeIcon from '@/assets/tree-icon.png';
+import { FaTree } from '@react-icons/all-files/fa/FaTree'
 import * as S from './NavBar.css';
 
 const NavBar = () => {
@@ -7,7 +7,7 @@ const NavBar = () => {
     <div className={S.Layout}>
       <nav className={S.Bar}>
         <Link to="/" className={S.Link}>
-          <img src={TreeIcon} className={S.Image} />
+          <FaTree className={S.Icon} />
           <p>지도</p>
         </Link>
       </nav>

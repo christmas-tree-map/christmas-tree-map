@@ -21,7 +21,7 @@ export const Bar = style({
   borderRadius: '58px',
 
   backgroundColor: '#ffffff',
-  color: vars.colors.primary[800],
+  color: vars.colors.grey[800],
   filter: 'drop-shadow(0px 3px 3px #00000040)',
 });
 
@@ -32,11 +32,21 @@ export const Link = style({
   gap: '3px',
 
   font: vars.fonts.tiny,
+
+  transition: '0.2s all ease',
+
+  ':hover': {
+    color: vars.colors.primary[800],
+  },
+  
+  ':active': {
+    color: vars.colors.primary[800],
+  }
 });
 
-export const Image = style({
-  width: '24px',
-  height: '24px',
+export const Icon = style({
+  width: '22px',
+  height: '22px',
 });
 
 export const Spacing = style({

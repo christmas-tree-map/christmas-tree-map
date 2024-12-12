@@ -26,8 +26,18 @@ export const Button = style({
   borderRadius: '35px',
 
   backgroundColor: vars.colors.white,
-  color: vars.colors.primary[800],
+  color: vars.colors.grey[800],
   filter: 'drop-shadow(0px 3px 3px #00000040)',
 
+  transition: '0.2s all ease',
+
   cursor: 'pointer',
+  
+  ':hover': {
+    color: vars.colors.primary[800],
+  },
+  
+  ':active': {
+    color: vars.colors.primary[800],
+  }
 });
