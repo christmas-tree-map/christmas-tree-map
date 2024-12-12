@@ -27,6 +27,7 @@ export const Button = style({
 
   backgroundColor: vars.colors.white,
   color: vars.colors.primary[800],
+  filter: 'drop-shadow(0px 3px 3px #00000040)',
 
   cursor: 'pointer',
 });
