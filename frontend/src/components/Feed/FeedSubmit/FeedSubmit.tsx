@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '@/components/_common/Button/Button';
+import Input from '@/components/_common/Input/Input';
 import TextArea from '@/components/_common/TextArea/TextArea';
 import useFeedMutation from '@/queries/Feed/useFeedMutation';
 import * as S from './FeedSubmit.css';
@@ -28,6 +29,7 @@ const FeedSubmit = () => {
       <TextArea value={content} onChange={(e) => setContent(e.target.value)}>
         <TextArea.Label label="설명" />
       </TextArea>
+      <Input label="비밀번호" type="number" />
       <Button type="submit" color="primary">
         제출
       </Button>
