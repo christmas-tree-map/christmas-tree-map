@@ -12,6 +12,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@react-icons/all-files": "^4.1.0",
     "@tanstack/react-query": "^5.62.1",
     "@vanilla-extract/css": "^1.16.0",
     "react": "^18.3.1",
