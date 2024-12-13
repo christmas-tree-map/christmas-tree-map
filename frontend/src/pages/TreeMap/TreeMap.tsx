@@ -60,7 +60,7 @@ const TreeMap = () => {
     <>
       <div ref={mapRef} className={S.Layout} />
       {modalType !== 'submit' && <FloatingButton onClick={handleButtonClick} />}
-      <Modal isOpen={isModalOpen} handleClose={handleCloseModal}>
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <Modal.BackgroundSnowBall />
         {modalContent}
       </Modal>

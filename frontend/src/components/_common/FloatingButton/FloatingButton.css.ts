@@ -16,6 +16,7 @@ export const Layout = style({
   borderRadius: '50%',
 
   backgroundColor: vars.colors.primary[800],
+  filter: 'drop-shadow(0px 3px 3px #00000040)',
 });
 
 export const EditIcon = style({
