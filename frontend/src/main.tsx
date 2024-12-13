@@ -3,12 +3,14 @@ import { createRoot } from 'react-dom/client';
 import App from '@/App';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import GlobalErrorBoundary from './pages/Error/Global/GlobalErrorBoundary';
 import './styles/global.css';
 
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       throwOnError: true,
+      retry: 0,
       // staleTime: 1000 * 60 * 5, // 개발 편의를 위해 주석처리합니다.
       // gcTime: 1000 * 60 * 10, // 개발 편의를 위해 주석처리합니다.
     },
@@ -27,7 +29,9 @@ enableMocking().then(() =>
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={true} />
-        <App />
+        <GlobalErrorBoundary>
+          <App />
+        </GlobalErrorBoundary>
       </QueryClientProvider>
     </StrictMode>,
   ),

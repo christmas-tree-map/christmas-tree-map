@@ -1,7 +1,7 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
-import Error from '@/pages/Error/Error';
 import Layout from '@/pages/Layout/Layout';
 import TreeMap from '@/pages/TreeMap/TreeMap';
+import Error from './pages/Error/Global/GlobalErrorFallback';
 
 const App = () => {
   const router = createBrowserRouter(
@@ -9,7 +9,6 @@ const App = () => {
       {
         path: '/',
         element: <Layout />,
-        errorElement: <Error />,
         children: [
           {
             path: '',
@@ -17,6 +16,7 @@ const App = () => {
           },
         ],
       },
+      { path: '*', element: <Error statusCode={404} /> },
     ],
     {
       future: {

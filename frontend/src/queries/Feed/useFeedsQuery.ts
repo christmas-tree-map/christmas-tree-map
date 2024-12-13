@@ -5,7 +5,7 @@ import { FEED_KEYS } from '@/queries/queryKeys';
 const useFeedsQuery = () => {
   const { data, ...rest } = useQuery({
     queryKey: [FEED_KEYS.FEEDS],
-    queryFn: () => getFeeds(),
+    queryFn: getFeeds
   });
 
   return { feeds: data ?? [], ...rest };
