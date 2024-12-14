@@ -30,6 +30,12 @@ export const Textarea = styleVariants({
 });
 
 export const ErrorMessage = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '3px',
+});
+
+export const ErrorMessageText = style({
   color: vars.colors.primary[800],
   font: vars.fonts.label,
 });
