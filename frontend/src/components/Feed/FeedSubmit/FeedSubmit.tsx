@@ -4,6 +4,7 @@ import Button from '@/components/_common/Button/Button';
 import Input from '@/components/_common/Input/Input';
 import TextArea from '@/components/_common/TextArea/TextArea';
 import useFeedMutation from '@/queries/Feed/useFeedMutation';
+import mapIcon from '@/assets/map.png';
 import * as S from './FeedSubmit.css';
 
 const FeedSubmit = () => {
@@ -21,6 +22,13 @@ const FeedSubmit = () => {
 
   return (
     <form className={S.Layout} onSubmit={handleSubmit}>
+      <div className={S.SelectPinBox}>
+        <div className={S.MapIconWrapper}>
+          <img src={mapIcon} alt="Map Icon" className={S.MapIcon} />
+        </div>
+        <p className={S.SelectPinText}>지도를 움직여 핀을 꽂아 보세요.</p>
+      </div>
+
       {/* 이미지 업로드 방식 논의 필요 */}
       <div className={S.ImageUploadBox}>
         <p className={S.LabelText}>업로드 할 이미지를 선택해 주세요.</p>
