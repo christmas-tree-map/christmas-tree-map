@@ -5,6 +5,7 @@ import Input from '@/components/_common/Input/Input';
 import TextArea from '@/components/_common/TextArea/TextArea';
 import useFeedMutation from '@/queries/Feed/useFeedMutation';
 import mapIcon from '@/assets/map.png';
+import santaWithWindow from '@/assets/santaWithWindow.png';
 import * as S from './FeedSubmit.css';
 
 const FeedSubmit = () => {
@@ -29,15 +30,14 @@ const FeedSubmit = () => {
         <p className={S.SelectPinText}>지도를 움직여 핀을 꽂아 보세요.</p>
       </div>
 
-      {/* 이미지 업로드 방식 논의 필요 */}
       <div className={S.ImageUploadBox}>
         <p className={S.LabelText}>업로드 할 이미지를 선택해 주세요.</p>
-        <img src="" alt="이미지 업로드" />
+        <img src={santaWithWindow} className={S.UploadedImage} alt="이미지 업로드" />
       </div>
       <TextArea value={content} onChange={(e) => setContent(e.target.value)}>
         <TextArea.Label label="설명" />
       </TextArea>
-      <Input label="비밀번호" type="number" />
+      <Input label="비밀번호" type="password" />
       <Button type="submit" color="primary">
         제출
       </Button>
