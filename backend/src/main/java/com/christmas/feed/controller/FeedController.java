@@ -19,10 +19,11 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.christmas.feed.dto.ContentUpdateRequest;
 import com.christmas.feed.dto.FeedCreateRequest;
 import com.christmas.feed.dto.FeedDeleteRequest;
 import com.christmas.feed.dto.FeedGetResponse;
+import com.christmas.feed.dto.FeedUpdateRequest;
+import com.christmas.feed.dto.FeedUpdateResponse;
 import com.christmas.feed.service.FeedService;
 
 import lombok.RequiredArgsConstructor;
@@ -58,27 +59,19 @@ public class FeedController implements FeedControllerDocs {
     }
 
     @PatchMapping(
-            value = "/feed/{id}/image",
+            value = "/feed/{id}",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE}
     )
-    public ResponseEntity<Void> updateImage(
+    public ResponseEntity<FeedUpdateResponse> updateFeed(
             @PathVariable("id") long id,
-            @RequestPart("image") MultipartFile image,
-            @RequestPart("password") String password
+            @RequestPart(value = "image", required = false) MultipartFile image,
+            @RequestPart("request") FeedUpdateRequest request
     ) {
-        feedService.updateImage(id, image, password);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .build();
-    }
-
-    @PatchMapping(value = "/feed/{id}/content")
-    public ResponseEntity<Void> updateContent(
-            @PathVariable("id") long id,
-            @Valid @RequestBody ContentUpdateRequest request
-    ) {
-        feedService.updateContent(id, request);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT)
-                .build();
+        feedService.updateFeed(id, image, request);
+        FeedGetResponse getFeed = feedService.getFeed(id);
+        FeedUpdateResponse response = FeedUpdateResponse.from(getFeed);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(response);
     }
 
     @DeleteMapping("/feed/{id}")

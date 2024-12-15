@@ -32,12 +32,13 @@ public class ImageFileService {
         return s3ImageManager.getUrlByKey(s3Key);
     }
 
-    public void updateImage(ImageFileEntity imageFileEntity, MultipartFile image) {
+    public URL updateImage(ImageFileEntity imageFileEntity, MultipartFile image) {
         String oldKey = imageFileEntity.getImageKey();
         String newKey = UUID.randomUUID() + image.getOriginalFilename();
-        s3ImageManager.upload(newKey, image);
+        URL url = s3ImageManager.upload(newKey, image);
         imageFileEntity.updateImageKey(newKey);
         s3ImageManager.deleteByKey(oldKey);
+        return url;
     }
 
     public void deleteImage(ImageFileEntity imageFileEntity) {

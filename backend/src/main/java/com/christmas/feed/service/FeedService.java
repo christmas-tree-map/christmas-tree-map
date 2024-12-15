@@ -1,6 +1,7 @@
 package com.christmas.feed.service;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.christmas.feed.domain.NicknameGenerator;
 import com.christmas.feed.dto.FeedCreateRequest;
 import com.christmas.feed.dto.FeedGetResponse;
-import com.christmas.feed.dto.ContentUpdateRequest;
+import com.christmas.feed.dto.FeedUpdateRequest;
 import com.christmas.feed.exception.InvalidPasswordException;
 import com.christmas.feed.exception.code.FeedErrorCode;
 import com.christmas.feed.repository.FeedImageFileRepository;
@@ -68,6 +69,24 @@ public class FeedService {
         return feedEntity.addLike();
     }
 
+    public FeedGetResponse getFeed(long id) {
+        FeedEntity feedEntity = feedRepository.findById(id)
+                .orElseThrow(() -> new NotFoundTreeException(
+                        FeedErrorCode.FEED_NOT_FOUND,
+                        Map.of("id", String.valueOf(id)))
+                );
+        FeedImageFileEntity feedImageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity);
+        URL imageUrl = imageFileService.getImageUrl(feedImageFileEntity.getImageFileEntity());
+        return new FeedGetResponse(
+                feedEntity.getTreeEntity().getImageCode(),
+                feedEntity.getNickname(),
+                latestUpdatedAt(feedEntity, feedImageFileEntity.getImageFileEntity()),
+                imageUrl.toString(),
+                feedEntity.getContent(),
+                feedEntity.getLikeCount()
+        );
+    }
+
     public List<FeedGetResponse> getAllFeedByTree(long treeId) {
         TreeEntity treeEntity = treeRepository.findById(treeId)
                 .orElseThrow(() -> new NotFoundTreeException(
@@ -77,12 +96,13 @@ public class FeedService {
         List<FeedEntity> feedEntities = feedRepository.findAllByTreeEntityOrderByCreatedAtDesc(treeEntity);
         List<FeedGetResponse> response = new ArrayList<>();
         for (FeedEntity feedEntity : feedEntities) {
-            FeedImageFileEntity feedImageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity);
-            URL imageUrl = imageFileService.getImageUrl(feedImageFileEntity.getImageFileEntity());
+            ImageFileEntity imageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity)
+                    .getImageFileEntity();
+            URL imageUrl = imageFileService.getImageUrl(imageFileEntity);
             response.add(new FeedGetResponse(
                     treeEntity.getImageCode(),
                     feedEntity.getNickname(),
-                    feedEntity.getCreatedAt(),
+                    latestUpdatedAt(feedEntity, imageFileEntity),
                     imageUrl.toString(),
                     feedEntity.getContent(),
                     feedEntity.getLikeCount())
@@ -91,20 +111,14 @@ public class FeedService {
         return response;
     }
 
-    public void updateImage(long id, MultipartFile image, String password) {
-        FeedEntity feedEntity = feedRepository.findById(id)
-                .orElseThrow(() -> new NotFoundTreeException(
-                        FeedErrorCode.FEED_NOT_FOUND,
-                        Map.of("id", String.valueOf(id)))
-                );
-        if (invalidPassword(feedEntity, password)) {
-            throw new InvalidPasswordException(FeedErrorCode.INVALID_PASSWORD, Map.of("password", password));
+    private LocalDateTime latestUpdatedAt(FeedEntity feedEntity, ImageFileEntity imageFileEntity) {
+        if (feedEntity.getUpdatedAt().isAfter(imageFileEntity.getUpdatedAt())) {
+            return feedEntity.getUpdatedAt();
         }
-        FeedImageFileEntity feedImageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity);
-        imageFileService.updateImage(feedImageFileEntity.getImageFileEntity(), image);
+        return imageFileEntity.getUpdatedAt();
     }
 
-    public void updateContent(long id, ContentUpdateRequest request) {
+    public void updateFeed(long id, MultipartFile image, FeedUpdateRequest request) {
         FeedEntity feedEntity = feedRepository.findById(id)
                 .orElseThrow(() -> new NotFoundTreeException(
                         FeedErrorCode.FEED_NOT_FOUND,
@@ -113,7 +127,14 @@ public class FeedService {
         if (invalidPassword(feedEntity, request.password())) {
             throw new InvalidPasswordException(FeedErrorCode.INVALID_PASSWORD, Map.of("password", request.password()));
         }
-        feedEntity.updateContent(request.content());
+
+        if (image != null) {
+            FeedImageFileEntity feedImageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity);
+            imageFileService.updateImage(feedImageFileEntity.getImageFileEntity(), image);
+        }
+        if (request.content() != null) {
+            feedEntity.updateContent(request.content());
+        }
     }
 
     private boolean invalidPassword(FeedEntity feedEntity, String password) {

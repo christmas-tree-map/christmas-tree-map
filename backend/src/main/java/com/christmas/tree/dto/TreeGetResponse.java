@@ -4,6 +4,9 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "트리 조회 응답 바디 element. 실제 응답은 TreeGetResponse 배열이다.")
 public record TreeGetResponse(
+        @Schema(description = "트리 id", example = "1")
+        long id,
+
         @Schema(description = "트리 경도", example = "127")
         Double longitude,
 

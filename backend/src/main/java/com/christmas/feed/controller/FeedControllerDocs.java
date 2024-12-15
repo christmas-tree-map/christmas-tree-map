@@ -11,6 +11,8 @@ import com.christmas.feed.dto.ContentUpdateRequest;
 import com.christmas.feed.dto.FeedCreateRequest;
 import com.christmas.feed.dto.FeedDeleteRequest;
 import com.christmas.feed.dto.FeedGetResponse;
+import com.christmas.feed.dto.FeedUpdateRequest;
+import com.christmas.feed.dto.FeedUpdateResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -55,30 +57,20 @@ public interface FeedControllerDocs {
     )
     ResponseEntity<List<FeedGetResponse>> getAllFeed(@Parameter(description = "treeId", required = true) long treeId);
 
-    @Operation(summary = "피드 이미지를 수정한다.")
-    @ApiResponse(responseCode = "204", description = "피드 이미지 수정에 성공한다.")
-    @ApiResponse(responseCode = "4XX", description = "피드 이미지 수정 실패 시 예외를 반환한다.",
+    @Operation(summary = "피드를 수정한다.")
+    @ApiResponse(responseCode = "200", description = "피드 수정에 성공 시 수정 시간, 이미지 url, 피드 내용을 반환한다.",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = FeedGetResponse.class)))
+    )
+    @ApiResponse(responseCode = "4XX", description = "피드 수정 실패 시 예외를 반환한다.",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponse.class))
     )
-    ResponseEntity<Void> updateImage(
+    ResponseEntity<FeedUpdateResponse> updateFeed(
             @Parameter(description = "피드 id", required = true)
             long id,
-            @Parameter(description = "이미지 파일", required = true, content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
+            @Parameter(description = "이미지 파일", content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
             MultipartFile image,
-            @Parameter(description = "비밀번호", required = true)
-            String password
-    );
-
-    @Operation(summary = "피드 내용을 수정한다.")
-    @ApiResponse(responseCode = "204", description = "피드 내용 수정에 성공한다.")
-    @ApiResponse(responseCode = "4XX", description = "피드 내용 수정 실패 시 예외를 반환한다.",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponse.class))
-    )
-    ResponseEntity<Void> updateContent(
-            @Parameter(description = "피드 id", required = true)
-            long id,
-            @Parameter(description = "비밀번호, 수정한 글 내용", required = true)
-            ContentUpdateRequest request
+            @Parameter(description = "비밀번호 및 피드 내용", required = true)
+            FeedUpdateRequest request
     );
 
     @Operation(summary = "피드를 삭제한다.")
