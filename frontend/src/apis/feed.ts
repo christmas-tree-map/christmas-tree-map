@@ -23,8 +23,11 @@ interface PostFeedRequest {
 
 export const postFeed = async ({ imageFile, treeId, content, password }: PostFeedRequest) => {
   const formData = new FormData();
+  const value = { treeId, content, password };
+  const blob = new Blob([JSON.stringify(value)], { type: 'application/json' });
+
   formData.append('image', imageFile);
-  formData.append('request', JSON.stringify({ treeId, content, password }));
+  formData.append('request', blob);
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await requestAPI.post<{ data: any }>('/feed', formData);
