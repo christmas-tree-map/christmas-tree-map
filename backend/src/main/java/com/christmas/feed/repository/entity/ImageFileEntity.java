@@ -23,14 +23,24 @@ public class ImageFileEntity extends TimestampEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "file_name", nullable = false)
+    private String fileName;
+
     @Column(name = "image_key", nullable = false)
     private String imageKey;
 
-    public ImageFileEntity(String imageKey) {
+    @Column(name = "image_url", nullable = false)
+    private String imageUrl;
+
+    public ImageFileEntity(String fileName, String imageKey, String imageUrl) {
+        this.fileName = fileName;
         this.imageKey = imageKey;
+        this.imageUrl = imageUrl;
     }
 
-    public void updateImageKey(String imageKey) {
+    public void updateImage(String fileName, String imageKey, String imageUrl) {
+        this.fileName = fileName;
         this.imageKey = imageKey;
+        this.imageUrl = imageUrl;
     }
 }
