@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from '@/App';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { LayoutVisibilityProvider } from './contexts/LayoutVisibilityContext';
 import './styles/global.css';
 
 export const queryClient = new QueryClient({
@@ -27,7 +28,9 @@ enableMocking().then(() =>
     <StrictMode>
       <QueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={true} />
-        <App />
+        <LayoutVisibilityProvider>
+          <App />
+        </LayoutVisibilityProvider>
       </QueryClientProvider>
     </StrictMode>,
   ),
