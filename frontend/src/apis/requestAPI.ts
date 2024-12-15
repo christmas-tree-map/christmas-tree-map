@@ -6,11 +6,21 @@ type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 interface ApiMethodsProps {
   method: HttpMethod;
   endpoint: string;
+  queryParams?: Record<string, string | number | boolean>;
   body?: Record<string, any> | FormData;
 }
 
 const requestAPI = {
-  async apiMethods<T>({ method, endpoint, body }: ApiMethodsProps): Promise<T> {
+  async apiMethods<T>({ method, endpoint, queryParams, body }: ApiMethodsProps): Promise<T> {
+    const url = new URL(`${API_URL}${endpoint}`);
+    if (queryParams) {
+      Object.entries(queryParams).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          url.searchParams.append(key, String(value));
+        }
+      });
+    }
+
     const isFormData = body instanceof FormData;
     const options: RequestInit = {
       method,
@@ -19,7 +29,7 @@ const requestAPI = {
     };
 
     try {
-      const response = await fetch(`${API_URL}${endpoint}`, options);
+      const response = await fetch(url.toString(), options);
 
       if (!response.ok) {
         throw new Error(`Status: ${response.status}`); // TODO: message를 서버에서 받아올지, 아니면 따로 정의할지 논의
@@ -35,20 +45,28 @@ const requestAPI = {
     }
   },
 
-  get<T>(endpoint: string): Promise<T> {
-    return this.apiMethods<T>({ method: 'GET', endpoint });
+  get<T>(endpoint: string, queryParams?: Record<string, string | number | boolean>): Promise<T> {
+    return this.apiMethods<T>({ method: 'GET', endpoint, queryParams });
   },
 
-  post<T>(endpoint: string, body?: Record<string, any> | FormData): Promise<T> {
-    return this.apiMethods<T>({ method: 'POST', endpoint, body });
+  post<T>(
+    endpoint: string,
+    body?: Record<string, any> | FormData,
+    queryParams?: Record<string, string | number | boolean>,
+  ): Promise<T> {
+    return this.apiMethods<T>({ method: 'POST', endpoint, body, queryParams });
   },
 
-  patch<T>(endpoint: string, body?: Record<string, any>): Promise<T> {
-    return this.apiMethods<T>({ method: 'PATCH', endpoint, body });
+  patch<T>(
+    endpoint: string,
+    body?: Record<string, any>,
+    queryParams?: Record<string, string | number | boolean>,
+  ): Promise<T> {
+    return this.apiMethods<T>({ method: 'PATCH', endpoint, body, queryParams });
   },
 
-  delete(endpoint: string): Promise<void> {
-    return this.apiMethods({ method: 'DELETE', endpoint });
+  delete(endpoint: string, queryParams?: Record<string, string | number | boolean>): Promise<void> {
+    return this.apiMethods({ method: 'DELETE', endpoint, queryParams });
   },
 };
 
