@@ -1,7 +1,7 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Layout from '@/pages/Layout/Layout';
 import TreeMap from '@/pages/TreeMap/TreeMap';
-import Error from './pages/Error/Global/GlobalErrorFallback';
+import GlobalErrorFallback from './pages/Error/GlobalErrorFallback/GlobalErrorFallback';
 
 const App = () => {
   const router = createBrowserRouter(
@@ -16,7 +16,7 @@ const App = () => {
           },
         ],
       },
-      { path: '*', element: <Error statusCode={404} /> },
+      { path: '*', element: <GlobalErrorFallback statusCode={404} /> },
     ],
     {
       future: {

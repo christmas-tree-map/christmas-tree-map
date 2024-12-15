@@ -1,6 +1,6 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
-import ModalErrorBoundary from '@/pages/Error/Modal/ModalErrorBoundary';
+import ModalErrorBoundary from '@/pages/Error/ErrorBoundary/ModalErrorBoundary';
 import useEscapeKey from '@/hooks/_common/useEscapeKey';
 import useModalAnimation from '@/hooks/_common/useModalAnimation';
 import * as S from './Modal.css';

@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from '@/App';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import GlobalErrorBoundary from './pages/Error/Global/GlobalErrorBoundary';
+import GlobalErrorBoundary from './pages/Error/ErrorBoundary/GlobalErrorBoundary';
 import './styles/global.css';
 
 export const queryClient = new QueryClient({

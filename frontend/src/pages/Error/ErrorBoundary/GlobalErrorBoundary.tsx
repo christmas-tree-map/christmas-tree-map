@@ -1,6 +1,6 @@
 import { ErrorBoundary } from 'react-error-boundary';
 import { useQueryErrorResetBoundary } from '@tanstack/react-query';
-import GlobalErrorFallback from './GlobalErrorFallback';
+import GlobalErrorFallback from '../GlobalErrorFallback/GlobalErrorFallback';
 
 const GlobalErrorBoundary = ({ children }: React.PropsWithChildren) => {
   const { reset } = useQueryErrorResetBoundary();
