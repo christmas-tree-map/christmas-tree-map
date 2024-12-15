@@ -34,7 +34,7 @@ public class TreeService {
         return trees.stream()
                 .map(tree -> {
                     final Point point = tree.getLocation();
-                    return new TreeGetResponse(point.getX(), point.getY(), tree.getImageCode());
+                    return new TreeGetResponse(tree.getId(), point.getX(), point.getY(), tree.getImageCode());
                 })
                 .toList();
     }
