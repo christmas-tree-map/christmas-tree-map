@@ -1,56 +1,24 @@
-import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '@/components/_common/Button/Button';
 import Input from '@/components/_common/Input/Input';
 import TextArea from '@/components/_common/TextArea/TextArea';
-import useImageUploader from '@/hooks/_common/useImageUploader';
-import useFeedMutation from '@/queries/Feed/useFeedMutation';
-import useTreeMutation from '@/queries/Tree/useTreeMutation';
-import useTreesQuery from '@/queries/Tree/useTreesQuery';
-import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
+import useImageUploader from '@/hooks/Feed/useImageUploader';
+import useFeedSubmit from '@/hooks/Feed/useFeedSubmit';
 import mapIcon from '@/assets/map.png';
 import santaWithWindow from '@/assets/santaWithWindow.png';
 import * as S from './FeedSubmit.css';
 
 const FeedSubmit = () => {
-  const [content, setContent] = useState('');
-  const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
 
-  const imageCode = 'TREE_01'; // TODO: 변경 필요
-  const [treeId, setTreeId] = useState<number>(location.state?.treeId ?? 0);
-  const center: { latitude: number; longitude: number } = location.state?.center ?? {
-    latitude: DEFAULT_LATITUDE,
-    longitude: DEFAULT_LONGITUDE,
-  };
-
-  const { addFeedMutation } = useFeedMutation();
-  const { addTree } = useTreeMutation();
-  const { trees } = useTreesQuery(center);
-
-  const { imageUrl, imageFile, fileInputRef, handleImageUploadClick, handleImageChange } = useImageUploader();
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!imageFile) return;
-
-    // 1. 주변 트리가 있는지 조회
-    if ((trees && trees.length === 0) || treeId === 0) {
-      // 2. 트리가 없다면 Tree 생성 요청
-      const treeId = await addTree({ latitude: center.latitude, longitude: center.longitude, imageCode });
-      setTreeId(treeId);
-    }
-
-    // 3. 해당 트리에 Feed 등록 요청
-    addFeedMutation({ imageFile, treeId, content, password });
-    navigate('/?modal=feeds');
-  };
-
-  const handleSelectMarkerClick = () => {
-    navigate('/select');
-  };
+  const { imageUrl, fileInputRef, handleImageUploadClick, handleImageChange } = useImageUploader();
+  const { content, password, handleContentChange, handlePasswordChange, handleSubmit, handleSelectMarkerClick } =
+    useFeedSubmit({
+      imageFile: fileInputRef.current?.files?.[0] || null,
+      location,
+      navigate,
+    });
 
   return (
     <form className={S.Layout} onSubmit={handleSubmit}>
@@ -71,10 +39,10 @@ const FeedSubmit = () => {
         <input type="file" accept="image/*" onChange={handleImageChange} className={S.ImageInput} ref={fileInputRef} />
       </div>
 
-      <TextArea value={content} onChange={(e) => setContent(e.target.value)}>
+      <TextArea value={content} onChange={handleContentChange}>
         <TextArea.Label label="설명" />
       </TextArea>
-      <Input label="비밀번호" type="password" />
+      <Input label="비밀번호" type="password" value={password} onChange={handlePasswordChange} />
       <Button type="submit" color="primary">
         제출
       </Button>
