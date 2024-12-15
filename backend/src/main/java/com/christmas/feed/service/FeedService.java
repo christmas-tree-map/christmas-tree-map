@@ -76,12 +76,13 @@ public class FeedService {
                         Map.of("id", String.valueOf(id)))
                 );
         FeedImageFileEntity feedImageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity);
-        URL imageUrl = imageFileService.getImageUrl(feedImageFileEntity.getImageFileEntity());
+        ImageFileEntity imageFileEntity = feedImageFileEntity.getImageFileEntity();
         return new FeedGetResponse(
-                feedEntity.getTreeEntity().getImageCode(),
+                feedEntity.getTreeEntity()
+                        .getImageCode(),
                 feedEntity.getNickname(),
-                latestUpdatedAt(feedEntity, feedImageFileEntity.getImageFileEntity()),
-                imageUrl.toString(),
+                latestUpdatedAt(feedEntity, imageFileEntity),
+                imageFileEntity.getImageUrl(),
                 feedEntity.getContent(),
                 feedEntity.getLikeCount()
         );
@@ -98,12 +99,11 @@ public class FeedService {
         for (FeedEntity feedEntity : feedEntities) {
             ImageFileEntity imageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity)
                     .getImageFileEntity();
-            URL imageUrl = imageFileService.getImageUrl(imageFileEntity);
             response.add(new FeedGetResponse(
                     treeEntity.getImageCode(),
                     feedEntity.getNickname(),
                     latestUpdatedAt(feedEntity, imageFileEntity),
-                    imageUrl.toString(),
+                    imageFileEntity.getImageUrl(),
                     feedEntity.getContent(),
                     feedEntity.getLikeCount())
             );
