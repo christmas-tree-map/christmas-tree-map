@@ -1,22 +1,21 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const API_URL = '/api'; // TODO: 주소 수정하기
+export const API_URL = '/api'; // TODO: 주소 수정하기
 
 type HttpMethod = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
 interface ApiMethodsProps {
   method: HttpMethod;
   endpoint: string;
-  body?: Record<string, any>;
+  body?: Record<string, any> | FormData;
 }
 
 const requestAPI = {
   async apiMethods<T>({ method, endpoint, body }: ApiMethodsProps): Promise<T> {
+    const isFormData = body instanceof FormData;
     const options: RequestInit = {
       method,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: body ? JSON.stringify(body) : undefined,
+      headers: isFormData ? undefined : { 'Content-Type': 'application/json' },
+      body: isFormData ? body : body ? JSON.stringify(body) : undefined,
     };
 
     try {
@@ -40,7 +39,7 @@ const requestAPI = {
     return this.apiMethods<T>({ method: 'GET', endpoint });
   },
 
-  post<T>(endpoint: string, body?: Record<string, any>): Promise<T> {
+  post<T>(endpoint: string, body?: Record<string, any> | FormData): Promise<T> {
     return this.apiMethods<T>({ method: 'POST', endpoint, body });
   },
 

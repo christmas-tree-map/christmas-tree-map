@@ -5,6 +5,7 @@ import Input from '@/components/_common/Input/Input';
 import TextArea from '@/components/_common/TextArea/TextArea';
 import useImageUploader from '@/hooks/_common/useImageUploader';
 import useFeedMutation from '@/queries/Feed/useFeedMutation';
+import useTreeMutation from '@/queries/Tree/useTreeMutation';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
 import mapIcon from '@/assets/map.png';
 import santaWithWindow from '@/assets/santaWithWindow.png';
@@ -12,21 +13,30 @@ import * as S from './FeedSubmit.css';
 
 const FeedSubmit = () => {
   const [content, setContent] = useState('');
+  const [password, setPassword] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
-  const center = location.state?.center || {
+
+  const imageCode = 'TREE_01'; // TODO: 변경 필요
+  const [treeId, setTreeId] = useState<number>();
+  const center: { latitude: number; longitude: number } = location.state?.center || {
     latitude: DEFAULT_LATITUDE,
     longitude: DEFAULT_LONGITUDE,
   };
 
   const { addFeedMutation } = useFeedMutation();
+  const { addTree } = useTreeMutation();
 
   const { imageUrl, imageFile, fileInputRef, handleImageUploadClick, handleImageChange } = useImageUploader();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    addFeedMutation({ imageUrl, content });
+    if (!imageFile) return;
+
+    const treeId = await addTree({ latitude: center.latitude, longitude: center.longitude, imageCode });
+    setTreeId(treeId);
+    addFeedMutation({ imageFile, treeId, content, password });
     navigate('/?modal=feeds');
   };
 
