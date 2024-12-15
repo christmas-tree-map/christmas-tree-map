@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '@/components/_common/Button/Button';
 import Input from '@/components/_common/Input/Input';
 import TextArea from '@/components/_common/TextArea/TextArea';
 import useFeedMutation from '@/queries/Feed/useFeedMutation';
+import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
 import mapIcon from '@/assets/map.png';
 import santaWithWindow from '@/assets/santaWithWindow.png';
 import * as S from './FeedSubmit.css';
@@ -12,6 +13,15 @@ const FeedSubmit = () => {
   const [imageUrl, setImageUrl] = useState('');
   const [content, setContent] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
+  const [center, setCenter] = useState(
+    () =>
+      location.state?.center || {
+        latitude: DEFAULT_LATITUDE,
+        longitude: DEFAULT_LONGITUDE,
+      },
+  );
+
   const { addFeedMutation } = useFeedMutation();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -21,13 +31,17 @@ const FeedSubmit = () => {
     navigate('/?modal=feeds');
   };
 
+  const handleSelectMarkerClick = () => {
+    navigate('/select');
+  };
+
   return (
     <form className={S.Layout} onSubmit={handleSubmit}>
-      <div className={S.SelectPinBox}>
+      <div className={S.SelectMarkerBox} onClick={handleSelectMarkerClick}>
         <div className={S.MapIconWrapper}>
           <img src={mapIcon} alt="Map Icon" className={S.MapIcon} />
         </div>
-        <p className={S.SelectPinText}>지도를 움직여 핀을 꽂아 보세요.</p>
+        <p className={S.SelectMarkerText}>지도를 움직여 핀을 꽂아 보세요.</p>
       </div>
 
       <div className={S.ImageUploadBox}>

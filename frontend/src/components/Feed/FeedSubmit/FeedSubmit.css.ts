@@ -13,7 +13,7 @@ export const Layout = style({
   background: vars.colors.white,
 });
 
-export const SelectPinBox = style({
+export const SelectMarkerBox = style({
   display: 'flex',
   alignItems: 'center',
   gap: '10px',
@@ -40,7 +40,7 @@ export const MapIcon = style({
   objectFit: 'cover',
 });
 
-export const SelectPinText = style({
+export const SelectMarkerText = style({
   fontSize: vars.fonts.label,
   color: vars.colors.grey[700],
 });
