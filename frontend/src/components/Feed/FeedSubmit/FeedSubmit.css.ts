@@ -58,9 +58,16 @@ export const LabelText = style({
 
 export const UploadedImage = style({
   width: '100%',
-  aspectRatio: 1,
-  padding: '30px',
+  height: 'auto',
+  aspectRatio: '1',
+  objectFit: 'cover',
+
   borderRadius: '10px',
 
   background: vars.colors.grey[50],
+  cursor: 'pointer',
+});
+
+export const ImageInput = style({
+  display: 'none',
 });

@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '@/components/_common/Button/Button';
 import Input from '@/components/_common/Input/Input';
 import TextArea from '@/components/_common/TextArea/TextArea';
+import useImageUploader from '@/hooks/_common/useImageUploader';
 import useFeedMutation from '@/queries/Feed/useFeedMutation';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
 import mapIcon from '@/assets/map.png';
@@ -10,19 +11,17 @@ import santaWithWindow from '@/assets/santaWithWindow.png';
 import * as S from './FeedSubmit.css';
 
 const FeedSubmit = () => {
-  const [imageUrl, setImageUrl] = useState('');
   const [content, setContent] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
-  const [center, setCenter] = useState(
-    () =>
-      location.state?.center || {
-        latitude: DEFAULT_LATITUDE,
-        longitude: DEFAULT_LONGITUDE,
-      },
-  );
+  const center = location.state?.center || {
+    latitude: DEFAULT_LATITUDE,
+    longitude: DEFAULT_LONGITUDE,
+  };
 
   const { addFeedMutation } = useFeedMutation();
+
+  const { imageUrl, imageFile, fileInputRef, handleImageUploadClick, handleImageChange } = useImageUploader();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -46,8 +45,14 @@ const FeedSubmit = () => {
 
       <div className={S.ImageUploadBox}>
         <p className={S.LabelText}>업로드 할 이미지를 선택해 주세요.</p>
-        <img src={santaWithWindow} className={S.UploadedImage} alt="이미지 업로드" />
+        {imageUrl ? (
+          <img src={imageUrl} className={S.UploadedImage} alt="업로드된 이미지" onClick={handleImageUploadClick} />
+        ) : (
+          <img src={santaWithWindow} className={S.UploadedImage} onClick={handleImageUploadClick} alt="이미지 업로드" />
+        )}
+        <input type="file" accept="image/*" onChange={handleImageChange} className={S.ImageInput} ref={fileInputRef} />
       </div>
+
       <TextArea value={content} onChange={(e) => setContent(e.target.value)}>
         <TextArea.Label label="설명" />
       </TextArea>
