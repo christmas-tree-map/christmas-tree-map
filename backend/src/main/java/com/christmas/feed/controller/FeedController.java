@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.christmas.feed.dto.ContentUpdateRequest;
 import com.christmas.feed.dto.FeedCreateRequest;
 import com.christmas.feed.dto.FeedDeleteRequest;
 import com.christmas.feed.dto.FeedGetResponse;
@@ -59,7 +58,6 @@ public class FeedController implements FeedControllerDocs {
                 .body(response);
     }
 
-    // todo: 비밀번호 헤더에 담에서 보내기
     @PatchMapping(
             value = "/feed/{id}",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE}
@@ -76,7 +74,6 @@ public class FeedController implements FeedControllerDocs {
                 .body(response);
     }
 
-    // todo: 비밀번호 헤더에 담아서 보내기
     @DeleteMapping("/feed/{id}")
     public ResponseEntity<Void> deleteFeed(@PathVariable("id") long id, @RequestBody FeedDeleteRequest request) {
         feedService.deleteFeed(id, request.password());
