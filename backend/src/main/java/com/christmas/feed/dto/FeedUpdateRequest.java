@@ -11,8 +11,8 @@ public record FeedUpdateRequest(
         @NotBlank(message = "비밀번호가 비어있습니다.")
         String password,
 
-        @Nullable
         @Schema(description = "수정한 피드 내용. 수정을 했을 때만 값을 요청한다.", nullable = true)
+        @Nullable
         String content
 ) {
 }
