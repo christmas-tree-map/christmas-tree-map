@@ -1,6 +1,7 @@
 import { HttpResponse, http } from 'msw';
 import { API_URL } from '@/apis/requestAPI';
 import mockFeeds from './feeds.json';
+import mockTrees from './trees.json';
 
 export const handlers = [
   http.get(`${API_URL}/feeds`, () => {
@@ -28,7 +29,7 @@ export const handlers = [
         createdAt: new Date().toISOString(),
         likeCount: 0,
         treeId,
-        password
+        password,
       };
 
       mockFeeds.push(newFeed);
@@ -43,5 +44,17 @@ export const handlers = [
 
   http.post(`${API_URL}/tree`, async () => {
     return HttpResponse.json({ status: 200, data: 1 });
+  }),
+
+  http.get(`${API_URL}/tree/filter`, async ({ request }) => {
+    const url = new URL(request.url);
+    const latitude = url.searchParams.get('latitude');
+    const longitude = url.searchParams.get('longitude');
+
+    if (!latitude || !longitude) {
+      return HttpResponse.json({ message: '위도와 경도가 필요합니다.' }, { status: 400 });
+    }
+
+    return HttpResponse.json({ status: 200, data: mockTrees });
   }),
 ];
