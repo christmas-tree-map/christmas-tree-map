@@ -26,13 +26,13 @@ public class ImageFileService {
         return imageFileRepository.save(new ImageFileEntity(image.getOriginalFilename(), key, imageUrl.toString()));
     }
 
-    public URL updateImage(ImageFileEntity imageFileEntity, MultipartFile newImage) {
+    public ImageFileEntity updateImage(ImageFileEntity imageFileEntity, MultipartFile newImage) {
         String oldKey = imageFileEntity.getImageKey();
         String newKey = UUID.randomUUID() + newImage.getOriginalFilename();
         URL url = s3ImageManager.upload(newKey, newImage);
         imageFileEntity.updateImage(newImage.getOriginalFilename(), newKey, url.toString());
         s3ImageManager.deleteByKey(oldKey);
-        return url;
+        return imageFileEntity;
     }
 
     public void deleteImage(ImageFileEntity imageFileEntity) {
