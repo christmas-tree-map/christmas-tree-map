@@ -7,8 +7,7 @@ interface PostTreeRequest {
 }
 
 export const postTree = async ({ latitude, longitude, imageCode }: PostTreeRequest) => {
-  const { data } = await requestAPI.post<{ data: number }>('/tree', { latitude, longitude, imageCode });
-  return data;
+  return await requestAPI.post<number>('/tree', { latitude, longitude, imageCode });
 };
 
 interface GetTreesRequest {
@@ -22,6 +21,5 @@ interface GetTreesResponse extends GetTreesRequest {
 }
 
 export const getTrees = async ({ latitude, longitude }: GetTreesRequest) => {
-  const { data } = await requestAPI.get<{ data: GetTreesResponse[] }>('/tree/filter', { latitude, longitude });
-  return data;
+  return await requestAPI.get<GetTreesResponse[]>('/tree', { latitude, longitude });
 };

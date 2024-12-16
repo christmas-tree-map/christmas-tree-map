@@ -1,17 +1,16 @@
 import requestAPI from './requestAPI';
 
 interface Feeds {
-  id: number;
-  name: string;
-  createdAt: string;
+  treeImageCode: string;
+  nickname: string;
+  updatedAt: string;
   imageUrl: string;
-  likeCount: number;
   content: string;
+  likeCount: number;
 }
 
-export const getFeeds = async () => {
-  const { data } = await requestAPI.get<{ data: Feeds[] }>('/feeds');
-  return data;
+export const getFeeds = async (treeId: number) => {
+  return await requestAPI.get<Feeds[]>('/feed', { treeId });
 };
 
 interface PostFeedRequest {

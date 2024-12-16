@@ -34,7 +34,7 @@ const MapMarkerSelector = () => {
   }, [map]);
 
   const handleComplete = () => {
-    navigate('/?modal=submit', { state: { center } }); // 선택한 center를 state로 전달하며 돌아감
+    navigate('/?modal=submit', { state: { center } });
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

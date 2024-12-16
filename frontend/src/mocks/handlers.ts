@@ -26,7 +26,7 @@ export const handlers = [
         name: '토끼',
         imageUrl: '',
         content,
-        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
         likeCount: 0,
         treeId,
         password,
