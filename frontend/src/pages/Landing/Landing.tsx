@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
-
-import Modal from '@/components/_common/Modal/Modal';
+import { useNavigate } from 'react-router-dom';
 
 const Landing = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,9 +17,6 @@ const Landing = () => {
   return (
     <div>
       <button onClick={toggleModal}>트리 에셋</button>
-      <Modal isOpen={isOpen}>
-        <Outlet />
-      </Modal>
     </div>
   );
 };
