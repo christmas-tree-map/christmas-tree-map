@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from 'react';
 
 const { kakao } = window;
 
 interface useMapEventHandlerProps {
-  map: kakao.maps.Map | null;
+  map: any;
   eventName: string;
-  onEvent: (map: kakao.maps.Map) => void;
+  onEvent: (map: any) => void;
 }
 
 const useMapEventHandler = ({ map, eventName, onEvent }: useMapEventHandlerProps) => {

@@ -6,7 +6,7 @@ import useTreesQuery from '@/queries/Tree/useTreesQuery';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
 
 interface UseFeedSubmitProps {
-  imageFile: File;
+  imageFile: File | null;
   location: Location;
   navigate: NavigateFunction;
 }
@@ -29,6 +29,8 @@ const useFeedSubmit = ({ imageFile, location, navigate }: UseFeedSubmitProps) =>
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (!imageFile) return;
 
     let currentTreeId = treeId;
 

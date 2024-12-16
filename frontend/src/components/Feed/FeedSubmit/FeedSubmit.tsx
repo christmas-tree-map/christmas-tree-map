@@ -2,8 +2,8 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Button from '@/components/_common/Button/Button';
 import Input from '@/components/_common/Input/Input';
 import TextArea from '@/components/_common/TextArea/TextArea';
-import useImageUploader from '@/hooks/Feed/useImageUploader';
 import useFeedSubmit from '@/hooks/Feed/useFeedSubmit';
+import useImageUploader from '@/hooks/Feed/useImageUploader';
 import mapIcon from '@/assets/map.png';
 import santaWithWindow from '@/assets/santaWithWindow.png';
 import * as S from './FeedSubmit.css';
@@ -15,7 +15,7 @@ const FeedSubmit = () => {
   const { imageUrl, fileInputRef, handleImageUploadClick, handleImageChange } = useImageUploader();
   const { content, password, handleContentChange, handlePasswordChange, handleSubmit, handleSelectMarkerClick } =
     useFeedSubmit({
-      imageFile: fileInputRef.current?.files?.[0] || null,
+      imageFile: fileInputRef.current?.files?.[0] ?? null,
       location,
       navigate,
     });
