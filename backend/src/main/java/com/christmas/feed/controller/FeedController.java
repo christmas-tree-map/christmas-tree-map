@@ -68,10 +68,8 @@ public class FeedController implements FeedControllerDocs {
             @RequestPart("request") FeedUpdateRequest request
     ) {
         feedService.updateFeed(id, image, request);
-        FeedGetResponse getFeed = feedService.getFeed(id);
-        FeedUpdateResponse response = FeedUpdateResponse.from(getFeed);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(response);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
     @DeleteMapping("/feed/{id}")

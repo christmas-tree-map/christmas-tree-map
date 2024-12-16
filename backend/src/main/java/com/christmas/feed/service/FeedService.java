@@ -1,6 +1,5 @@
 package com.christmas.feed.service;
 
-import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,6 +77,7 @@ public class FeedService {
         FeedImageFileEntity feedImageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity);
         ImageFileEntity imageFileEntity = feedImageFileEntity.getImageFileEntity();
         return new FeedGetResponse(
+                feedEntity.getId(),
                 feedEntity.getTreeEntity()
                         .getImageCode(),
                 feedEntity.getNickname(),
@@ -100,6 +100,7 @@ public class FeedService {
             ImageFileEntity imageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity)
                     .getImageFileEntity();
             response.add(new FeedGetResponse(
+                    feedEntity.getId(),
                     treeEntity.getImageCode(),
                     feedEntity.getNickname(),
                     latestUpdatedAt(feedEntity, imageFileEntity),
