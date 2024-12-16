@@ -2,7 +2,7 @@ import { Meta, StoryFn } from '@storybook/react';
 import FeedList from './FeedList';
 
 export default {
-  title: 'Components/FeedList',
+  title: 'Feed/FeedList',
   component: FeedList,
 } as Meta;
 
