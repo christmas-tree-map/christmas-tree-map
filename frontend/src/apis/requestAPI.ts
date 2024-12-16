@@ -1,3 +1,5 @@
+import ApiError from './apiError';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const API_URL = import.meta.env.VITE_API_URL;
 
@@ -32,13 +34,13 @@ const requestAPI = {
       const response = await fetch(url.toString(), options);
 
       if (!response.ok) {
-        throw new Error(`Status: ${response.status}`); // TODO: message를 서버에서 받아올지, 아니면 따로 정의할지 논의
+        throw new ApiError(endpoint, response.status);
       }
 
       return response.json();
     } catch (error) {
-      if (error instanceof Error) {
-        throw new Error(`Http error! ${error.message}`);
+      if (error instanceof ApiError) {
+        console.error(`Http error! ${error.message}`);
       }
 
       throw error;

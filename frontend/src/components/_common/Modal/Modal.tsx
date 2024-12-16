@@ -1,5 +1,6 @@
 import React from 'react';
 import { createPortal } from 'react-dom';
+import ModalErrorBoundary from '@/pages/Error/ErrorBoundary/ModalErrorBoundary';
 import useEscapeKey from '@/hooks/_common/useEscapeKey';
 import useModalAnimation from '@/hooks/_common/useModalAnimation';
 import * as S from './Modal.css';
@@ -33,7 +34,9 @@ const Modal = ({ children, isOpen, onClose, backgroundColor = 'red' }: React.Pro
           <div className={S.Bar} />
         </div>
 
-        <div className={S.ContentWrapper}>{children}</div>
+        <div className={S.ContentWrapper}>
+          <ModalErrorBoundary>{children}</ModalErrorBoundary>
+        </div>
       </div>
     </div>
   );

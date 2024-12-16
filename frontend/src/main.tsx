@@ -10,6 +10,7 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       throwOnError: true,
+      retry: 0,
       // staleTime: 1000 * 60 * 5, // 개발 편의를 위해 주석처리합니다.
       // gcTime: 1000 * 60 * 10, // 개발 편의를 위해 주석처리합니다.
     },
