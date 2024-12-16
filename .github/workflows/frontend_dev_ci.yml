@@ -1,0 +1,136 @@
+name: ✨ Frontend Dev CI
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  PATH_CHANGES:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./frontend
+
+    permissions:
+      pull-requests: read
+    outputs:
+      frontend: ${{ steps.changes.outputs.frontend }}
+
+    steps:
+      - uses: dorny/paths-filter@v3
+        id: changes
+        with:
+          filters: |
+            frontend:
+              - 'frontend/**'
+
+  FE_CI:
+    runs-on: ubuntu-latest
+    needs: PATH_CHANGES
+    permissions:
+      contents: read
+      packages: write
+      actions: write
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    outputs:
+      lint: ${{ steps.yarn_lint_result.outputs.result }}
+      build: ${{ steps.yarn_build_result.outputs.result }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.15.1'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run lint
+        id: yarn_lint
+        run: yarn lint
+
+      - name: Save Run lint result
+        id: yarn_lint_result
+        run: echo "result=${{steps.yarn_lint.outcome}}" >> $GITHUB_OUTPUT
+
+      - name: Run build
+        id: yarn_build
+        run: |
+          pwd
+          yarn build
+
+      - name: Save Run build result
+        id: yarn_build_result
+        run: echo "result=${{steps.yarn_build.outcome}}" >> $GITHUB_OUTPUT
+
+  publish-storybook:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    needs: FE_CI
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.15.1'
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Publish Storybook
+        id: publish_storybook
+        run: |
+          npx chromatic \
+          --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} \
+          --storybook-config-dir=.storybook \
+          --only-changed \
+          --auto-accept-changes \
+          | tee chromatic-log.txt
+
+      - name: Extract Storybook URL
+        id: set_storybook_url
+        run: |
+          storybook_url=$(grep -o 'https://67604086bae1648966795b11-[a-z0-9]*\.chromatic\.com/' chromatic-log.txt | head -n 1)
+          echo "storybook_url=${storybook_url}" >> $GITHUB_OUTPUT
+
+      - name: Debug Chromatic Output
+        run: echo "${{ steps.set_storybook_url.outputs.storybook_url }}"
+
+      - name: Get Current Time
+        uses: josStorer/get-current-time@v2
+        id: current_time
+        with:
+          format: 'YYYY년 MM월 DD일 HH:mm:ss'
+          utcOffset: '+09:00'
+
+    outputs:
+      storybook_url: ${{ steps.set_storybook_url.outputs.storybook_url }}
+      current_time: ${{ steps.current_time.outputs.formattedTime }}
+
+  github-bot-storybook:
+    runs-on: ubuntu-latest
+    needs: [publish-storybook]
+    steps:
+      - name: Record PR Comment
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          comment_tag: ${{github.event.number}}-storybook
+          message: |
+            **Storybook Published**  
+            💄 [View Storybook](${{ needs.publish-storybook.outputs.storybook_url }})
+            🕖 Update Time : ${{ needs.publish-storybook.outputs.current_time }}
