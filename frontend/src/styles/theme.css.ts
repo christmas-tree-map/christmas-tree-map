@@ -95,9 +95,9 @@ createGlobalTheme(':root', vars, {
     black: '#000000',
   },
   fonts: {
-    body: '16px Pretendard',
-    label: '14px Pretendard',
-    button: 'bold 12px Pretendard',
-    tiny: '12px Pretendard',
+    body: '16px Pretendard sans-serif',
+    label: '14px Pretendard sans-serif',
+    button: 'bold 12px Pretendard sans-serif',
+    tiny: '10px Pretendard sans-serif',
   },
 });

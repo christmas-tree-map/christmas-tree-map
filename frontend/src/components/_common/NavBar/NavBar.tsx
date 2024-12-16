@@ -1,8 +1,13 @@
 import { Link } from 'react-router-dom';
-import { FaTree } from '@react-icons/all-files/fa/FaTree'
+import { useLayoutVisibilityContext } from '@/contexts/LayoutVisibilityContext';
+import { FaTree } from '@react-icons/all-files/fa/FaTree';
 import * as S from './NavBar.css';
 
 const NavBar = () => {
+  const { isNavBarHidden } = useLayoutVisibilityContext();
+
+  if (isNavBarHidden) return null;
+
   return (
     <div className={S.Layout}>
       <nav className={S.Bar}>

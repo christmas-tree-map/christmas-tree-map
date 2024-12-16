@@ -1,6 +1,7 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Layout from '@/pages/Layout/Layout';
 import TreeMap from '@/pages/TreeMap/TreeMap';
+import MapMarkerSelector from './pages/MapMarkerSelector/MapMarkerSelector';
 import GlobalErrorFallback from './pages/Error/GlobalErrorFallback/GlobalErrorFallback';
 
 const App = () => {
@@ -13,6 +14,10 @@ const App = () => {
           {
             path: '',
             element: <TreeMap />,
+          },
+          {
+            path: 'select',
+            element: <MapMarkerSelector />,
           },
         ],
       },

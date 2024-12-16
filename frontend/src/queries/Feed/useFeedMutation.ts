@@ -1,12 +1,18 @@
+import { useNavigate } from 'react-router-dom';
 import { queryClient } from '@/main';
 import { useMutation } from '@tanstack/react-query';
 import { postFeed } from '@/apis/feed';
 import { FEED_KEYS } from '../queryKeys';
 
 const useFeedMutation = () => {
-  const { mutate: addFeedMutation } = useMutation({
+  const navigate = useNavigate();
+
+  const { mutateAsync: addFeedMutation } = useMutation({
     mutationFn: postFeed,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEEDS] }),
+    onSuccess: (_, { treeId }) => {
+      queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEEDS] });
+      navigate(`/?modal=feeds&treeId=${treeId}`);
+    },
   });
 
   return { addFeedMutation };

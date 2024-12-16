@@ -76,7 +76,7 @@ const ContainerBase = style({
   width: '100%',
   height: 'calc(100vh - 20vh)',
 
-  padding: '33px 24px',
+  padding: '33px 24px 0',
 
   borderRadius: '30px 30px 0 0',
 
