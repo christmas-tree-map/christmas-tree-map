@@ -6,7 +6,7 @@ import useTreesQuery from '@/queries/Tree/useTreesQuery';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
 
 interface UseFeedSubmitProps {
-  imageFile: File | null;
+  imageFile: File;
   location: Location;
   navigate: NavigateFunction;
 }
@@ -30,15 +30,23 @@ const useFeedSubmit = ({ imageFile, location, navigate }: UseFeedSubmitProps) =>
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!imageFile) return;
+    let currentTreeId = treeId;
 
-    if ((trees && trees.length === 0) || treeId === 0) {
-      const newTreeId = await addTree({ latitude: center.latitude, longitude: center.longitude, imageCode: 'TREE_01' });
-      setTreeId(newTreeId);
+    if (!trees || trees.length === 0 || treeId === 0) {
+      currentTreeId = await addTree({
+        latitude: center.latitude,
+        longitude: center.longitude,
+        imageCode: 'TREE_01',
+      });
+      setTreeId(currentTreeId);
     }
 
-    addFeedMutation({ imageFile, treeId, content, password });
-    navigate('/?modal=feeds');
+    await addFeedMutation({
+      imageFile,
+      treeId: currentTreeId,
+      content,
+      password,
+    });
   };
 
   const handleSelectMarkerClick = () => navigate('/select');
