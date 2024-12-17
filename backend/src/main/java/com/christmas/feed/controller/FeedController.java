@@ -78,4 +78,11 @@ public class FeedController implements FeedControllerDocs {
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .build();
     }
+
+    @DeleteMapping("/feed/{id}/like")
+    public ResponseEntity<Void> deleteLike(@PathVariable("id") long id) {
+        feedService.deleteLike(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .build();
+    }
 }

@@ -68,26 +68,6 @@ public class FeedService {
         return feedEntity.addLike();
     }
 
-    public FeedGetResponse getFeed(long id) {
-        FeedEntity feedEntity = feedRepository.findById(id)
-                .orElseThrow(() -> new NotFoundTreeException(
-                        FeedErrorCode.FEED_NOT_FOUND,
-                        Map.of("id", String.valueOf(id)))
-                );
-        FeedImageFileEntity feedImageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity);
-        ImageFileEntity imageFileEntity = feedImageFileEntity.getImageFileEntity();
-        return new FeedGetResponse(
-                feedEntity.getId(),
-                feedEntity.getTreeEntity()
-                        .getImageCode(),
-                feedEntity.getNickname(),
-                latestUpdatedAt(feedEntity, imageFileEntity),
-                imageFileEntity.getImageUrl(),
-                feedEntity.getContent(),
-                feedEntity.getLikeCount()
-        );
-    }
-
     public List<FeedGetResponse> getAllFeedByTree(long treeId) {
         TreeEntity treeEntity = treeRepository.findById(treeId)
                 .orElseThrow(() -> new NotFoundTreeException(
@@ -159,5 +139,14 @@ public class FeedService {
         feedImageFileRepository.deleteByFeedEntity(feedEntity);
         imageFileService.deleteImage(feedImageFileEntity.getImageFileEntity());
         feedRepository.deleteById(id);
+    }
+
+    public void deleteLike(long id) {
+        FeedEntity feedEntity = feedRepository.findById(id)
+                .orElseThrow(() -> new NotFoundTreeException(
+                        FeedErrorCode.FEED_NOT_FOUND,
+                        Map.of("id", String.valueOf(id)))
+                );
+        feedEntity.removeLike();
     }
 }
