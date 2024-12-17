@@ -62,7 +62,7 @@ jobs:
         id: yarn_build_result
         run: echo "result=${{steps.yarn_build.outcome}}" >> $GITHUB_OUTPUT
 
-  publish-storybook:
+  PUBLISH_STORYBOOK:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -120,7 +120,7 @@ jobs:
       storybook_url: ${{ steps.set_storybook_url.outputs.storybook_url }}
       current_time: ${{ steps.current_time.outputs.formattedTime }}
 
-  github-bot-storybook:
+  GITHUB_BOT_STORYBOOK:
     runs-on: ubuntu-latest
     needs: [publish-storybook]
     steps:
