@@ -70,7 +70,7 @@ jobs:
     needs: FE_CI
 
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -123,6 +123,8 @@ jobs:
   GITHUB_BOT_STORYBOOK:
     runs-on: ubuntu-latest
     needs: [PUBLISH_STORYBOOK]
+    permissions:
+      pull-requests: write
     steps:
       - name: Record PR Comment
         uses: thollander/actions-comment-pull-request@v2
