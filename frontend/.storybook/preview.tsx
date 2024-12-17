@@ -1,4 +1,5 @@
-import { BrowserRouter as Router } from 'react-router-dom';
+import React from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import type { Decorator, Preview } from '@storybook/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { worker } from '../src/mocks/browser';
@@ -16,11 +17,11 @@ const queryClient = new QueryClient();
 
 export const decorators: Decorator[] = [
   (Story) => (
-    <Router>
+    <MemoryRouter initialEntries={['/?treeId=1']}>
       <QueryClientProvider client={queryClient}>
         <Story />
       </QueryClientProvider>
-    </Router>
+    </MemoryRouter>
   ),
 ];
 
