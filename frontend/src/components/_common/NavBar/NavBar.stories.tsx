@@ -1,3 +1,4 @@
+import { LayoutVisibilityProvider } from '@/contexts/LayoutVisibilityContext';
 import type { Meta, StoryObj } from '@storybook/react';
 import NavBar from './NavBar';
 
@@ -11,7 +12,9 @@ const meta = {
   decorators: [
     (Story) => (
       <div style={{ position: 'relative', height: '200px', overflow: 'hidden' }}>
-        <Story />
+        <LayoutVisibilityProvider>
+          <Story />
+        </LayoutVisibilityProvider>
       </div>
     ),
   ],
