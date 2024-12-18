@@ -1,5 +1,6 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Error from '@/pages/Error/Error';
+import Landing from '@/pages/Landing/Landing';
 import Layout from '@/pages/Layout/Layout';
 import TreeMap from '@/pages/TreeMap/TreeMap';
 
@@ -8,6 +9,16 @@ const App = () => {
     [
       {
         path: '/',
+        errorElement: <Error />,
+        children: [
+          {
+            path: '',
+            element: <Landing />,
+          },
+        ],
+      },
+      {
+        path: '/map',
         element: <Layout />,
         errorElement: <Error />,
         children: [
