@@ -27,12 +27,12 @@ const TreeMap = () => {
 
   const handleMarkerClick = () => {
     openModal();
-    navigate('/?modal=feeds');
+    navigate('/map?modal=feeds');
   };
 
   const handleButtonClick = () => {
     openModal();
-    navigate('/?modal=submit');
+    navigate('/map?modal=submit');
   };
 
   const handleCloseModal = useCallback(() => {
@@ -60,7 +60,7 @@ const TreeMap = () => {
     <>
       <div ref={mapRef} className={S.Layout} />
       {modalType !== 'submit' && <FloatingButton onClick={handleButtonClick} />}
-      <Modal isOpen={isModalOpen} handleClose={handleCloseModal}>
+      <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <Modal.BackgroundSnowBall />
         {modalContent}
       </Modal>
