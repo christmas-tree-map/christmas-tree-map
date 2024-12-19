@@ -1,4 +1,4 @@
-import { globalStyle, keyframes, style } from '@vanilla-extract/css';
+import { globalStyle, keyframes, style, styleVariants } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 
 export const Layout = style({
@@ -28,40 +28,69 @@ export const Circle = style({
   height: '120vh',
   borderRadius: '50%',
 
-  backgroundColor: vars.colors.primary[700],
+  background: `radial-gradient(circle, #FF7F7F, ${vars.colors.primary[500]}, ${vars.colors.primary[800]})`,
 });
 
 export const TitleContainer = style({
   position: 'absolute',
   top: '40%',
+  zIndex: 1,
 
   padding: '0 30px',
 
-  font: 'bold 26px Pretendard',
+  font: 'bold 28px Pretendard',
   color: vars.colors.white,
   lineHeight: '1.2',
   whiteSpace: 'nowrap',
 });
 
-globalStyle(`${TitleContainer} span`, {
-  opacity: 0.6,
-});
+globalStyle(`${TitleContainer} span`, { opacity: 0.6 });
 
-const animationKeyframes = keyframes({
+const slide = keyframes({
   '0%': { width: '0' },
   '100%': { width: '100%' },
 });
 
-export const TitleWrapper = style({
+const TitleBase = style({
   display: 'inline-block',
   overflow: 'hidden',
 
   width: '0',
 
-  animation: `${animationKeyframes} 1s ease-in-out forwards`,
+  animation: `${slide} 1s ease-in-out forwards`,
 });
 
-export const TitleWrapperDelayed = style([TitleWrapper, { animationDelay: '1.2s' }]);
+export const Title = styleVariants({
+  default: [TitleBase],
+  delayed: [TitleBase, { animationDelay: '1.2s' }],
+});
+
+const glow = keyframes({
+  '0%': { filter: 'brightness(1)' },
+  '50%': { filter: 'brightness(2.5)' },
+  '100%': { filter: 'brightness(1)' },
+});
+
+export const GarlandImage = style({
+  position: 'absolute',
+  top: '-4%',
+  left: '-10%',
+
+  width: '300px',
+
+  animation: `${glow} 4s ease infinite`,
+});
+
+export const SnowmanImage = style({
+  position: 'absolute',
+  bottom: '-5%',
+  right: '-5%',
+
+  width: '250px',
+  height: '250px',
+
+  zIndex: 1,
+});
 
 export const ButtonContainer = style({
   display: 'flex',
