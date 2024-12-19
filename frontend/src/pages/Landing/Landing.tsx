@@ -8,7 +8,7 @@ import * as S from './Landing.css';
 const Landing = () => {
   return (
     <div className={S.Layout}>
-      <div className={S.Container}>
+      <div className={S.CircleContainer}>
         <div className={S.Circle} />
         <img className={S.GarlandImage} src={Garland} />
         <img className={S.SnowmanImage} src={Snowman} />
@@ -21,15 +21,20 @@ const Landing = () => {
           </p>
         </div>
       </div>
-      <div className={S.ButtonContainer}>
+      <div className={S.FooterContainer}>
         <p className={S.Text}>
           메리 트리스마스와 함께
           <br />
           낭만적인 크리스마스를 만들어 보세요!
         </p>
-        <Link to="/map">
-          <Button color="secondary">시작하기</Button>
-        </Link>
+        <div className={S.ButtonContainer}>
+          <Button color="primary" disabled={true}>
+            5초 만에 로그인하고 시작하기
+          </Button>
+          <Link to="/map">
+            <Button color="secondary">시작하기</Button>
+          </Link>
+        </div>
       </div>
     </div>
   );

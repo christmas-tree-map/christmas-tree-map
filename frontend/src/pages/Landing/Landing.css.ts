@@ -10,7 +10,7 @@ export const Layout = style({
   height: '100vh',
 });
 
-export const Container = style({
+export const CircleContainer = style({
   position: 'relative',
 
   width: '100vw',
@@ -28,7 +28,7 @@ export const Circle = style({
   height: '120vh',
   borderRadius: '50%',
 
-  background: `radial-gradient(circle, #FF7F7F, ${vars.colors.primary[500]}, ${vars.colors.primary[800]})`,
+  background: `radial-gradient(circle, #FF7F7F, ${vars.colors.primary[700]}, ${vars.colors.primary[800]})`,
 });
 
 export const TitleContainer = style({
@@ -92,7 +92,7 @@ export const SnowmanImage = style({
   zIndex: 1,
 });
 
-export const ButtonContainer = style({
+export const FooterContainer = style({
   display: 'flex',
   flexDirection: 'column',
   gap: '25px',
@@ -105,4 +105,10 @@ export const Text = style({
   color: vars.colors.grey[600],
   textAlign: 'center',
   lineHeight: '1.6',
+});
+
+export const ButtonContainer = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '10px',
 });
