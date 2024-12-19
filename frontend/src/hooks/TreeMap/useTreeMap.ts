@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
+import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
 import treeImage from '@/assets/tree.png';
 
 const { kakao } = window;
 
-const DEFAULT_LATITUDE = 37.5503;
-const DEFAULT_LONGITUDE = 126.9971;
 const DEFAULT_ZOOM_LEVEL = 3;
 
 const MARKER_SIZE = new kakao.maps.Size(50, 55);

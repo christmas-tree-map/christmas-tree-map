@@ -21,12 +21,17 @@ export const Header = style({
   width: '100%',
 });
 
+export const NicknameBox = style({
+  display: 'flex',
+  gap: '0.5px',
+});
+
 export const BodyText = style({
   font: vars.fonts.body,
   wordBreak: 'break-all',
 });
 
-export const CreatedAtText = style({
+export const UpdatedAtText = style({
   font: vars.fonts.tiny,
   color: vars.colors.grey[500],
 });

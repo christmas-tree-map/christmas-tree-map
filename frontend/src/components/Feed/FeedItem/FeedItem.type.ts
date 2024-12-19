@@ -1,8 +1,8 @@
 export interface FeedItemType {
-  id: number;
-  name: string;
-  createdAt: string;
+  nickname: string;
+  updatedAt: string;
   imageUrl: string;
   likeCount: number;
   content: string;
+  treeImageCode: string;
 }

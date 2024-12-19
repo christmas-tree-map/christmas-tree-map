@@ -3,6 +3,8 @@ import Error from '@/pages/Error/Error';
 import Landing from '@/pages/Landing/Landing';
 import Layout from '@/pages/Layout/Layout';
 import TreeMap from '@/pages/TreeMap/TreeMap';
+import MapMarkerSelector from './pages/MapMarkerSelector/MapMarkerSelector';
+import GlobalErrorFallback from './pages/Error/GlobalErrorFallback/GlobalErrorFallback';
 
 const App = () => {
   const router = createBrowserRouter(
@@ -20,14 +22,18 @@ const App = () => {
       {
         path: '/map',
         element: <Layout />,
-        errorElement: <Error />,
         children: [
           {
             path: '',
             element: <TreeMap />,
           },
+          {
+            path: 'select',
+            element: <MapMarkerSelector />,
+          },
         ],
       },
+      { path: '*', element: <GlobalErrorFallback statusCode={404} /> },
     ],
     {
       future: {

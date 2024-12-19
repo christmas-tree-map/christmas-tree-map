@@ -1,0 +1,136 @@
+name: ✨ Frontend Dev CI
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  FE_CI:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      actions: write
+    defaults:
+      run:
+        working-directory: ./frontend
+
+    outputs:
+      lint: ${{ steps.yarn_lint_result.outputs.result }}
+      build: ${{ steps.yarn_build_result.outputs.result }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.15.1'
+
+      - name: Cache node_modules
+        uses: actions/cache@v3
+        id: cache-deps
+        with:
+          path: ./frontend/node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run lint
+        id: yarn_lint
+        run: yarn lint
+
+      - name: Save Run lint result
+        id: yarn_lint_result
+        run: echo "result=${{steps.yarn_lint.outcome}}" >> $GITHUB_OUTPUT
+
+      - name: Run build
+        id: yarn_build
+        run: yarn build
+
+      - name: Save Run build result
+        id: yarn_build_result
+        run: echo "result=${{steps.yarn_build.outcome}}" >> $GITHUB_OUTPUT
+
+  PUBLISH_STORYBOOK:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend
+    needs: FE_CI
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.15.1'
+
+      - name: Restore node_modules cache
+        uses: actions/cache@v3
+        id: cache-deps
+        with:
+          path: ./frontend/node_modules
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-node_modules-
+
+      - name: Verify dependencies
+        if: steps.cache-deps.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+
+      - name: Publish Storybook
+        id: publish_storybook
+        run: |
+          npx chromatic \
+          --project-token=${{ secrets.CHROMATIC_PROJECT_TOKEN }} \
+          --storybook-config-dir=.storybook \
+          --only-changed \
+          --auto-accept-changes \
+          | tee chromatic-log.txt
+
+      - name: Extract Storybook URL
+        id: set_storybook_url
+        run: |
+          storybook_url=$(grep -o 'https://67604086bae1648966795b11-[a-z0-9]*\.chromatic\.com/' chromatic-log.txt | head -n 1)
+          echo "storybook_url=${storybook_url}" >> $GITHUB_OUTPUT
+
+      - name: Get Current Time
+        uses: josStorer/get-current-time@v2
+        id: current_time
+        with:
+          format: 'YYYY년 MM월 DD일 HH:mm:ss'
+          utcOffset: '+09:00'
+
+    outputs:
+      storybook_url: ${{ steps.set_storybook_url.outputs.storybook_url }}
+      current_time: ${{ steps.current_time.outputs.formattedTime }}
+
+  GITHUB_BOT_STORYBOOK:
+    runs-on: ubuntu-latest
+    needs: [PUBLISH_STORYBOOK]
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Record PR Comment
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          comment_tag: ${{github.event.number}}-storybook
+          message: |
+            **Storybook Published**  
+            💄 [View Storybook](${{ needs.PUBLISH_STORYBOOK.outputs.storybook_url }})
+            🕖 Update Time : ${{ needs.PUBLISH_STORYBOOK.outputs.current_time }}
