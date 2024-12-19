@@ -8,7 +8,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const Button = ({ color = 'default', children, ...props }: React.PropsWithChildren<ButtonProps>) => {
   return (
-    <button type="button" className={S.Layout[color]} {...props}>
+    <button type="button" className={props.disabled ? S.Layout['disabled'] : S.Layout[color]} {...props}>
       {children}
     </button>
   );

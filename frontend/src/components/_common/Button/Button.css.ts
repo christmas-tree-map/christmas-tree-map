@@ -11,10 +11,40 @@ export const Base = style({
   borderRadius: '15px',
 
   font: vars.fonts.button,
+
+  transition: 'all 0.2s ease',
 });
 
 export const Layout = styleVariants({
-  primary: [Base, { color: vars.colors.white, background: vars.colors.primary[800] }],
-  secondary: [Base, { color: vars.colors.white, background: vars.colors.secondary[700] }],
-  default: [Base, { color: vars.colors.primary[800], background: vars.colors.white }],
+  primary: [
+    Base,
+    {
+      background: vars.colors.primary[800],
+      color: vars.colors.white,
+
+      ':hover': { background: vars.colors.primary[900] },
+      ':active': { background: vars.colors.primary[900] },
+    },
+  ],
+  secondary: [
+    Base,
+    {
+      background: vars.colors.secondary[700],
+      color: vars.colors.white,
+
+      ':hover': { background: vars.colors.secondary[800] },
+      ':active': { background: vars.colors.secondary[800] },
+    },
+  ],
+  default: [
+    Base,
+    {
+      background: vars.colors.white,
+      color: vars.colors.primary[800],
+
+      ':hover': { color: vars.colors.primary[900] },
+      ':active': { color: vars.colors.primary[900] },
+    },
+  ],
+  disabled: [Base, { color: vars.colors.white, background: vars.colors.grey[500] }],
 });

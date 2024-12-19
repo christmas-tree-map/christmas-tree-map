@@ -1,14 +1,24 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import Landing from '@/pages/Landing/Landing';
 import Layout from '@/pages/Layout/Layout';
 import TreeMap from '@/pages/TreeMap/TreeMap';
-import MapMarkerSelector from './pages/MapMarkerSelector/MapMarkerSelector';
 import GlobalErrorFallback from './pages/Error/GlobalErrorFallback/GlobalErrorFallback';
+import MapMarkerSelector from './pages/MapMarkerSelector/MapMarkerSelector';
 
 const App = () => {
   const router = createBrowserRouter(
     [
       {
         path: '/',
+        children: [
+          {
+            path: '',
+            element: <Landing />,
+          },
+        ],
+      },
+      {
+        path: '/map',
         element: <Layout />,
         children: [
           {

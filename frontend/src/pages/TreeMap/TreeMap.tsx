@@ -33,12 +33,12 @@ const TreeMap = () => {
   const handleMarkerClick = () => {
     const treeId = 1; // TODO: 수정 필요
     openModal();
-    navigate(`/?modal=feeds&treeId=${treeId}`);
+    navigate(`/map?modal=feeds&treeId=${treeId}`);
   };
 
   const handleButtonClick = () => {
     openModal();
-    navigate(`/?modal=submit`, { state: { center: currentPosition } });
+    navigate('/map?modal=submit', { state: { center: currentPosition } });
   };
 
   const handleCloseModal = useCallback(() => {
