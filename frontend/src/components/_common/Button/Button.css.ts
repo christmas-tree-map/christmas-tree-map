@@ -46,5 +46,5 @@ export const Layout = styleVariants({
       ':active': { color: vars.colors.primary[900] },
     },
   ],
-  disabled: [Base, { color: vars.colors.white, background: vars.colors.grey[500] }],
+  disabled: [Base, { background: vars.colors.grey[500], color: vars.colors.white, cursor: 'not-allowed' }],
 });
