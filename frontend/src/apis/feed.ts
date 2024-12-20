@@ -1,6 +1,7 @@
 import requestAPI from './requestAPI';
 
 interface Feeds {
+  id: number;
   treeImageCode: string;
   nickname: string;
   updatedAt: string;
@@ -30,4 +31,12 @@ export const postFeed = async ({ imageFile, treeId, content, password }: PostFee
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   await requestAPI.post<{ data: any }>('/feed', formData);
+};
+
+interface PostLikeFeedRequest {
+  feedId: number;
+}
+
+export const postLikeFeed = async ({ feedId }: PostLikeFeedRequest) => {
+  await requestAPI.post<number>(`/feed/${feedId}/like`);
 };

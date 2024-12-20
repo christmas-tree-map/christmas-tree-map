@@ -4,8 +4,8 @@ import mockFeeds from './feeds.json';
 import mockTrees from './trees.json';
 
 export const handlers = [
-  http.get(`${API_URL}/feeds`, () => {
-    return HttpResponse.json({ status: 200, data: mockFeeds });
+  http.get(`${API_URL}/feed`, () => {
+    return HttpResponse.json(mockFeeds);
   }),
 
   http.post(`${API_URL}/feed`, async ({ request }) => {
@@ -56,5 +56,22 @@ export const handlers = [
     }
 
     return HttpResponse.json({ status: 200, data: mockTrees });
+  }),
+
+  http.post(`${API_URL}/feed/:id/like`, async ({ request }) => {
+    const url = new URL(request.url);
+    const feedId = Number(url.pathname.split('/').at(-2));
+
+    if (mockFeeds.some((feed) => feed.id === feedId)) {
+      mockFeeds.forEach((feed, index) => {
+        if (feed.id === feedId) {
+          mockFeeds[index] = {
+            ...feed,
+            likeCount: feed.likeCount + 1,
+          };
+        }
+      });
+    }
+    return HttpResponse.json({ status: 200 });
   }),
 ];

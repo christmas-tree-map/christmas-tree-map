@@ -1,4 +1,8 @@
+import { useSearchParams } from 'react-router-dom';
+import HeartWithCount from '@/components/_common/HeartWithCount/HeartWithCount';
+import useFeedMutation from '@/queries/Feed/useFeedMutation';
 import { formatDateTime } from '@/utils/formatDateTime';
+import { manageLikedFeeds } from '@/utils/manageLikedFeeds';
 import * as S from './FeedItem.css';
 import type { FeedItemType } from './FeedItem.type';
 
@@ -7,7 +11,19 @@ interface FeedItemProps {
 }
 
 const FeedItem = ({ feed }: FeedItemProps) => {
-  const { nickname, updatedAt, imageUrl, likeCount, content, treeImageCode } = feed;
+  const { id, nickname, updatedAt, imageUrl, likeCount, content, treeImageCode } = feed;
+  const { addLikeFeedMutation } = useFeedMutation();
+
+  const [searchParams] = useSearchParams();
+  const treeId = Number(searchParams.get('treeId'));
+
+  const likedFeedList = JSON.parse(localStorage.getItem('liked_feeds') ?? '{}');
+  const isSelected = likedFeedList[treeId] ? likedFeedList[treeId].includes(id) : false;
+
+  const handleLiked = () => {
+    manageLikedFeeds(treeId, id);
+    addLikeFeedMutation({ feedId: id });
+  };
 
   return (
     <div className={S.Layout}>
@@ -19,7 +35,7 @@ const FeedItem = ({ feed }: FeedItemProps) => {
         <p className={S.UpdatedAtText}>{formatDateTime(updatedAt)}</p>
       </div>
       <img src={imageUrl} draggable={false} className={S.Image} alt="feed" />
-      <p className={S.LikeCountText}>{likeCount}</p>
+      <HeartWithCount isSelected={isSelected} count={likeCount} onClickIcon={handleLiked} />
       <p className={S.BodyText}>{content}</p>
     </div>
   );
