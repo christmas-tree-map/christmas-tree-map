@@ -11,10 +11,12 @@ import org.locationtech.jts.geom.Point;
 
 import com.christmas.common.application.TimestampEntity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "tree")
