@@ -43,7 +43,7 @@ const TreeMap = () => {
 
   const handleCloseModal = useCallback(() => {
     closeModal();
-    navigate('/');
+    navigate('/map');
   }, []);
 
   useEffect(() => {

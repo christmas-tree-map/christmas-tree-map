@@ -6,14 +6,14 @@ export const Layout = style({
   flexDirection: 'column',
   justifyContent: 'space-between',
 
-  width: '100vw',
+  width: '100%',
   height: '100vh',
 });
 
 export const CircleContainer = style({
   position: 'relative',
 
-  width: '100vw',
+  width: '100%',
   height: '60vh',
 
   overflow: 'hidden',
