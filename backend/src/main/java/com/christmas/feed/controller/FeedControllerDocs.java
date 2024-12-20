@@ -11,7 +11,6 @@ import com.christmas.feed.dto.FeedCreateRequest;
 import com.christmas.feed.dto.FeedDeleteRequest;
 import com.christmas.feed.dto.FeedGetResponse;
 import com.christmas.feed.dto.FeedUpdateRequest;
-import com.christmas.feed.dto.FeedUpdateResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -63,7 +62,7 @@ public interface FeedControllerDocs {
     @ApiResponse(responseCode = "4XX", description = "피드 수정 실패 시 예외를 반환한다.",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponse.class))
     )
-    ResponseEntity<FeedUpdateResponse> updateFeed(
+    ResponseEntity<Void> updateFeed(
             @Parameter(description = "피드 id", required = true)
             long id,
             @Parameter(description = "이미지 파일", content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))

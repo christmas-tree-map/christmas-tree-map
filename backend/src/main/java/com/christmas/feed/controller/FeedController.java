@@ -23,7 +23,6 @@ import com.christmas.feed.dto.FeedCreateRequest;
 import com.christmas.feed.dto.FeedDeleteRequest;
 import com.christmas.feed.dto.FeedGetResponse;
 import com.christmas.feed.dto.FeedUpdateRequest;
-import com.christmas.feed.dto.FeedUpdateResponse;
 import com.christmas.feed.service.FeedService;
 
 import lombok.RequiredArgsConstructor;
@@ -62,7 +61,7 @@ public class FeedController implements FeedControllerDocs {
             value = "/feed/{id}",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE}
     )
-    public ResponseEntity<FeedUpdateResponse> updateFeed(
+    public ResponseEntity<Void> updateFeed(
             @PathVariable("id") long id,
             @RequestPart(value = "image", required = false) MultipartFile image,
             @RequestPart("request") FeedUpdateRequest request
