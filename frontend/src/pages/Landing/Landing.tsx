@@ -28,9 +28,9 @@ const Landing = () => {
           낭만적인 크리스마스를 만들어 보세요!
         </p>
         <div className={S.ButtonContainer}>
-          <Button color="primary" disabled={true}>
+          {/* <Button color="primary" disabled={true}>
             5초 만에 로그인하고 시작하기
-          </Button>
+          </Button> */}
           <Link to="/map">
             <Button color="secondary">시작하기</Button>
           </Link>

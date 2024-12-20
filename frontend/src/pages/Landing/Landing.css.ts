@@ -97,11 +97,11 @@ export const FooterContainer = style({
   flexDirection: 'column',
   gap: '25px',
 
-  padding: '30px',
+  padding: '30px 30px 34px 30px',
 });
 
 export const Text = style({
-  font: vars.fonts.tiny,
+  font: vars.fonts.small,
   color: vars.colors.grey[600],
   textAlign: 'center',
   lineHeight: '1.6',
