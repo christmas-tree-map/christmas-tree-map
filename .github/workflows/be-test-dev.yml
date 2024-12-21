@@ -9,27 +9,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SPRING_PROFILE: local
-      MYSQL_USER: test
-      MYSQL_PASSWORD: testpassword
     defaults:
       run:
         working-directory: ./backend
-
-    services:
-      mysql:
-        image: mysql:8.0.39
-        env:
-          MYSQL_ROOT_PASSWORD: rootpassword
-          MYSQL_DATABASE: christmas
-          MYSQL_USER: test
-          MYSQL_PASSWORD: testpassword
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
 
     steps:
       - name: checkout
@@ -45,6 +27,14 @@ jobs:
         uses: gradle/actions/setup-gradle@v3
         with:
           cache-write-only: true
+
+      - name: Set up MySQL
+        uses: mirromutth/mysql-action@v1.1
+        with:
+          host port: 3306
+          container port: 3306
+          mysql database: christmas
+          mysql root password: 15911591
 
       - name: Grant Execute Permission For Gradlew
         run: chmod +x gradlew
