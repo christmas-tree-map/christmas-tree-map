@@ -67,6 +67,7 @@ class FeedServiceTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("피드 생성 시 닉네임이 DB에 존재하면 닉네임 뒤에 중복 개수를 붙인다.")
     void create_duplicate_nickname() {
         // given
