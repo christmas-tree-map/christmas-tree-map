@@ -7,12 +7,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.christmas.common.exception.ExceptionResponse;
-import com.christmas.feed.dto.ContentUpdateRequest;
 import com.christmas.feed.dto.FeedCreateRequest;
 import com.christmas.feed.dto.FeedDeleteRequest;
 import com.christmas.feed.dto.FeedGetResponse;
 import com.christmas.feed.dto.FeedUpdateRequest;
-import com.christmas.feed.dto.FeedUpdateResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -64,7 +62,7 @@ public interface FeedControllerDocs {
     @ApiResponse(responseCode = "4XX", description = "피드 수정 실패 시 예외를 반환한다.",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponse.class))
     )
-    ResponseEntity<FeedUpdateResponse> updateFeed(
+    ResponseEntity<Void> updateFeed(
             @Parameter(description = "피드 id", required = true)
             long id,
             @Parameter(description = "이미지 파일", content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
@@ -84,4 +82,11 @@ public interface FeedControllerDocs {
             @Parameter(description = "비밀번호", example = "abs123", required = true)
             FeedDeleteRequest password
     );
+
+    @Operation(summary = "좋아요를 취소한다.")
+    @ApiResponse(responseCode = "204", description = "좋아요 취소에 성공한다.")
+    @ApiResponse(responseCode = "4XX", description = "좋아요 취소에 실패한다.",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponse.class))
+    )
+    ResponseEntity<Void> deleteLike(@Parameter(description = "피드 id", required = true) long id);
 }

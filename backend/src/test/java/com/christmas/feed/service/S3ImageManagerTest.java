@@ -1,43 +1,28 @@
 package com.christmas.feed.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.mock.web.MockMultipartFile;
 
-import com.christmas.config.S3MockConfig;
+import com.christmas.feed.exception.NotFoundS3ImageException;
 
-import io.findify.s3mock.S3Mock;
 
-@Import(S3MockConfig.class)
 @SpringBootTest
 class S3ImageManagerTest {
 
     @Autowired
-    private S3Mock s3Mock;
-
-    @Autowired
     private S3ImageManager s3ImageManager;
-
-    @AfterEach
-    public void tearDown() {
-        s3Mock.stop();
-    }
 
     @DisplayName("Multipart 이미지를 s3에 업로드한다.")
     @Test
     void upload_image() {
         // given
-        String imageName = "testname";
-        String originalImageName = "testname.png";
-        String contentType = "image/png";
-        byte[] content = imageName.getBytes();
-        MockMultipartFile image = new MockMultipartFile(imageName, originalImageName, contentType, content);
+        MockMultipartFile image = new MockMultipartFile("test", "test.png", "image/png", "test".getBytes());
         String key = "testkey";
 
         // when
@@ -45,5 +30,21 @@ class S3ImageManagerTest {
 
         // then
         assertThat(actual).contains(key);
+    }
+
+    @DisplayName("이미지를 s3에서 삭제한다.")
+    @Test
+    void delete_image() {
+        // given
+        String key = "testKey";
+        MockMultipartFile image = new MockMultipartFile("test", "test.png", "image/png", "test".getBytes());
+        s3ImageManager.upload(key, image);
+
+        // when
+        s3ImageManager.deleteByKey(key);
+
+        // then
+        assertThatThrownBy(() -> s3ImageManager.getUrlByKey(key))
+                .isExactlyInstanceOf(NotFoundS3ImageException.class);
     }
 }

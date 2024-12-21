@@ -31,7 +31,7 @@ class TreeAcceptanceTest extends AcceptanceFixture {
 
                 .when()
                 .body(request)
-                .post("/tree")
+                .post("/api/tree")
 
                 .then()
                 .log()
@@ -55,7 +55,7 @@ class TreeAcceptanceTest extends AcceptanceFixture {
                         .when()
                         .log()
                         .all()
-                        .get("/tree/filter")
+                        .get("/api/tree")
 
                         .then()
                         .log()
