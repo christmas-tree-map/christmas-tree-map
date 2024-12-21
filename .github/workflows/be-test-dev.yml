@@ -51,8 +51,8 @@ jobs:
       - name: Grant Execute Permission For Gradlew
         run: chmod +x gradlew
 
-      - name: Build with Gradle
-        run: ./gradlew bootJar -Dspring.profiles.active=${{ env.SPRING_PROFILE }}
+      - name: Build Application
+        run: ./gradlew clean build -Dspring.profiles.active=${{ env.SPRING_PROFILE }} --exclude-task test
 
       - name: Running Test Code
-        run: ./gradlew clean --info test -Dspring.profiles.active=${{ env.SPRING_PROFILE }}
+        run: ./gradlew --info test -Dspring.profiles.active=${{ env.SPRING_PROFILE }}
