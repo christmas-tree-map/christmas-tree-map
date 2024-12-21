@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SPRING_PROFILE: local
+      MYSQL_USER: test
+      MYSQL_PASSWORD: testpassword
     defaults:
       run:
         working-directory: ./backend
@@ -17,8 +19,10 @@ jobs:
       mysql:
         image: mysql:8.0.39
         env:
-          MYSQL_ROOT_PASSWORD: 15911591
+          MYSQL_ROOT_PASSWORD: rootpassword
           MYSQL_DATABASE: christmas
+          MYSQL_USER: test
+          MYSQL_PASSWORD: testpassword
         ports:
           - 3306:3306
         options: >-
