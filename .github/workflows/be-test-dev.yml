@@ -38,4 +38,4 @@ jobs:
         run: ./gradlew clean build -Dspring.profiles.active=${{ env.SPRING_PROFILE }} --exclude-task test
 
       - name: Running Test Code
-        run: ./gradlew --info test -Dspring.profiles.active=${{ env.SPRING_PROFILE }}
+        run: ./gradlew --info test --console=rich -Dspring.profiles.active=${{ env.SPRING_PROFILE }}
