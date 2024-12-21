@@ -15,12 +15,10 @@ jobs:
 
     services:
       mysql:
-        image: mysql:latest
+        image: mysql:8.0.39
         env:
           MYSQL_ROOT_PASSWORD: 15911591
           MYSQL_DATABASE: christmas
-          MYSQL_USER: root
-          MYSQL_PASSWORD: 15911591
         ports:
           - 3306:3306
         options: >-
