@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "피드 조회 응답 바디")
 public record FeedGetResponse(
+        @Schema(description = "피드 id", example = "1")
+        long id,
         @Schema(description = "트리 이미지 코드", example = "TREE_01")
         String treeImageCode,
         @Schema(description = "피드 작성자 닉네임", example = "귀여운산타클로스")

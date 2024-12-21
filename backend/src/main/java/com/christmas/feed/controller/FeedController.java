@@ -23,7 +23,6 @@ import com.christmas.feed.dto.FeedCreateRequest;
 import com.christmas.feed.dto.FeedDeleteRequest;
 import com.christmas.feed.dto.FeedGetResponse;
 import com.christmas.feed.dto.FeedUpdateRequest;
-import com.christmas.feed.dto.FeedUpdateResponse;
 import com.christmas.feed.service.FeedService;
 
 import lombok.RequiredArgsConstructor;
@@ -62,21 +61,26 @@ public class FeedController implements FeedControllerDocs {
             value = "/feed/{id}",
             consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE}
     )
-    public ResponseEntity<FeedUpdateResponse> updateFeed(
+    public ResponseEntity<Void> updateFeed(
             @PathVariable("id") long id,
             @RequestPart(value = "image", required = false) MultipartFile image,
             @RequestPart("request") FeedUpdateRequest request
     ) {
         feedService.updateFeed(id, image, request);
-        FeedGetResponse getFeed = feedService.getFeed(id);
-        FeedUpdateResponse response = FeedUpdateResponse.from(getFeed);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(response);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
     @DeleteMapping("/feed/{id}")
     public ResponseEntity<Void> deleteFeed(@PathVariable("id") long id, @RequestBody FeedDeleteRequest request) {
         feedService.deleteFeed(id, request.password());
+        return ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .build();
+    }
+
+    @DeleteMapping("/feed/{id}/like")
+    public ResponseEntity<Void> deleteLike(@PathVariable("id") long id) {
+        feedService.deleteLike(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
                 .build();
     }
