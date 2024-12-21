@@ -28,6 +28,9 @@ jobs:
         with:
           cache-write-only: true
 
+      - name: Debug Environment Variables
+        run: printenv | grep SPRING_PROFILE
+
       - name: Set up MySQL
         uses: mirromutth/mysql-action@v1.1
         with:
@@ -49,7 +52,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build with Gradle
-        run: ./gradlew bootJar
+        run: ./gradlew bootJar -Dspring.profiles.active=${{ env.SPRING_PROFILE }}
 
       - name: Running Test Code
-        run: ./gradlew --stacktrace test
+        run: ./gradlew clean --info test -Dspring.profiles.active=${{ env.SPRING_PROFILE }}
