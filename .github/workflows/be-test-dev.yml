@@ -1,0 +1,54 @@
+name: 🎄Backend Build & Test With Local Profile
+
+on:
+  pull_request:
+    branches: [ "BE/dev", "main"]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    env:
+      SPRING_PROFILE: local
+    defaults:
+      run:
+        working-directory: ./backend
+
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: 15911591
+          MYSQL_DATABASE: christmas
+          MYSQL_USER: root
+          MYSQL_PASSWORD: 15911591
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'corretto'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-write-only: true
+
+      - name: Grant Execute Permission For Gradlew
+        run: chmod +x gradlew
+
+      - name: Build with Gradle
+        run: ./gradlew bootJar
+
+      - name: Running Test Code
+        run: ./gradlew --stacktrace test
