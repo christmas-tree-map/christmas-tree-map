@@ -76,4 +76,38 @@ export const handlers = [
     }
     return HttpResponse.json({ status: 200 });
   }),
+
+  http.post(`${API_URL}/feed/:id/like`, async ({ request }) => {
+    const url = new URL(request.url);
+    const feedId = Number(url.pathname.split('/').at(-2));
+
+    if (mockFeeds.some((feed) => feed.id === feedId)) {
+      mockFeeds.forEach((feed, index) => {
+        if (feed.id === feedId) {
+          mockFeeds[index] = {
+            ...feed,
+            likeCount: feed.likeCount + 1,
+          };
+        }
+      });
+    }
+    return HttpResponse.json({ status: 200 });
+  }),
+
+  http.delete(`${API_URL}/feed/:id/like`, async ({ request }) => {
+    const url = new URL(request.url);
+    const feedId = Number(url.pathname.split('/').at(-2));
+
+    if (mockFeeds.some((feed) => feed.id === feedId)) {
+      mockFeeds.forEach((feed, index) => {
+        if (feed.id === feedId) {
+          mockFeeds[index] = {
+            ...feed,
+            likeCount: Math.max(0, feed.likeCount - 1),
+          };
+        }
+      });
+    }
+    return HttpResponse.json({ status: 200 });
+  }),
 ];

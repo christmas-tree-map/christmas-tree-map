@@ -12,7 +12,7 @@ interface FeedItemProps {
 
 const FeedItem = ({ feed }: FeedItemProps) => {
   const { id, nickname, updatedAt, imageUrl, likeCount, content, treeImageCode } = feed;
-  const { addLikeFeedMutation } = useFeedMutation();
+  const { addLikeFeedMutation, deleteLikeFeedMutation } = useFeedMutation();
 
   const [searchParams] = useSearchParams();
   const treeId = Number(searchParams.get('treeId'));
@@ -21,8 +21,12 @@ const FeedItem = ({ feed }: FeedItemProps) => {
   const isSelected = likedFeedList[treeId] ? likedFeedList[treeId].includes(id) : false;
 
   const handleLiked = () => {
+    if (isSelected) {
+      deleteLikeFeedMutation({ feedId: id });
+    } else {
+      addLikeFeedMutation({ feedId: id });
+    }
     manageLikedFeeds(treeId, id);
-    addLikeFeedMutation({ feedId: id });
   };
 
   return (

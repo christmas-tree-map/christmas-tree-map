@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { queryClient } from '@/main';
 import { useMutation } from '@tanstack/react-query';
-import { postFeed, postLikeFeed } from '@/apis/feed';
+import { deleteLikeFeed, postFeed, postLikeFeed } from '@/apis/feed';
 import { FEED_KEYS } from '../queryKeys';
 
 const useFeedMutation = () => {
@@ -22,7 +22,14 @@ const useFeedMutation = () => {
     },
   });
 
-  return { addFeedMutation, addLikeFeedMutation };
+  const { mutate: deleteLikeFeedMutation } = useMutation({
+    mutationFn: deleteLikeFeed,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEEDS] });
+    },
+  });
+
+  return { addFeedMutation, addLikeFeedMutation, deleteLikeFeedMutation };
 };
 
 export default useFeedMutation;
