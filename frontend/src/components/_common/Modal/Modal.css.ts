@@ -24,7 +24,14 @@ const slideOut = keyframes({
 });
 
 export const Layout = style({
-  height: '100vh',
+  position: 'fixed',
+  top: 0,
+  zIndex: 100,
+
+  width: '100%',
+  minWidth: '320px',
+  maxWidth: '480px',
+  height: '100%',
 });
 
 export const BarContainer = style({
@@ -54,13 +61,13 @@ export const Bar = style({
 });
 
 export const Backdrop = style({
-  position: 'fixed',
+  position: 'absolute',
   top: '0',
   left: '0',
   zIndex: 100,
 
   width: '100%',
-  height: '100%',
+  height: '100vh',
 });
 
 const ContainerBase = style({
@@ -68,14 +75,12 @@ const ContainerBase = style({
   flexDirection: 'column',
   alignItems: 'center',
 
-  position: 'fixed',
-  top: '20vh',
+  position: 'absolute',
+  top: '48px',
   zIndex: 200,
 
   width: '100%',
-  minWidth: '320px',
-  maxWidth: '480px',
-  height: '80vh',
+  height: '100vh',
 
   padding: '33px 24px 0',
 

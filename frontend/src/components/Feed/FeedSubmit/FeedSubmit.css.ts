@@ -51,21 +51,36 @@ export const ImageUploadBox = style({
   gap: '8px',
 });
 
-export const LabelText = style({
-  font: vars.fonts.label,
-  color: vars.colors.grey[700],
-});
-
 export const UploadedImage = style({
   width: '100%',
   height: 'auto',
   aspectRatio: '1',
   objectFit: 'cover',
 
-  borderRadius: '10px',
-
-  background: vars.colors.grey[50],
   cursor: 'pointer',
+  borderRadius: '10px',
+  background: vars.colors.grey[50],
+});
+
+export const UploadBox = style({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '5px',
+
+  width: '100%',
+  height: '100%',
+  aspectRatio: '1',
+
+  cursor: 'pointer',
+  borderRadius: '10px',
+  background: vars.colors.grey[50],
+});
+
+export const LabelText = style({
+  font: vars.fonts.label,
+  color: vars.colors.grey[700],
 });
 
 export const ImageInput = style({
