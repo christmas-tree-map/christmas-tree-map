@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { RiImageAddLine } from '@react-icons/all-files/ri/RiImageAddLine';
 import Button from '@/components/_common/Button/Button';
@@ -5,6 +6,7 @@ import Input from '@/components/_common/Input/Input';
 import TextArea from '@/components/_common/TextArea/TextArea';
 import useFeedSubmit from '@/hooks/Feed/useFeedSubmit';
 import useImageUploader from '@/hooks/Feed/useImageUploader';
+import useTreeMap from '@/hooks/TreeMap/useTreeMap';
 import mapIcon from '@/assets/map.png';
 import * as S from './FeedSubmit.css';
 
@@ -12,21 +14,44 @@ const FeedSubmit = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const { getAddress, currentAddress } = useTreeMap();
   const { imageUrl, fileInputRef, handleImageUploadClick, handleImageChange } = useImageUploader();
-  const { content, password, handleContentChange, handlePasswordChange, handleSubmit, handleSelectMarkerClick } =
-    useFeedSubmit({
-      imageFile: fileInputRef.current?.files?.[0] ?? null,
-      location,
-      navigate,
-    });
+  const {
+    content,
+    password,
+    center,
+    handleContentChange,
+    handlePasswordChange,
+    handleSubmit,
+    handleSelectMarkerClick,
+  } = useFeedSubmit({
+    imageFile: fileInputRef.current?.files?.[0] ?? null,
+    location,
+    navigate,
+  });
+
+  useEffect(() => {
+    getAddress(center.latitude, center.longitude);
+  }, [center, getAddress]);
 
   return (
     <form className={S.Layout} onSubmit={handleSubmit}>
-      <div className={S.SelectMarkerBox} onClick={handleSelectMarkerClick}>
+      <div className={S.SelectMarkerBox}>
         <div className={S.MapIconWrapper}>
           <img src={mapIcon} alt="Map Icon" className={S.MapIcon} />
         </div>
-        <p className={S.SelectMarkerText}>지도를 움직여 핀을 꽂아 보세요.</p>
+        <div className={S.SelectMarkerTextBox}>
+          <p className={S.SelectMarkerText}>
+            현재 선택된 주소
+            <br />
+            {currentAddress}
+          </p>
+        </div>
+        <div className={S.AddressSelectButtonBox}>
+          <Button color="secondary" onClick={handleSelectMarkerClick}>
+            다시 선택
+          </Button>
+        </div>
       </div>
 
       <div className={S.ImageUploadBox}>
