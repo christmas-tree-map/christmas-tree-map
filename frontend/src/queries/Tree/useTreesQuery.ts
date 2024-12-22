@@ -3,12 +3,12 @@ import { getTrees } from '@/apis/tree';
 import { TREE_KEYS } from '@/queries/queryKeys';
 
 const useTreesQuery = ({ latitude, longitude }: { latitude: number; longitude: number }) => {
-  const { data, ...rest } = useQuery({
+  const { data, isSuccess } = useQuery({
     queryKey: [TREE_KEYS.TREES, latitude, longitude],
     queryFn: () => getTrees({ latitude, longitude }),
   });
 
-  return { trees: data ?? [], ...rest };
+  return { trees: data ?? [], isSuccess };
 };
 
 export default useTreesQuery;
