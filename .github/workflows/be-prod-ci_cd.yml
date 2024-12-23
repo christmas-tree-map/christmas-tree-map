@@ -42,7 +42,7 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: ./backend
-          file: docker/Dockerfile
+          file: ./backend/docker/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_REPO_NAME }}/christmas-springboot-app:${{ env.SPRING_PROFILE }}
           build-args: |
