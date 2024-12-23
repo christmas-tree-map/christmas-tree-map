@@ -5,4 +5,4 @@ COPY ${JAR_FILE} /christmas-app.jar
 
 ARG SPRING_PROFILE
 ENV PROFILE_ENV=${SPRING_PROFILE}
-ENTRYPOINT ["sh", "-c", "java -jar -Dspring.profiles.active=${PROFILE_ENV} /christmas-app.jar"]
+ENTRYPOINT ["sh", "-c", "java -jar -Dspring.profiles.active=$PROFILE_ENV /christmas-app.jar"]
