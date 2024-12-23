@@ -63,7 +63,7 @@ jobs:
         working-directory: ./backend
 
     steps:
-      - name: Download docker-compose YAML script to runner
+      - name: Download docker-compose yaml script to runner
         uses: actions/download-artifact@v4
         with:
           name: christmas-docker-compose
@@ -71,7 +71,7 @@ jobs:
 
       - name: Move docker-compose YAML
         run: |
-          sudo mv docker-compose.yml ${{ secrets.DOCKER_COMPOSE_PATH }}/
+          sudo mv ./docker/docker-compose.yml ${{ secrets.DOCKER_COMPOSE_PATH }}/
 
       - name: Set docker-compose environment variables
         run: |
