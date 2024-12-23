@@ -1,0 +1,7 @@
+services:
+  springboot:
+    container_name: christmas_springboot
+    image: ${DOCKER_REPO_NAME}/christmas-springboot-app:${DOCKER_IMAGE_VERSION}
+    ports:
+      - 8080:8080
+    restart: on-failure
