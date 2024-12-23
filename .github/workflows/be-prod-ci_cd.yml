@@ -41,7 +41,8 @@ jobs:
       - name: Build and Push
         uses: docker/build-push-action@v4
         with:
-          context: ./backend/docker
+          context: ./backend
+          file: docker/Dockerfile
           push: true
           tags: ${{ secrets.DOCKER_REPO_NAME }}/christmas-springboot-app:${{ env.SPRING_PROFILE }}
           build-args: |
