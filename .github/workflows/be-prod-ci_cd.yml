@@ -65,11 +65,6 @@ jobs:
         working-directory: ./backend
 
     steps:
-      - name: Set docker-compose environment variables
-        run: |
-          echo "DOCKER_REPO_NAME=${{ secrets.DOCKER_REPO_NAME }}" > ${{ secrets.DOCKER_COMPOSE_PATH }}/.christmas-env
-          echo "DOCKER_IMAGE_VERSION=${{ env.SPRING_PROFILE }}" >> ${{ secrets.DOCKER_COMPOSE_PATH }}/.christmas-env
-
       - name: Download docker-compose YAML script to runner
         uses: actions/download-artifact@v4
         with:
@@ -79,6 +74,11 @@ jobs:
       - name: Move docker-compose YAML
         run: |
           sudo mv docker-compose.yml ${{ secrets.DOCKER_COMPOSE_PATH }}
+
+      - name: Set docker-compose environment variables
+        run: |
+          echo "DOCKER_REPO_NAME=${{ secrets.DOCKER_REPO_NAME }}" > ${{ secrets.DOCKER_COMPOSE_PATH }}/.christmas-env
+          echo "DOCKER_IMAGE_VERSION=${{ env.SPRING_PROFILE }}" >> ${{ secrets.DOCKER_COMPOSE_PATH }}/.christmas-env
 
       - name: Stop and remove existing containers
         run: |
