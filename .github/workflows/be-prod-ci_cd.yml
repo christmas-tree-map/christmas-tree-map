@@ -47,6 +47,7 @@ jobs:
           tags: ${{ secrets.DOCKER_REPO_NAME }}/christmas-springboot-app:${{ env.SPRING_PROFILE }}
           build-args: |
             SPRING_PROFILE=${{ env.SPRING_PROFILE }}
+          no-cache: true
 
       - name: Upload docker-compose yaml script to artifact
         uses: actions/upload-artifact@v4
