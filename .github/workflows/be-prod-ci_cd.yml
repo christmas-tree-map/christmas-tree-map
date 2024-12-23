@@ -90,4 +90,4 @@ jobs:
 
       - name: Check container status
         run: |
-          docker ps
+          sudo docker ps
