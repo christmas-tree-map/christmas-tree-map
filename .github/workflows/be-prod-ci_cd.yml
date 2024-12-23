@@ -77,8 +77,22 @@ jobs:
 
       - name: Set docker-compose environment variables
         run: |
-          echo "DOCKER_REPO_NAME=${{ secrets.DOCKER_REPO_NAME }}" > ${{ secrets.DOCKER_COMPOSE_PATH }}/.christmas-env
-          echo "DOCKER_IMAGE_VERSION=${{ env.SPRING_PROFILE }}" >> ${{ secrets.DOCKER_COMPOSE_PATH }}/.christmas-env
+          cat <<EOF > ${{ secrets.DOCKER_COMPOSE_PATH }}/.christmas-env
+          # Profile
+          SPRING_PROFILE=${{ env.SPRING_PROFILE }}
+          
+          # Application yml environments
+          DB_URL=${{ secrets.DB_URL }}
+          DB_USERNAME=${{ secrets.DB_USERNAME }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          S3_ACCESS_KEY=${{ secrets.S3_ACCESS_KEY }}
+          S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }}
+          S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}
+          
+          # Docker Compose yml environments
+          DOCKER_REPO_NAME=${{ secrets.DOCKER_REPO_NAME }}
+          DOCKER_IMAGE_VERSION=${{ env.SPRING_PROFILE }}
+          EOF
 
       - name: Stop and remove existing containers
         run: |
