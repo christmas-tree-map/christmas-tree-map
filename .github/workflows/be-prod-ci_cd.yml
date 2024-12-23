@@ -2,9 +2,7 @@ name: 🎄Backend CI & CD With Prod Profile
 
 on:
   push:
-    branches: [ "main", "dev" ]
-  pull_request:
-    branches: [ "BE/dev" ]
+    branches: [ "main", "BE/dev" ]
 
 jobs:
   build:
@@ -73,7 +71,7 @@ jobs:
 
       - name: Move docker-compose YAML
         run: |
-          sudo mv docker-compose.yml ${{ secrets.DOCKER_COMPOSE_PATH }}
+          sudo mv docker-compose.yml ${{ secrets.DOCKER_COMPOSE_PATH }}/
 
       - name: Set docker-compose environment variables
         run: |
