@@ -95,7 +95,7 @@ jobs:
           DOCKER_IMAGE_VERSION=${{ env.SPRING_PROFILE }}
           EOF
 
-      - name: Stop and Remove existing container and image
+      - name: Stop and Remove existing container
         run: |
           sudo docker-compose -f ${{ secrets.DOCKER_COMPOSE_PATH }}/docker-compose.yml down
           sudo docker image prune -f
@@ -104,6 +104,11 @@ jobs:
         run: |
           sudo docker-compose --env-file ${{ secrets.DOCKER_COMPOSE_PATH }}/.christmas-env -f ${{ secrets.DOCKER_COMPOSE_PATH }}/docker-compose.yml up --pull always -d
 
+      - name: Remove old images
+        run: |
+          sudo docker image prune -f
+
       - name: Check container status
         run: |
           sudo docker ps
+          sudo docker images
