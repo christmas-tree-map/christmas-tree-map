@@ -15,7 +15,8 @@ public enum FeedErrorCode implements CustomErrorCode {
     IMAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "이미지를 챶을 수 없습니다."),
     IMAGE_DELETE_FAIL(HttpStatus.UNPROCESSABLE_ENTITY, "이미지 삭제 요청을 처리하던 중 오류가 발생했습니다."),
     FEED_NOT_FOUND(HttpStatus.NOT_FOUND, "피드를 찾을 수 없습니다."),
-    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 올바르지 않습니다.")
+    INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 올바르지 않습니다."),
+    NEGATIVE_LIKE_COUNT(HttpStatus.BAD_REQUEST, "좋아요 수가 0이기 때문에 좋아요를 취소할 수 없습니다.")
     ;
 
     private final HttpStatus status;
