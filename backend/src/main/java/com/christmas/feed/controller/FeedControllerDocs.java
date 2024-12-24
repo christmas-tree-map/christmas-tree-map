@@ -58,7 +58,7 @@ public interface FeedControllerDocs {
 
     @Operation(summary = "피드를 수정한다.")
     @ApiResponse(responseCode = "200", description = "피드 수정에 성공 시 id, 이미지 url, 피드 내용을 반환한다.",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = FeedGetResponse.class)))
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = FeedUpdateResponse.class)))
     )
     @ApiResponse(responseCode = "4XX", description = "피드 수정 실패 시 예외를 반환한다.",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponse.class))
