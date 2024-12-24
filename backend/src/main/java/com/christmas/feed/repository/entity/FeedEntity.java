@@ -1,5 +1,7 @@
 package com.christmas.feed.repository.entity;
 
+import java.util.Map;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -15,6 +17,8 @@ import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
 import com.christmas.common.application.TimestampEntity;
+import com.christmas.feed.exception.NegativeValueException;
+import com.christmas.feed.exception.code.FeedErrorCode;
 import com.christmas.tree.repository.TreeEntity;
 
 import lombok.AccessLevel;
@@ -68,6 +72,9 @@ public class FeedEntity extends TimestampEntity {
     }
 
     public void removeLike() {
+        if (likeCount == 0) {
+            throw new NegativeValueException(FeedErrorCode.NEGATIVE_LIKE_COUNT, Map.of("likeCount", "0"));
+        }
         likeCount--;
     }
 
