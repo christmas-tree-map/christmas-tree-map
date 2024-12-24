@@ -4,10 +4,9 @@ spring:
   config:
     activate:
       on-profile: local
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/christmas?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/christmas
     username: root
     password: 15911591
 
@@ -28,7 +27,7 @@ springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
   swagger-ui:
-    path: /api-docs
+    path: /api/api-docs
     disable-swagger-default-url: true
     display-request-duration: true
 
