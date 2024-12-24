@@ -11,6 +11,7 @@ import com.christmas.feed.dto.FeedCreateRequest;
 import com.christmas.feed.dto.FeedDeleteRequest;
 import com.christmas.feed.dto.FeedGetResponse;
 import com.christmas.feed.dto.FeedUpdateRequest;
+import com.christmas.feed.dto.FeedUpdateResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -56,13 +57,13 @@ public interface FeedControllerDocs {
     ResponseEntity<List<FeedGetResponse>> getAllFeed(@Parameter(description = "treeId", required = true) long treeId);
 
     @Operation(summary = "피드를 수정한다.")
-    @ApiResponse(responseCode = "200", description = "피드 수정에 성공 시 수정 시간, 이미지 url, 피드 내용을 반환한다.",
+    @ApiResponse(responseCode = "200", description = "피드 수정에 성공 시 id, 이미지 url, 피드 내용을 반환한다.",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = FeedGetResponse.class)))
     )
     @ApiResponse(responseCode = "4XX", description = "피드 수정 실패 시 예외를 반환한다.",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponse.class))
     )
-    ResponseEntity<Void> updateFeed(
+    ResponseEntity<FeedUpdateResponse> updateFeed(
             @Parameter(description = "피드 id", required = true)
             long id,
             @Parameter(description = "이미지 파일", content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
@@ -72,11 +73,13 @@ public interface FeedControllerDocs {
     );
 
     @Operation(summary = "피드를 삭제한다.")
-    @ApiResponse(responseCode = "204", description = "피드 삭제에 성공한다.")
+    @ApiResponse(responseCode = "200", description = "피드 삭제에 성공한다. 성공하면 삭제한 피드 id를 반환한다.",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Long.class))
+    )
     @ApiResponse(responseCode = "4XX", description = "피드 삭제 실패 시 예외를 반환한다.",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponse.class))
     )
-    ResponseEntity<Void> deleteFeed(
+    ResponseEntity<Long> deleteFeed(
             @Parameter(description = "피드 id", required = true)
             long id,
             @Parameter(description = "비밀번호", example = "abs123", required = true)
@@ -84,9 +87,11 @@ public interface FeedControllerDocs {
     );
 
     @Operation(summary = "좋아요를 취소한다.")
-    @ApiResponse(responseCode = "204", description = "좋아요 취소에 성공한다.")
+    @ApiResponse(responseCode = "200", description = "좋아요 취소에 성공한다. 성공하면 현재 좋아요 수를 반환한다.",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Long.class))
+    )
     @ApiResponse(responseCode = "4XX", description = "좋아요 취소에 실패한다.",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponse.class))
     )
-    ResponseEntity<Void> deleteLike(@Parameter(description = "피드 id", required = true) long id);
+    ResponseEntity<Long> deleteLike(@Parameter(description = "피드 id", required = true) long id);
 }
