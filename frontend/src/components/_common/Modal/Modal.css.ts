@@ -15,15 +15,15 @@ const slideIn = keyframes({
 const slideOut = keyframes({
   from: {
     transform: 'translateY(0)',
-    opacity: 1,
+    // opacity: 1,
   },
   to: {
     transform: 'translateY(100%)',
-    opacity: 0,
+    // opacity: 0,
   },
 });
 
-export const Layout = style({
+export const LayoutBase = style({
   position: 'fixed',
   top: 0,
   zIndex: 100,
@@ -32,6 +32,18 @@ export const Layout = style({
   minWidth: '320px',
   maxWidth: '480px',
   height: '100%',
+
+  animation: `${slideIn} 2s ease-out`,
+});
+
+export const Layout = styleVariants({
+  isOpening: [LayoutBase],
+  isClosing: [
+    LayoutBase,
+    {
+      animation: `${slideOut} 2s ease-in`,
+    },
+  ],
 });
 
 export const BarContainer = style({
@@ -87,12 +99,11 @@ const ContainerBase = style({
   borderRadius: '30px 30px 0 0',
 
   boxShadow: '6px 0 30px 0 rgba(0, 0, 0, 0.12), 12px 0px 38px 0 rgba(0, 0, 0, 0.08)',
-  animation: `${slideIn} 0.2s ease-out`,
 });
 
-export const ContainerClosing = style({
-  animation: `${slideOut} 0.2s ease-in`,
-});
+// export const ContainerClosing = style({
+//   animation: `${slideOut} 1s ease-in`,
+// });
 
 export const Container = styleVariants({
   red: [ContainerBase, { backgroundColor: vars.colors.primary[900] }],
