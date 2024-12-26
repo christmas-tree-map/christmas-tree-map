@@ -14,7 +14,7 @@ const HeartWithCount = ({ count, isSelected, onClickIcon }: HeartWithCountProps)
 
   return (
     <div className={S.Layout}>
-      {count && <p className={S.CountText}>{count}</p>}
+      {count !== undefined && <p className={S.CountText}>{count}</p>}
       <HeartIcon color={isSelected ? vars.colors.primary[800] : vars.colors.black} size={20} onClick={onClickIcon} />
     </div>
   );
