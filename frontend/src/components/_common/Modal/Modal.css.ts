@@ -96,10 +96,6 @@ const ContainerBase = style({
   boxShadow: '6px 0 30px 0 rgba(0, 0, 0, 0.12), 12px 0px 38px 0 rgba(0, 0, 0, 0.08)',
 });
 
-// export const ContainerClosing = style({
-//   animation: `${slideOut} 1s ease-in`,
-// });
-
 export const Container = styleVariants({
   red: [ContainerBase, { backgroundColor: vars.colors.primary[900] }],
 });
