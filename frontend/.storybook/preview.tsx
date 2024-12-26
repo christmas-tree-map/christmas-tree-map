@@ -16,13 +16,16 @@ export const parameters = {
 const queryClient = new QueryClient();
 
 export const decorators: Decorator[] = [
-  (Story) => (
-    <MemoryRouter initialEntries={['/?treeId=1']}>
+  (Story, context) => {
+    const initialEntry = context.args.initialEntry || '/'; // 기본 경로 설정
+    return (
       <QueryClientProvider client={queryClient}>
-        <Story />
+        <MemoryRouter initialEntries={[initialEntry]}>
+          <Story />
+        </MemoryRouter>
       </QueryClientProvider>
-    </MemoryRouter>
-  ),
+    );
+  },
 ];
 
 const preview: Preview = {
