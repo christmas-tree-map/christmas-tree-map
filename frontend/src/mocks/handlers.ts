@@ -43,6 +43,10 @@ export const handlers = [
     return HttpResponse.json(1);
   }),
 
+  http.get(`${API_URL}/tree`, async () => {
+    return HttpResponse.json(1);
+  }),
+
   // http.get(`${API_URL}/tree/filter`, async ({ request }) => {
   //   const url = new URL(request.url);
   //   const latitude = url.searchParams.get('latitude');
