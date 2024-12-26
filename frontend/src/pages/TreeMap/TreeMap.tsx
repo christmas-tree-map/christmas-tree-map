@@ -25,7 +25,7 @@ const TreeMap = () => {
     const handleMarkerClick = () => {
       const treeId = 1; // TODO: 수정 필요
       openModal();
-      navigate(`/map?modal=feeds&treeId=${treeId}`);
+      navigate(`/map/${treeId}?modal=feeds`);
     };
 
     navigator.geolocation.getCurrentPosition((position) => {
