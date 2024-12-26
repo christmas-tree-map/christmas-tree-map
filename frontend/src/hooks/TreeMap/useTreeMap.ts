@@ -18,10 +18,12 @@ const useTreeMap = () => {
   const treeMarkerImage = new kakao.maps.MarkerImage(treeImage, MARKER_SIZE, MARKER_OPTIONS);
 
   const initializeMap = (latitude: number, longitude: number) => {
-    const options = { center: new kakao.maps.LatLng(latitude, longitude), level: DEFAULT_ZOOM_LEVEL };
-    const map = new kakao.maps.Map(mapRef.current, options);
+    if (mapRef.current) {
+      const options = { center: new kakao.maps.LatLng(latitude, longitude), level: DEFAULT_ZOOM_LEVEL };
+      const map = new kakao.maps.Map(mapRef.current, options);
 
-    setMap(map);
+      setMap(map);
+    }
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
