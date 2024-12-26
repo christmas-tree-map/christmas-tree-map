@@ -17,7 +17,7 @@ const queryClient = new QueryClient();
 
 export const decorators: Decorator[] = [
   (Story, context) => {
-    const initialEntry = context.args.initialEntry || '/'; // 기본 경로 설정
+    const initialEntry = context.args.initialEntry || '/';
     return (
       <QueryClientProvider client={queryClient}>
         <MemoryRouter initialEntries={[initialEntry]}>

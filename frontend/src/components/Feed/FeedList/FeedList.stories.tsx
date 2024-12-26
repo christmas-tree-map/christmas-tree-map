@@ -8,7 +8,7 @@ export default {
   component: FeedList,
 } as Meta;
 
-const Template: StoryFn<{ initialEntry: string }> = ({ initialEntry }) => (
+const Template: StoryFn<{ initialEntry: string }> = () => (
   <Routes>
     <Route path="/map/:treeId" element={<FeedList />} />
   </Routes>
