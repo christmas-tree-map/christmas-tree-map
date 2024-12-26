@@ -24,8 +24,7 @@ const slideOut = keyframes({
 });
 
 export const Layout = style({
-  height: '100%',
-  zIndex: 100,
+  height: '100vh',
 });
 
 export const BarContainer = style({
@@ -74,7 +73,9 @@ const ContainerBase = style({
   zIndex: 200,
 
   width: '100%',
-  height: 'calc(100vh - 20vh)',
+  minWidth: '320px',
+  maxWidth: '480px',
+  height: '80vh',
 
   padding: '33px 24px 0',
 

@@ -4,10 +4,13 @@ import { vars } from '@/styles/theme.css';
 export const Layout = style({
   position: 'fixed',
   bottom: 0,
-  left: 0,
+  left: '50%',
+  transform: 'translateX(-50%)',
   zIndex: 100,
 
   width: '100%',
+  minWidth: '320px',
+  maxWidth: '480px',
   padding: '0 16px',
 });
 
@@ -38,10 +41,10 @@ export const Link = style({
   ':hover': {
     color: vars.colors.primary[800],
   },
-  
+
   ':active': {
     color: vars.colors.primary[800],
-  }
+  },
 });
 
 export const Icon = style({

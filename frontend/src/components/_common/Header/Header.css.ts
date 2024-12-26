@@ -8,10 +8,13 @@ export const Layout = style({
 
   position: 'fixed',
   top: 0,
-  left: 0,
+  left: '50%',
+  transform: 'translateX(-50%)',
   zIndex: 100,
 
   width: '100%',
+  minWidth: '320px',
+  maxWidth: '480px',
   height: '48px',
   padding: '0 16px',
 });
@@ -32,12 +35,12 @@ export const Button = style({
   transition: '0.2s all ease',
 
   cursor: 'pointer',
-  
+
   ':hover': {
     color: vars.colors.primary[800],
   },
-  
+
   ':active': {
     color: vars.colors.primary[800],
-  }
+  },
 });
