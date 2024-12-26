@@ -33,10 +33,7 @@ export const handlers = [
 
       mockFeeds.push(newFeed);
 
-      return HttpResponse.json(
-        { message: '피드가 성공적으로 추가되었습니다.', data: newFeedWithRequiredFields },
-        { status: 200 },
-      );
+      return HttpResponse.json(mockFeeds, { status: 200 });
     } catch (error) {
       console.error('MSW 핸들러 에러:', error);
 
