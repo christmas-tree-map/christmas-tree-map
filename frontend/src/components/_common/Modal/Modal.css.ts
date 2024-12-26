@@ -15,11 +15,11 @@ const slideIn = keyframes({
 const slideOut = keyframes({
   from: {
     transform: 'translateY(0)',
-    // opacity: 1,
+    opacity: 1,
   },
   to: {
     transform: 'translateY(100%)',
-    // opacity: 0,
+    opacity: 0,
   },
 });
 
@@ -33,17 +33,12 @@ export const LayoutBase = style({
   maxWidth: '480px',
   height: '100%',
 
-  animation: `${slideIn} 2s ease-out`,
+  animation: `${slideIn} var(--animation-duration, 200ms) ease-out`,
 });
 
 export const Layout = styleVariants({
   isOpening: [LayoutBase],
-  isClosing: [
-    LayoutBase,
-    {
-      animation: `${slideOut} 2s ease-in`,
-    },
-  ],
+  isClosing: [LayoutBase, { animation: `${slideOut} var(--animation-duration, 200ms) ease-in` }],
 });
 
 export const BarContainer = style({
