@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FloatingButton from '@/components/_common/FloatingButton/FloatingButton';
 import Modal from '@/components/_common/Modal/Modal';
@@ -19,43 +19,14 @@ const TreeMap = () => {
     longitude: DEFAULT_LONGITUDE,
   });
 
-  const searchParams = useMemo(() => new URLSearchParams(location.search), [location]);
-  const modalType = searchParams.get('modal');
-  const modalContent = useModalContent(modalType);
-
-  // 뒤로가기로 '/' 이동을 방지
-  useEffect(() => {
-    if (modalType) {
-      window.history.replaceState(null, '', location.pathname + location.search);
-    }
-  }, [modalType]);
-
-  const handleMarkerClick = () => {
-    const treeId = 1; // TODO: 수정 필요
-    openModal();
-    navigate(`/map?modal=feeds&treeId=${treeId}`);
-  };
-
-  const handleButtonClick = () => {
-    openModal();
-    navigate('/map?modal=submit', { state: { center: currentPosition } });
-  };
-
-  const handleCloseModal = useCallback(() => {
-    closeModal();
-    navigate('/map');
-  }, []);
-
-  useEffect(() => {
-    if (!modalType) {
-      closeModal();
-    } else {
-      openModal();
-    }
-  }, [modalType]);
-
   useEffect(() => {
     if (map === null) return;
+
+    const handleMarkerClick = () => {
+      const treeId = 1; // TODO: 수정 필요
+      openModal();
+      navigate(`/map/${treeId}?modal=feeds`);
+    };
 
     navigator.geolocation.getCurrentPosition((position) => {
       const { latitude, longitude } = position.coords;
@@ -63,6 +34,27 @@ const TreeMap = () => {
       addMarker(map, latitude, longitude, handleMarkerClick);
     });
   }, [map]);
+
+  const searchParams = useMemo(() => new URLSearchParams(location.search), [location]);
+  const modalType = searchParams.get('modal');
+  const modalContent = useModalContent(modalType);
+
+  const handleButtonClick = () => {
+    navigate('/map?modal=submit', { state: { center: currentPosition } });
+  };
+
+  useEffect(() => {
+    if (modalType) {
+      openModal();
+    } else {
+      closeModal();
+    }
+  }, [modalType, location]);
+
+  const handleCloseModal = () => {
+    closeModal();
+    navigate('/map');
+  };
 
   return (
     <>

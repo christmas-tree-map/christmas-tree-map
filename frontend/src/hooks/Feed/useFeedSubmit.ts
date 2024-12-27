@@ -51,11 +51,12 @@ const useFeedSubmit = ({ imageFile, location, navigate }: UseFeedSubmitProps) =>
     });
   };
 
-  const handleSelectMarkerClick = () => navigate('/select');
+  const handleSelectMarkerClick = () => navigate('/map/select');
 
   return {
     content,
     password,
+    center,
     handleContentChange,
     handlePasswordChange,
     handleSubmit,
