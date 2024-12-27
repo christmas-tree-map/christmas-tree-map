@@ -14,7 +14,6 @@ const config: StorybookConfig = {
   },
   previewBody: (body) => `
     ${body}
-    <div id="modal" />
   `,
 };
 export default config;
