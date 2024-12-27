@@ -10,15 +10,15 @@ interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
   backgroundColor?: 'red';
-  animationDurationTime?: number;
 }
+
+const ANIMATION_DURATION_TIME = 200
 
 const Modal = ({
   children,
   isOpen,
   onClose,
   backgroundColor = 'red',
-  animationDurationTime = 200,
 }: React.PropsWithChildren<ModalProps>) => {
   const portalElement = document.getElementById('modal') as HTMLElement;
   const [isRender, setIsRender] = useState(isOpen);
@@ -31,7 +31,7 @@ const Modal = ({
     } else {
       const timer = setTimeout(() => {
         setIsRender(false);
-      }, animationDurationTime);
+      }, ANIMATION_DURATION_TIME);
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
@@ -43,7 +43,7 @@ const Modal = ({
   const modalLayout = (
     <div
       className={S.Layout[isRender && isOpen ? 'isOpening' : 'isClosing']}
-      style={{ '--animation-duration': `${animationDurationTime + 1}ms` } as React.CSSProperties}
+      style={{ '--animation-duration': `${ANIMATION_DURATION_TIME + 1}ms` } as React.CSSProperties}
     >
       <ModalBackdrop onClick={onClose} />
       <div className={S.Container[backgroundColor]}>
