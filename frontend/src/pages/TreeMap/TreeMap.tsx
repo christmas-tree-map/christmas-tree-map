@@ -28,6 +28,19 @@ const TreeMap = () => {
   const { map, mapRef, addMarker } = useTreeMap();
   const { trees, isSuccess } = useTreesQuery(currentPosition);
 
+  const handleMarkerClick = (treeId: number) => {
+    openModal();
+    navigate(`/map?modal=feeds&treeId=${treeId}`);
+  };
+
+  useEffect(() => {
+    if (map === null || !isSuccess) return;
+
+    trees.forEach((tree) =>
+      addMarker(map, tree.latitude, tree.longitude, tree.imageCode, () => handleMarkerClick(tree.id)),
+    );
+  }, [map, isSuccess]);
+
   const searchParams = useMemo(() => new URLSearchParams(location.search), [location]);
   const modalType = searchParams.get('modal');
   const modalContent = useModalContent(modalType);
@@ -56,17 +69,6 @@ const TreeMap = () => {
       openModal();
     }
   }, [modalType]);
-
-  const handleMarkerClick = () => {
-    const treeId = 1; // TODO: 수정 필요
-    openModal();
-    navigate(`/map?modal=feeds&treeId=${treeId}`);
-  };
-
-  useEffect(() => {
-    if (map === null || !isSuccess) return;
-    trees.map((tree) => addMarker(map, tree.latitude, tree.longitude, tree.imageCode, handleMarkerClick));
-  }, [map, isSuccess]);
 
   return (
     <>

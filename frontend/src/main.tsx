@@ -11,29 +11,28 @@ export const queryClient = new QueryClient({
     queries: {
       throwOnError: true,
       retry: 0,
-      // staleTime: 1000 * 60 * 5, // 개발 편의를 위해 주석처리합니다.
-      // gcTime: 1000 * 60 * 10, // 개발 편의를 위해 주석처리합니다.
     },
   },
 });
-// async function enableMocking() {
-//   if (process.env.NODE_ENV !== 'development') return;
 
-//   const { worker } = await import('./mocks/browser');
+async function enableMocking() {
+  if (process.env.NODE_ENV === 'development') return;
+  if (process.env.NODE_ENV !== 'development') return;
 
-//   return worker.start();
-// }
+  const { worker } = await import('./mocks/browser');
 
-// enableMocking().then(() =>
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <ReactQueryDevtools initialIsOpen={true} />
-      <LayoutVisibilityProvider>
-        <App />
-      </LayoutVisibilityProvider>
-    </QueryClientProvider>
-  </StrictMode>,
+  return worker.start();
+}
+
+enableMocking().then(() =>
+  createRoot(document.getElementById('root')!).render(
+    <StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <ReactQueryDevtools initialIsOpen={true} />
+        <LayoutVisibilityProvider>
+          <App />
+        </LayoutVisibilityProvider>
+      </QueryClientProvider>
+    </StrictMode>,
+  ),
 );
-
-//
