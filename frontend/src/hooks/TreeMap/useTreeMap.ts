@@ -6,19 +6,18 @@ const { kakao } = window;
 
 const DEFAULT_ZOOM_LEVEL = 3;
 
-const MARKER_SIZE = new kakao.maps.Size(50, 55);
-const MARKER_OPTIONS = { offset: new kakao.maps.Point(25, 55) };
-
 const useTreeMap = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
 
   const [map, setMap] = useState(null);
   const [currentAddress, setCurrentAddress] = useState('');
 
+  const MARKER_SIZE = new kakao.maps.Size(50, 55);
+  const MARKER_OPTIONS = { offset: new kakao.maps.Point(25, 55) };
   const treeMarkerImage = new kakao.maps.MarkerImage(treeImage, MARKER_SIZE, MARKER_OPTIONS);
 
   const initializeMap = (latitude: number, longitude: number) => {
-    if (mapRef.current) {
+    if (mapRef.current && kakao && kakao.maps) {
       const options = { center: new kakao.maps.LatLng(latitude, longitude), level: DEFAULT_ZOOM_LEVEL };
       const map = new kakao.maps.Map(mapRef.current, options);
 
