@@ -1,4 +1,5 @@
 export interface FeedItemType {
+  id: number;
   nickname: string;
   updatedAt: string;
   imageUrl: string;

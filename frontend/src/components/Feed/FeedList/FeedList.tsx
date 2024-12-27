@@ -15,17 +15,7 @@ const FeedList = () => {
 
   return (
     <div className={S.Layout}>
-      {feeds && feeds.length > 0 ? (
-        feeds.map((feed, index) => (
-          <FeedItem
-            key={index}
-            // key={feed.id} // TODO: 바꾸기
-            feed={feed}
-          />
-        ))
-      ) : (
-        <>피드가 없습니다.</>
-      )}
+      {feeds && feeds.length > 0 ? feeds.map((feed) => <FeedItem key={feed.id} feed={feed} />) : <>피드가 없습니다.</>}
     </div>
   );
 };

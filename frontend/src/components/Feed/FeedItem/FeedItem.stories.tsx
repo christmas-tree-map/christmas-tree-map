@@ -14,6 +14,7 @@ export default meta;
 type Story = StoryObj<typeof FeedItem>;
 
 const data = {
+  id: 1,
   nickname: '사용자 이름',
   updatedAt: '2024-12-01',
   imageUrl: 'https://via.placeholder.com/150',

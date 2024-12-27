@@ -1,6 +1,7 @@
 import requestAPI from './requestAPI';
 
 interface Feeds {
+  id: number;
   treeImageCode: string;
   nickname: string;
   updatedAt: string;
@@ -29,4 +30,20 @@ export const postFeed = async ({ imageFile, treeId, content, password }: PostFee
   formData.append('request', blob);
 
   await requestAPI.post<number>('/feed', formData);
+};
+
+interface PostLikeFeedRequest {
+  feedId: number;
+}
+
+export const postLikeFeed = async ({ feedId }: PostLikeFeedRequest) => {
+  await requestAPI.post<number>(`/feed/${feedId}/like`);
+};
+
+interface DeleteLikeFeedRequest {
+  feedId: number;
+}
+
+export const deleteLikeFeed = async ({ feedId }: DeleteLikeFeedRequest) => {
+  await requestAPI.delete(`/feed/${feedId}/like`);
 };
