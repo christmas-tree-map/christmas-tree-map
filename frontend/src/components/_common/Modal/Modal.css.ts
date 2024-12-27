@@ -23,8 +23,22 @@ const slideOut = keyframes({
   },
 });
 
-export const Layout = style({
-  height: '100vh',
+export const LayoutBase = style({
+  position: 'fixed',
+  top: 0,
+  zIndex: 100,
+
+  width: '100%',
+  minWidth: '320px',
+  maxWidth: '480px',
+  height: '100%',
+
+  animation: `${slideIn} var(--animation-duration, 200ms) ease-out`,
+});
+
+export const Layout = styleVariants({
+  isOpening: [LayoutBase],
+  isClosing: [LayoutBase, { animation: `${slideOut} var(--animation-duration, 200ms) ease-in` }],
 });
 
 export const BarContainer = style({
@@ -54,13 +68,13 @@ export const Bar = style({
 });
 
 export const Backdrop = style({
-  position: 'fixed',
+  position: 'absolute',
   top: '0',
   left: '0',
   zIndex: 100,
 
   width: '100%',
-  height: '100%',
+  height: '100vh',
 });
 
 const ContainerBase = style({
@@ -68,25 +82,18 @@ const ContainerBase = style({
   flexDirection: 'column',
   alignItems: 'center',
 
-  position: 'fixed',
-  top: '20vh',
+  position: 'absolute',
+  top: '48px',
   zIndex: 200,
 
   width: '100%',
-  minWidth: '320px',
-  maxWidth: '480px',
-  height: '80vh',
+  height: '100vh',
 
   padding: '33px 24px 0',
 
   borderRadius: '30px 30px 0 0',
 
   boxShadow: '6px 0 30px 0 rgba(0, 0, 0, 0.12), 12px 0px 38px 0 rgba(0, 0, 0, 0.08)',
-  animation: `${slideIn} 0.2s ease-out`,
-});
-
-export const ContainerClosing = style({
-  animation: `${slideOut} 0.2s ease-in`,
 });
 
 export const Container = styleVariants({

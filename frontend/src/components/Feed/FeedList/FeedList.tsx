@@ -1,12 +1,11 @@
-import { useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import useFeedsQuery from '@/queries/Feed/useFeedsQuery';
 import FeedItem from '../FeedItem/FeedItem';
 import * as S from './FeedList.css';
 
 const FeedList = () => {
-  const [searchParams] = useSearchParams();
-  const treeIdSearchParam = searchParams.get('treeId');
-  const treeId = treeIdSearchParam ? Number(treeIdSearchParam) : null;
+  const { treeId: treeIdParam } = useParams();
+  const treeId = Number(treeIdParam);
 
   if (!treeId) {
     throw new Error();

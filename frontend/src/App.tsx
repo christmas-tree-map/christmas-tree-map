@@ -2,6 +2,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Landing from '@/pages/Landing/Landing';
 import Layout from '@/pages/Layout/Layout';
 import TreeMap from '@/pages/TreeMap/TreeMap';
+import FeedList from './components/Feed/FeedList/FeedList';
 import GlobalErrorFallback from './pages/Error/GlobalErrorFallback/GlobalErrorFallback';
 import MapMarkerSelector from './pages/MapMarkerSelector/MapMarkerSelector';
 
@@ -24,6 +25,12 @@ const App = () => {
           {
             path: '',
             element: <TreeMap />,
+            children: [
+              {
+                path: ':treeId',
+                element: <FeedList />,
+              },
+            ],
           },
           {
             path: 'select',

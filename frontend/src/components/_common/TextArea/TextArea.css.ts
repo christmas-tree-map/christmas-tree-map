@@ -25,8 +25,8 @@ export const TextareaBase = style({
 });
 
 export const Textarea = styleVariants({
-  default: [TextareaBase, { ':focus': { border: `1px solid ${vars.colors.grey[700]}` } }],
-  error: [TextareaBase, { border: `1px solid ${vars.colors.primary[800]}` }],
+  default: [TextareaBase, { ':focus': { outline: `1px solid ${vars.colors.grey[700]}` } }],
+  error: [TextareaBase, { outline: `1px solid ${vars.colors.primary[800]}` }],
 });
 
 export const ErrorMessage = style({

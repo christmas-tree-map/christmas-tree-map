@@ -1,7 +1,6 @@
 import { HttpResponse, http } from 'msw';
 import { API_URL } from '@/apis/requestAPI';
 import mockFeeds from './feeds.json';
-import mockTrees from './trees.json';
 
 export const handlers = [
   http.get(`${API_URL}/feed`, () => {
@@ -11,7 +10,7 @@ export const handlers = [
   http.post(`${API_URL}/feed`, async ({ request }) => {
     try {
       const formData = await request.formData();
-      const imageFile = formData.get('image') as File; //
+      const imageFile = formData.get('image') as File;
       const requestData = formData.get('request');
 
       if (!imageFile || !requestData) {
@@ -30,10 +29,8 @@ export const handlers = [
         likeCount,
         content,
       };
-
       mockFeeds.push(newFeed);
-
-      return HttpResponse.json(mockFeeds, { status: 200 });
+      return HttpResponse.json(newFeed.id);
     } catch (error) {
       console.error('MSW 핸들러 에러:', error);
 
@@ -42,19 +39,11 @@ export const handlers = [
   }),
 
   http.post(`${API_URL}/tree`, async () => {
-    return HttpResponse.json({ status: 200, data: 1 });
+    return HttpResponse.json(1);
   }),
 
-  http.get(`${API_URL}/tree/filter`, async ({ request }) => {
-    const url = new URL(request.url);
-    const latitude = url.searchParams.get('latitude');
-    const longitude = url.searchParams.get('longitude');
-
-    if (!latitude || !longitude) {
-      return HttpResponse.json({ message: '위도와 경도가 필요합니다.' }, { status: 400 });
-    }
-
-    return HttpResponse.json({ status: 200, data: mockTrees });
+  http.get(`${API_URL}/tree`, async () => {
+    return HttpResponse.json(1);
   }),
 
   http.post(`${API_URL}/feed/:id/like`, async ({ request }) => {
