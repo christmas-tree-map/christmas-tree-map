@@ -34,7 +34,7 @@ const MapMarkerSelector = () => {
   }, [map]);
 
   const handleComplete = () => {
-    navigate('/?modal=submit', { state: { center } });
+    navigate('/map?modal=submit', { state: { center } });
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -49,8 +49,8 @@ const MapMarkerSelector = () => {
   useMapEventHandler({ map, eventName: 'dragend', onEvent: handleDragEnd });
 
   return (
-    <div>
-      <div ref={mapRef} className={S.Layout} />
+    <div className={S.Layout}>
+      <div ref={mapRef} className={S.MapLayout} />
       <div className={S.ToolTip}>
         <p className={S.ToolTipText}>핀을 지정하고 싶은 장소를 선택해 주세요.</p>
       </div>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FloatingButton from '@/components/_common/FloatingButton/FloatingButton';
 import Modal from '@/components/_common/Modal/Modal';
@@ -45,30 +45,22 @@ const TreeMap = () => {
   const modalType = searchParams.get('modal');
   const modalContent = useModalContent(modalType);
 
-  // 뒤로가기로 '/' 이동을 방지
-  useEffect(() => {
-    if (modalType) {
-      window.history.replaceState(null, '', location.pathname + location.search);
-    }
-  }, [modalType]);
-
   const handleButtonClick = () => {
-    openModal();
     navigate('/map?modal=submit', { state: { center: currentPosition } });
   };
 
-  const handleCloseModal = useCallback(() => {
+  useEffect(() => {
+    if (modalType) {
+      openModal();
+    } else {
+      closeModal();
+    }
+  }, [modalType, location]);
+
+  const handleCloseModal = () => {
     closeModal();
     navigate('/map');
-  }, []);
-
-  useEffect(() => {
-    if (!modalType) {
-      closeModal();
-    } else {
-      openModal();
-    }
-  }, [modalType]);
+  };
 
   return (
     <>
