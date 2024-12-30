@@ -1,6 +1,6 @@
 import { HttpResponse, http } from 'msw';
 import { API_URL } from '@/apis/requestAPI';
-import mockFeeds from './feeds.json';
+import mockFeeds from '../data/feeds.json';
 
 export const handlers = [
   http.get(`${API_URL}/feed`, () => {
@@ -36,14 +36,6 @@ export const handlers = [
 
       return HttpResponse.json({ message: '서버 에러가 발생했습니다.' }, { status: 500 });
     }
-  }),
-
-  http.post(`${API_URL}/tree`, async () => {
-    return HttpResponse.json(1);
-  }),
-
-  http.get(`${API_URL}/tree`, async () => {
-    return HttpResponse.json(1);
   }),
 
   http.post(`${API_URL}/feed/:id/like`, async ({ request }) => {

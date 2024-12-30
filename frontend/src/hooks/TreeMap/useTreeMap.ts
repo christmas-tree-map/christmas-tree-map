@@ -6,6 +6,10 @@ const { kakao } = window;
 
 const DEFAULT_ZOOM_LEVEL = 3;
 
+const MARKER_IMAGE: Record<string, string> = {
+  TREE_01: treeImage,
+};
+
 const useTreeMap = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
 
@@ -14,7 +18,6 @@ const useTreeMap = () => {
 
   const MARKER_SIZE = new kakao.maps.Size(50, 55);
   const MARKER_OPTIONS = { offset: new kakao.maps.Point(25, 55) };
-  const treeMarkerImage = new kakao.maps.MarkerImage(treeImage, MARKER_SIZE, MARKER_OPTIONS);
 
   const initializeMap = (latitude: number, longitude: number) => {
     if (mapRef.current && kakao && kakao.maps) {
@@ -26,9 +29,10 @@ const useTreeMap = () => {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const addMarker = (map: any, latitude: number, longitude: number, onClick?: () => void) => {
+  const addMarker = (map: any, latitude: number, longitude: number, imageCode: string, onClick?: () => void) => {
     const markerPosition = new kakao.maps.LatLng(latitude, longitude);
-    const marker = new kakao.maps.Marker({ position: markerPosition, image: treeMarkerImage, clickable: true });
+    const markerImage = new kakao.maps.MarkerImage(MARKER_IMAGE[imageCode], MARKER_SIZE, MARKER_OPTIONS);
+    const marker = new kakao.maps.Marker({ position: markerPosition, image: markerImage, clickable: true });
 
     if (onClick) kakao.maps.event.addListener(marker, 'click', onClick);
 
