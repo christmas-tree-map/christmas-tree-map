@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { IoIosSearch } from '@react-icons/all-files/io/IoIosSearch';
 import { RiImageAddLine } from '@react-icons/all-files/ri/RiImageAddLine';
 import Button from '@/components/_common/Button/Button';
 import Input from '@/components/_common/Input/Input';
@@ -70,7 +71,14 @@ const FeedSubmit = () => {
       <TextArea value={content} onChange={handleContentChange}>
         <TextArea.Label label="설명" />
       </TextArea>
-      <Input label="비밀번호" type="password" value={password} onChange={handlePasswordChange} />
+      <Input
+        label="비밀번호"
+        buttonType="submit"
+        buttonImage={IoIosSearch}
+        type="password"
+        value={password}
+        onChange={handlePasswordChange}
+      />
       <Button type="submit" color="primary">
         제출
       </Button>

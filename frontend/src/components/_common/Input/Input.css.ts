@@ -12,7 +12,12 @@ export const Label = style({
   font: vars.fonts.label,
 });
 
-export const InputBase = style({
+export const InputBoxBase = style({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  gap: '10px',
+
   width: '100%',
   height: '44px',
   padding: '0 10px',
@@ -22,9 +27,18 @@ export const InputBase = style({
   font: vars.fonts.body,
 });
 
-export const Input = styleVariants({
-  default: [InputBase, { ':focus': { border: `1px solid ${vars.colors.grey[700]}` } }],
-  error: [InputBase, { border: `1px solid ${vars.colors.primary[800]}` }],
+export const InputBox = styleVariants({
+  default: [InputBoxBase, { ':focus': { border: `1px solid ${vars.colors.grey[700]}` } }],
+  error: [InputBoxBase, { border: `1px solid ${vars.colors.primary[800]}` }],
+});
+
+export const Input = style({
+  width: '100%',
+});
+
+export const Button = style({
+  width: '25px',
+  height: '25px',
 });
 
 export const ErrorMessage = style({
