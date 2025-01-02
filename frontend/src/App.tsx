@@ -1,4 +1,5 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import CourseDetail from '@/pages/CourseDetail/CourseDetail';
 import Landing from '@/pages/Landing/Landing';
 import Layout from '@/pages/Layout/Layout';
 import TreeMap from '@/pages/TreeMap/TreeMap';
@@ -15,6 +16,10 @@ const App = () => {
           {
             path: '',
             element: <Landing />,
+          },
+          {
+            path: 'course',
+            element: <CourseDetail />,
           },
         ],
       },
