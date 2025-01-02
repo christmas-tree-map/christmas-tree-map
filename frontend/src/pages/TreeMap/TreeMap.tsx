@@ -30,7 +30,7 @@ const TreeMap = () => {
 
   const handleMarkerClick = (treeId: number) => {
     openModal();
-    navigate(`/map?modal=feeds&treeId=${treeId}`);
+    navigate(`/map/${treeId}?modal=feeds`);
   };
 
   useEffect(() => {
