@@ -4,26 +4,23 @@ import * as S from './Dropdown.css';
 interface DropdownProps<T> {
   dropdownList: T[];
   selectedIndex: number | null;
-  onDropdownSelect?: (item: T) => void;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  foundIndex: number | null;
+  triggerFormSubmit: () => void;
+  onInputChange?: (value: string) => void;
 }
 
 const Dropdown = <T extends { id: string; displayedKeyword: string }>({
   dropdownList,
   selectedIndex,
-  onDropdownSelect,
-  onChange,
+  foundIndex,
+  triggerFormSubmit,
+  onInputChange,
 }: DropdownProps<T>) => {
   useEffect(() => {
     if (selectedIndex !== null && dropdownList && dropdownList[selectedIndex]) {
-      const selectedItem = dropdownList[selectedIndex];
-
-      const inputEvent = {
-        target: { value: selectedItem.displayedKeyword },
-      } as React.ChangeEvent<HTMLInputElement>;
-      onChange?.(inputEvent);
+      onInputChange?.(dropdownList[selectedIndex].displayedKeyword);
     }
-  }, [selectedIndex, dropdownList, onChange]);
+  }, [selectedIndex, dropdownList]);
 
   return (
     <ul className={S.DropdownBox}>
@@ -35,9 +32,17 @@ const Dropdown = <T extends { id: string; displayedKeyword: string }>({
               item.displayedKeyword && typeof item.displayedKeyword === 'string' ? (
                 <li
                   key={item.id}
-                  className={index === selectedIndex ? S.DropdownOption['selected'] : S.DropdownOption['default']}
-                  onMouseUp={() => onDropdownSelect?.(item)}
-                  onKeyDown={() => onDropdownSelect?.(item)}
+                  className={
+                    selectedIndex !== -1 && (index === selectedIndex || index === foundIndex)
+                      ? S.DropdownOption['selected']
+                      : S.DropdownOption['default']
+                  }
+                  onMouseUp={() => {
+                    triggerFormSubmit();
+                  }}
+                  onKeyDown={() => {
+                    triggerFormSubmit();
+                  }}
                 >
                   {item.displayedKeyword}
                 </li>
