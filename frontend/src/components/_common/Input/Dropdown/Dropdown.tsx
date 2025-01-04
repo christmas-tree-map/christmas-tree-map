@@ -7,6 +7,7 @@ interface DropdownProps<T> {
   foundIndex: number | null;
   triggerFormSubmit: () => void;
   onInputChange?: (value: string) => void;
+  isOnlySubmitByDropdown?: boolean;
 }
 
 const Dropdown = <T extends { id: string; displayedKeyword: string }>({
@@ -15,6 +16,7 @@ const Dropdown = <T extends { id: string; displayedKeyword: string }>({
   foundIndex,
   triggerFormSubmit,
   onInputChange,
+  isOnlySubmitByDropdown,
 }: DropdownProps<T>) => {
   useEffect(() => {
     if (selectedIndex !== null && dropdownList && dropdownList[selectedIndex]) {
@@ -26,7 +28,7 @@ const Dropdown = <T extends { id: string; displayedKeyword: string }>({
     <ul className={S.DropdownBox}>
       {dropdownList?.length > 0 ? (
         <>
-          <p className={S.DropdownLabel}>반드시 아래의 장소 중 하나로 선택해야 해요.</p>
+          {isOnlySubmitByDropdown && <p className={S.DropdownLabel}>반드시 아래의 장소 중 하나로 선택해야 해요.</p>}
           <div className={S.DropdownOptionBox}>
             {dropdownList.map((item, index) =>
               item.displayedKeyword && typeof item.displayedKeyword === 'string' ? (

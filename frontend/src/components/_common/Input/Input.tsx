@@ -38,7 +38,6 @@ const Input = <T extends { id: string; displayedKeyword: string }>({
     if (dropdownList && dropdownList.length > 0 && value) {
       const index = dropdownList.findIndex((item) => item.displayedKeyword === value);
       if (index !== -1) {
-        onInputChange?.(dropdownList[index].displayedKeyword);
         setFoundIndex(index);
         setSelectedIndex(index);
       } else {
@@ -50,26 +49,25 @@ const Input = <T extends { id: string; displayedKeyword: string }>({
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (!dropdownList || dropdownList.length === 0) return;
 
-    let newIndex: number | null = selectedIndex;
-
     switch (event.key) {
-      case 'ArrowDown':
+      case 'ArrowDown': {
         event.preventDefault();
-        newIndex = selectedIndex === -1 ? 0 : selectedIndex + 1 === dropdownList.length ? -1 : selectedIndex + 1;
+        const newIndex = selectedIndex + 1 === dropdownList.length ? -1 : selectedIndex + 1;
         setSelectedIndex(newIndex);
-        console.log(newIndex);
-        break;
+        return;
+      }
 
-      case 'ArrowUp':
+      case 'ArrowUp': {
         event.preventDefault();
-        newIndex = selectedIndex === -1 ? dropdownList.length - 1 : selectedIndex === 0 ? -1 : selectedIndex - 1;
+        const newIndex = selectedIndex === -1 ? dropdownList.length - 1 : selectedIndex - 1;
         setSelectedIndex(newIndex);
-        break;
+        return;
+      }
 
       case 'Enter':
         event.preventDefault();
         handleSubmit();
-        break;
+        return;
     }
   };
 
@@ -89,8 +87,7 @@ const Input = <T extends { id: string; displayedKeyword: string }>({
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    onInputChange?.(value);
+    onInputChange?.(event.target.value);
     setSelectedIndex(-1);
   };
 
@@ -121,6 +118,7 @@ const Input = <T extends { id: string; displayedKeyword: string }>({
           foundIndex={foundIndex}
           triggerFormSubmit={triggerFormSubmit}
           onInputChange={onInputChange}
+          isOnlySubmitByDropdown={isOnlySubmitByDropdown}
         />
       )}
     </div>
