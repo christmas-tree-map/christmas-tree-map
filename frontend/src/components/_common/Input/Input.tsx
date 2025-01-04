@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { IoIosWarning } from '@react-icons/all-files/io/IoIosWarning';
 import { IconType } from '@react-icons/all-files/lib';
 import { vars } from '@/styles/theme.css';
+import Dropdown from './Dropdown/Dropdown';
 import * as S from './Input.css';
 
 interface InputProps<T> extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -57,17 +58,6 @@ const Input = <T extends { id: string; displayedKeyword: string }>({
     }
   };
 
-  useEffect(() => {
-    if (selectedIndex !== null && dropdownList && dropdownList[selectedIndex]) {
-      const selectedItem = dropdownList[selectedIndex];
-
-      const inputEvent = {
-        target: { value: selectedItem.displayedKeyword },
-      } as React.ChangeEvent<HTMLInputElement>;
-      onChange?.(inputEvent);
-    }
-  }, [selectedIndex, dropdownList, onChange]);
-
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange?.(event);
     setSelectedIndex(null);
@@ -95,30 +85,12 @@ const Input = <T extends { id: string; displayedKeyword: string }>({
       )}
       {/* Dropdown */}
       {variant === 'dropdown' && dropdownList && (
-        <>
-          <ul className={S.DropdownBox}>
-            {dropdownList?.length > 0 ? (
-              <>
-                <p className={S.DropdownLabel}>반드시 아래의 장소 중 하나로 선택해야 해요.</p>
-                <div className={S.DropdownOptionBox}>
-                  {dropdownList.map((item, index) =>
-                    item.displayedKeyword && typeof item.displayedKeyword === 'string' ? (
-                      <li
-                        className={index === selectedIndex ? S.DropdownOption['selected'] : S.DropdownOption['default']}
-                        onMouseUp={() => onDropdownSelect?.(item)}
-                        onKeyDown={() => onDropdownSelect?.(item)}
-                      >
-                        {item.displayedKeyword}
-                      </li>
-                    ) : null,
-                  )}
-                </div>
-              </>
-            ) : (
-              <div className={S.NoContentBox}>검색된 결과가 없어요! 다른 키워드를 입력해 주세요.</div>
-            )}
-          </ul>
-        </>
+        <Dropdown
+          dropdownList={dropdownList}
+          selectedIndex={selectedIndex}
+          onDropdownSelect={onDropdownSelect}
+          onChange={onChange}
+        />
       )}
     </div>
   );
