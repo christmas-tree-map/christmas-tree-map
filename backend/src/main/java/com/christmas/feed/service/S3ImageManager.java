@@ -41,10 +41,10 @@ public class S3ImageManager {
             amazonS3.putObject(new PutObjectRequest(bucketName, s3Key, inputStream, metadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
         } catch (IOException e) {
-            log.warn("S3 upload error: {}", e);
+            log.warn("S3 upload error log", e);
             throw new S3Exception(FeedErrorCode.IMAGE_READ_FAIL, Map.of("image", imageName));
         } catch (Exception e) {
-            log.warn("S3 upload error: {}", e);
+            log.warn("S3 upload error log", e);
             throw new S3Exception(FeedErrorCode.IMAGE_UPLOAD_FAIL, Map.of("image", imageName));
         }
         return amazonS3.getUrl(bucketName, s3Key);
@@ -57,7 +57,7 @@ public class S3ImageManager {
         try {
             amazonS3.deleteObject(bucketName, key);
         } catch (Exception e) {
-            log.warn("S3 delete error: {}", e);
+            log.warn("S3 delete error log", e);
             throw new S3Exception(FeedErrorCode.IMAGE_DELETE_FAIL, Map.of("image key", key));
         }
     }
