@@ -5,6 +5,7 @@ on:
     branches: [ "main", "BE/dev" ]
   pull_request:
     branches: [ "BE/dev" ]
+
 jobs:
   build:
     environment: production
