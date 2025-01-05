@@ -28,7 +28,7 @@ export const InputBoxBase = style({
 });
 
 export const InputBox = styleVariants({
-  default: [InputBoxBase, { ':focus': { border: `1px solid ${vars.colors.grey[700]}` } }],
+  default: [InputBoxBase, { ':focus-within': { border: `1px solid ${vars.colors.grey[700]}` } }],
   error: [InputBoxBase, { border: `1px solid ${vars.colors.primary[800]}` }],
 });
 

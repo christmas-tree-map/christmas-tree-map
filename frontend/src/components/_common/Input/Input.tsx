@@ -33,7 +33,6 @@ const Input = ({
       {status === 'error' && errorMessage && (
         <div className={S.ErrorMessage}>
           <IoIosWarning color={vars.colors.primary[800]} />
-
           <p className={S.ErrorMessageText}>{errorMessage}</p>
         </div>
       )}
