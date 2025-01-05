@@ -26,53 +26,43 @@ const InputWithDropdown = <T extends { id: string; displayedKeyword: string }>({
   canSubmitByButton = false,
   ...props
 }: InputWithDropdownProps<T>) => {
-  console.log(value);
-  // 다른 곳 포커싱하면 dropdown 지워지는 기능 추가하기
   const [displayedValue, setDisplayedValue] = useState(value);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [isDropdownRender, setIsDropdownRender] = useState(false);
 
   useEffect(() => {
-    if (displayedValue.trim() === '') {
-      setIsDropdownRender(false);
-    } else {
-      setIsDropdownRender(true);
-    }
+    setIsDropdownRender(displayedValue.trim() !== '');
   }, [displayedValue]);
 
   useEffect(() => {
     if (isDropdownRender && dropdownList && value.trim() !== '') {
       const foundIndex = dropdownList.findIndex((item) => item.displayedKeyword === value);
-      if (foundIndex !== -1) {
-        setSelectedIndex(foundIndex);
-      } else {
-        setSelectedIndex(-1);
-      }
+      setSelectedIndex(foundIndex !== -1 ? foundIndex : -1);
     }
-  }, [value]);
+  }, [isDropdownRender, dropdownList, value]);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (!dropdownList || dropdownList.length === 0 || displayedValue.length === 0) return;
+    if (!dropdownList || dropdownList.length === 0 || displayedValue.trim() === '') return;
+
+    const cycleIndex = (currentIndex: number, direction: number) => {
+      return (currentIndex + direction + dropdownList.length) % dropdownList.length;
+    };
 
     switch (event.key) {
       case 'ArrowDown': {
         event.preventDefault();
-        const newIndex = selectedIndex + 1 === dropdownList.length ? 0 : selectedIndex + 1;
-        setSelectedIndex(newIndex);
-        if (newIndex !== -1) {
-          setDisplayedValue(dropdownList[newIndex].displayedKeyword);
-        }
-        return;
+        const nextIndex = cycleIndex(selectedIndex, 1);
+        setSelectedIndex(nextIndex);
+        setDisplayedValue(dropdownList[nextIndex].displayedKeyword);
+        break;
       }
 
       case 'ArrowUp': {
         event.preventDefault();
-        const newIndex = selectedIndex === 0 ? dropdownList.length - 1 : selectedIndex - 1;
-        setSelectedIndex(newIndex);
-        if (newIndex !== -1) {
-          setDisplayedValue(dropdownList[newIndex].displayedKeyword);
-        }
-        return;
+        const prevIndex = cycleIndex(selectedIndex, -1);
+        setSelectedIndex(prevIndex);
+        setDisplayedValue(dropdownList[prevIndex].displayedKeyword);
+        break;
       }
 
       case 'Enter':
@@ -80,19 +70,20 @@ const InputWithDropdown = <T extends { id: string; displayedKeyword: string }>({
         if (selectedIndex !== -1) {
           onClickOption(dropdownList[selectedIndex]);
         }
-        return;
+        break;
 
       case 'Escape':
         event.preventDefault();
         setIsDropdownRender(false);
         setSelectedIndex(-1);
-        return;
+        break;
     }
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDisplayedValue(event.target.value);
-    onInputChange(event.target.value);
+    const { value } = event.target;
+    setDisplayedValue(value);
+    onInputChange(value);
   };
 
   return (
