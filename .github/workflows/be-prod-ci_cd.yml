@@ -55,7 +55,7 @@ jobs:
 
   deploy:
     environment: production
-    runs-on: [ "merrytreesmas-prod-a" ]
+    runs-on: [ "merrytreesmas-prod" ]
     env:
       SPRING_PROFILE: prod
     needs: build
