@@ -89,7 +89,6 @@ const InputWithDropdown = <T extends { id: string; displayedKeyword: string }>({
       case 'Escape':
         event.preventDefault();
         setIsDropdownRender(false);
-        setSelectedIndex(-1);
         break;
     }
   };

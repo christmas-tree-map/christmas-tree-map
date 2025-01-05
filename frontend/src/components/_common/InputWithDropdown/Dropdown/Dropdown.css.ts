@@ -15,7 +15,7 @@ export const DropdownBox = style({
 });
 
 export const DropdownLabel = style({
-  padding: '10px',
+  padding: '10px 18px 0',
   color: vars.colors.primary[800],
   fontSize: vars.fonts.tiny,
 });
@@ -23,13 +23,14 @@ export const DropdownLabel = style({
 export const DropdownOptionBox = style({
   display: 'flex',
   flexDirection: 'column',
-  gap: '10px',
 
   width: '100%',
 });
 
 export const DropdownOptionBase = style({
-  padding: '10px',
+  margin: '8px',
+  padding: '3px 10px',
+  borderRadius: '5px',
   cursor: 'pointer',
 
   ':hover': {

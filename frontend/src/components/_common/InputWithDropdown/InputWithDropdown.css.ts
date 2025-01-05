@@ -20,7 +20,7 @@ export const InputBox = style({
 
   width: '100%',
   height: '44px',
-  padding: '0 10px',
+  padding: '0 10px 0 18px',
   borderRadius: '10px',
 
   background: vars.colors.grey[50],
