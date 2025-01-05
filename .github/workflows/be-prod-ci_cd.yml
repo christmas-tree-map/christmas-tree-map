@@ -3,6 +3,8 @@ name: 🎄Backend CI & CD With Prod Profile
 on:
   push:
     branches: [ "main", "BE/dev" ]
+  pull_request:
+    branches: [ "BE/dev" ]
 jobs:
   build:
     environment: production
