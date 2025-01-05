@@ -76,7 +76,7 @@ jobs:
 
       - name: Set docker-compose environment variables
         run: |
-          cat <<EOF > ${{ secrets.DOCKER_COMPOSE_PATH }}/.christmas-env
+          cat <<EOF > ${{ secrets.DOCKER_COMPOSE_PATH }}/.treesmas-env
           # Profile
           SPRING_PROFILE=${{ env.SPRING_PROFILE }}
           
