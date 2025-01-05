@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IconType } from '@react-icons/all-files/lib';
 import { vars } from '@/styles/theme.css';
 import Dropdown from './Dropdown/Dropdown';
@@ -29,6 +29,7 @@ const InputWithDropdown = <T extends { id: string; displayedKeyword: string }>({
   const [displayedValue, setDisplayedValue] = useState(value);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [isDropdownRender, setIsDropdownRender] = useState(false);
+  const inputRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsDropdownRender(displayedValue.trim() !== '');
@@ -40,6 +41,19 @@ const InputWithDropdown = <T extends { id: string; displayedKeyword: string }>({
       setSelectedIndex(foundIndex !== -1 ? foundIndex : -1);
     }
   }, [isDropdownRender, dropdownList, value]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (inputRef.current && !inputRef.current.contains(event.target as Node)) {
+        setIsDropdownRender(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (!dropdownList || dropdownList.length === 0 || displayedValue.trim() === '') return;
@@ -87,7 +101,7 @@ const InputWithDropdown = <T extends { id: string; displayedKeyword: string }>({
   };
 
   return (
-    <div className={S.Layout}>
+    <div className={S.Layout} ref={inputRef}>
       {label && <label className={S.Label}>{label}</label>}
 
       <div className={S.InputBox}>
