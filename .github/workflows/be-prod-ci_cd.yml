@@ -3,7 +3,6 @@ name: 🎄Backend CI & CD With Prod Profile
 on:
   push:
     branches: [ "main", "BE/dev" ]
-
 jobs:
   build:
     environment: production
@@ -42,7 +41,7 @@ jobs:
           context: ./backend
           file: ./backend/docker/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_REPO_NAME }}/christmas-springboot-app:${{ env.SPRING_PROFILE }}
+          tags: ${{ secrets.DOCKER_REPO_NAME }}/treesmas-springboot-app:${{ env.SPRING_PROFILE }}
           build-args: |
             SPRING_PROFILE=${{ env.SPRING_PROFILE }}
           no-cache: true
@@ -50,7 +49,7 @@ jobs:
       - name: Upload docker-compose yaml script to artifact
         uses: actions/upload-artifact@v4
         with:
-          name: christmas-docker-compose
+          name: treesmas-docker-compose
           path: ${{ github.workspace }}/backend/docker/docker-compose.yml
 
   deploy:
@@ -67,7 +66,7 @@ jobs:
       - name: Download docker-compose yaml script to runner
         uses: actions/download-artifact@v4
         with:
-          name: christmas-docker-compose
+          name: treesmas-docker-compose
           path: ${{ github.workspace }}/backend/docker
 
       - name: Move docker-compose YAML
@@ -76,7 +75,7 @@ jobs:
 
       - name: Set docker-compose environment variables
         run: |
-          cat <<EOF > ${{ secrets.DOCKER_COMPOSE_PATH }}/.christmas-env
+          cat <<EOF > ${{ secrets.DOCKER_COMPOSE_PATH }}/.treesmas-env
           # Profile
           SPRING_PROFILE=${{ env.SPRING_PROFILE }}
           
@@ -100,7 +99,7 @@ jobs:
 
       - name: Start new container
         run: |
-          sudo docker-compose --env-file ${{ secrets.DOCKER_COMPOSE_PATH }}/.christmas-env -f ${{ secrets.DOCKER_COMPOSE_PATH }}/docker-compose.yml up --pull always -d
+          sudo docker-compose --env-file ${{ secrets.DOCKER_COMPOSE_PATH }}/.treesmas-env -f ${{ secrets.DOCKER_COMPOSE_PATH }}/docker-compose.yml up --pull always -d
 
       - name: Remove old images
         run: |
