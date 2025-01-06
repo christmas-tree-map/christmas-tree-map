@@ -15,6 +15,7 @@ const useComboBox = <T extends { displayedKeyword: string }>({
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [isComboBoxOpen, setIsComboBoxOpen] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
     setIsComboBoxOpen(value.trim() !== '');
@@ -78,6 +79,7 @@ const useComboBox = <T extends { displayedKeyword: string }>({
     isComboBoxOpen,
     setIsComboBoxOpen,
     inputRef,
+    listRef,
     handleKeyDown,
     handleDisplayedInputChange,
   };

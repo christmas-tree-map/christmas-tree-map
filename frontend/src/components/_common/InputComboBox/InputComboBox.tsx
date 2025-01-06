@@ -31,6 +31,7 @@ const InputComboBox = <T extends { id: string; displayedKeyword: string }>({
     isComboBoxOpen,
     setIsComboBoxOpen,
     inputRef,
+    listRef,
     handleKeyDown,
     handleDisplayedInputChange,
   } = useComboBox({ items: comboBoxList, value, canSubmitByInput });
@@ -59,7 +60,9 @@ const InputComboBox = <T extends { id: string; displayedKeyword: string }>({
         )}
       </div>
 
-      {comboBoxList && isComboBoxOpen && <ComboBox comboBoxList={comboBoxList} selectedIndex={selectedIndex} />}
+      {comboBoxList && isComboBoxOpen && (
+        <ComboBox comboBoxList={comboBoxList} selectedIndex={selectedIndex} ref={listRef} />
+      )}
     </div>
   );
 };
