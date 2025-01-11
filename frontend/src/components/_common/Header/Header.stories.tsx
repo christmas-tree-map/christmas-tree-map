@@ -14,3 +14,9 @@ export default meta;
 type Story = StoryObj<typeof Header>;
 
 export const Default: Story = {};
+
+export const Title: Story = {
+  args: {
+    title: '맞춤 코스 추천',
+  },
+};

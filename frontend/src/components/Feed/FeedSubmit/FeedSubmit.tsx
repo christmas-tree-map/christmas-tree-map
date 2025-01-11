@@ -70,7 +70,7 @@ const FeedSubmit = () => {
       <TextArea value={content} onChange={handleContentChange}>
         <TextArea.Label label="설명" />
       </TextArea>
-      <Input label="비밀번호" type="password" value={password} onChange={handlePasswordChange} />
+      <Input label="비밀번호" buttonType="submit" type="password" value={password} onChange={handlePasswordChange} />
       <Button type="submit" color="primary">
         제출
       </Button>

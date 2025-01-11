@@ -3,7 +3,11 @@ import { IoIosArrowBack } from '@react-icons/all-files/io/IoIosArrowBack';
 import { IoMdMenu } from '@react-icons/all-files/io/IoMdMenu';
 import * as S from './Header.css';
 
-const Header = () => {
+interface HeaderProp {
+  title?: string;
+}
+
+const Header = ({ title = '' }: HeaderProp) => {
   const navigate = useNavigate();
 
   return (
@@ -11,6 +15,7 @@ const Header = () => {
       <button className={S.Button} onClick={() => navigate(-1)}>
         <IoIosArrowBack />
       </button>
+      <p className={S.TitleText}>{title}</p>
       <button className={S.Button}>
         <IoMdMenu />
       </button>
