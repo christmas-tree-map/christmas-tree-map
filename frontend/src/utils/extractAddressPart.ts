@@ -1,4 +1,4 @@
-export const formatAddress = (address: string, keyword: string): string | undefined => {
+export const extractAddressPart = (address: string, keyword: string): string | undefined => {
   const addressList = address.split(' ');
 
   const foundAddress = addressList.find((address: string) => {

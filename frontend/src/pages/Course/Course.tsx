@@ -4,7 +4,7 @@ import { IoIosSearch } from '@react-icons/all-files/io/IoIosSearch';
 import InputComboBox from '@/components/_common/InputComboBox/InputComboBox';
 import CourseSearchedPlaceItem from '@/components/Course/CourseSearchedPlaceItem/CourseSearchedPlaceItem';
 import useTreeMap from '@/hooks/TreeMap/useTreeMap';
-import { formatAddress } from '@/utils/formatAddress';
+import { extractAddressPart } from '@/utils/extractAddressPart';
 import * as S from './Course.css';
 
 const Course = () => {
@@ -26,7 +26,7 @@ const Course = () => {
     getAddress(currentPosition.latitude, currentPosition.longitude);
   }, [currentPosition]);
 
-  const currentCity = formatAddress(currentAddress, '시');
+  const currentCity = extractAddressPart(currentAddress, '시');
   useEffect(() => {
     if (!currentCity || currentCity.length === 0) return;
 
