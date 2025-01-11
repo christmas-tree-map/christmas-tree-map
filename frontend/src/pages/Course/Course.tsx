@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { IoIosSearch } from '@react-icons/all-files/io/IoIosSearch';
+import InputComboBox from '@/components/_common/InputComboBox/InputComboBox';
 import useTreeMap from '@/hooks/TreeMap/useTreeMap';
 import { formatAddress } from '@/utils/formatAddress';
 import * as S from './Course.css';
@@ -34,8 +36,19 @@ const Course = () => {
   return (
     <div className={S.Layout}>
       <div className={S.Container}>
-        <p>어디로 떠나시나요?\n직접 선별한 코스를 알려드려요!</p>
-
+        <div className={S.Circle} />
+        <form className={S.FormSection}>
+          <InputComboBox
+            label="어디로 떠나시나요?\n직접 선별한 코스를 알려드려요!"
+            comboBoxList={[]}
+            value=""
+            canSubmitByInput={false}
+            buttonType="submit"
+            buttonImage={IoIosSearch}
+            onChangeValue={() => {}}
+            name={'searchedComboBox'}
+          />
+        </form>
         <section className={S.PlaceSection}>
           <div className={S.PlaceHeader}>
             <h1 className={S.Title}>{currentCity} 주변 가볼 만한 곳</h1>
