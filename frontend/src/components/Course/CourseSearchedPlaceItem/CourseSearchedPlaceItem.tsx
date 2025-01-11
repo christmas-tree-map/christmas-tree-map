@@ -8,7 +8,7 @@ interface CourseSearchedPlaceItemProps {
 
 const CourseSearchedPlaceItem = ({ place }: CourseSearchedPlaceItemProps) => {
   return (
-    <Link to="http://place.map.kakao.com/784414359" target="_blank" key={place.id}>
+    <Link to={`https://map.kakao.com/link/map/${place.id}`} target="_blank" key={place.id}>
       <div key={place.id} className={S.PlaceItemBox}>
         <img src={''} className={S.PlaceImage} alt="장소 썸네일" />
         <div className={S.PlaceContentBox}>
