@@ -2,6 +2,21 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
 import treeImage from '@/assets/tree.png';
 
+interface SearchedPlace {
+  address_name: string;
+  category_group_code: string;
+  category_group_name: string;
+  category_name: string;
+  distance: string;
+  id: string;
+  phone: string;
+  place_name: string;
+  place_url: string;
+  road_address_name: string;
+  x: string;
+  y: string;
+}
+
 const { kakao } = window;
 
 const DEFAULT_ZOOM_LEVEL = 3;
@@ -15,6 +30,7 @@ const useTreeMap = () => {
 
   const [map, setMap] = useState(null);
   const [currentAddress, setCurrentAddress] = useState('');
+  const [searchedPlaceList, setSearchedPlaceList] = useState<SearchedPlace[]>([]);
 
   const MARKER_SIZE = new kakao.maps.Size(50, 55);
   const MARKER_OPTIONS = { offset: new kakao.maps.Point(25, 55) };
@@ -54,6 +70,22 @@ const useTreeMap = () => {
     });
   }, []);
 
+  const searchPlaces = (keyword: string, count: number) => {
+    if (!keyword) return;
+
+    const places = new kakao.maps.services.Places();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return places.keywordSearch(keyword, (data: any[], status: any) => {
+      if (status === kakao.maps.services.Status.OK) {
+        setSearchedPlaceList(data.slice(0, count));
+      } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+        return;
+      } else if (status === kakao.maps.services.Status.ERROR) {
+        return;
+      }
+    });
+  };
+
   useEffect(() => {
     if (!navigator.geolocation) {
       initializeMap(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
@@ -65,7 +97,7 @@ const useTreeMap = () => {
     );
   }, []);
 
-  return { map, mapRef, currentAddress, addMarker, getAddress };
+  return { map, mapRef, currentAddress, addMarker, getAddress, searchPlaces, searchedPlaceList };
 };
 
 export default useTreeMap;
