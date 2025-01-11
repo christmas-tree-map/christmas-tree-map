@@ -39,7 +39,7 @@ const Course = () => {
         <div className={S.Circle} />
         <form className={S.FormSection}>
           <InputComboBox
-            label="어디로 떠나시나요?\n직접 선별한 코스를 알려드려요!"
+            label="어디로 떠나시나요?<br/>직접 선별한 코스를 알려드려요!"
             comboBoxList={[]}
             value=""
             canSubmitByInput={false}

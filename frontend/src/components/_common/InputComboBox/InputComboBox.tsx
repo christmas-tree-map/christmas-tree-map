@@ -1,3 +1,4 @@
+import React from 'react';
 import { IconType } from '@react-icons/all-files/lib';
 import useClickOutside from '@/hooks/_common/useClickOutside';
 import useComboBox from '@/hooks/_common/useComboBox';
@@ -15,7 +16,7 @@ interface InputComboBoxProps<T> extends React.InputHTMLAttributes<HTMLInputEleme
   onChangeValue: (value: string) => void;
 }
 
-const InputComboBox = <T extends { id: string; displayedKeyword: string }>({
+const InputComboBox = <T extends { id: string; displayedKeyword: string } & React.PropsWithChildren>({
   label,
   buttonType = 'none',
   buttonImage: ButtonImage,
@@ -54,7 +55,16 @@ const InputComboBox = <T extends { id: string; displayedKeyword: string }>({
 
   return (
     <div className={S.Layout} ref={containerRef}>
-      {label && <label className={S.Label}>{label}</label>}
+      {label && (
+        <label className={S.Label}>
+          {label.split('<br/>').map((line, index) => (
+            <React.Fragment key={index}>
+              {line}
+              <br />
+            </React.Fragment>
+          ))}
+        </label>
+      )}
 
       <Input
         {...props}
