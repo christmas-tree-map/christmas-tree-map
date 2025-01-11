@@ -3,6 +3,7 @@ import Landing from '@/pages/Landing/Landing';
 import Layout from '@/pages/Layout/Layout';
 import TreeMap from '@/pages/TreeMap/TreeMap';
 import FeedList from './components/Feed/FeedList/FeedList';
+import Course from './pages/Course/Course';
 import GlobalErrorFallback from './pages/Error/GlobalErrorFallback/GlobalErrorFallback';
 import MapMarkerSelector from './pages/MapMarkerSelector/MapMarkerSelector';
 
@@ -35,6 +36,16 @@ const App = () => {
           {
             path: 'select',
             element: <MapMarkerSelector />,
+          },
+        ],
+      },
+      {
+        path: '/course',
+        element: <Layout title="맞춤 코스 추천" />,
+        children: [
+          {
+            path: '',
+            element: <Course />,
           },
         ],
       },
