@@ -45,3 +45,10 @@ cloud:
     stack:
       auto: false
 
+server:
+  url: ${SERVER_URL}
+
+map:
+  kakao:
+    rest-api-key: ${KAKAO_MAP_REST_API_KEY}
+    default-url: https://dapi.kakao.com/v2/local
