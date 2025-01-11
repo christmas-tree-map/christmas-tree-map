@@ -23,7 +23,7 @@ const Input = ({
     <div className={S.Layout}>
       {label && <label className={S.Label}>{label}</label>}
       <div className={S.InputBox[status]}>
-        <input className={S.Input} {...props} />
+        <input {...props} className={S.Input} />
         {buttonType !== 'none' && ButtonImage && (
           <button className={S.Button} type={buttonType}>
             <ButtonImage color={vars.colors.grey[900]} size={25} />

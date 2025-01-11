@@ -1,7 +1,7 @@
 import { IconType } from '@react-icons/all-files/lib';
 import useClickOutside from '@/hooks/_common/useClickOutside';
 import useComboBox from '@/hooks/_common/useComboBox';
-import { vars } from '@/styles/theme.css';
+import Input from '../Input/Input';
 import ComboBox from './ComboBox/ComboBox';
 import * as S from './InputComboBox.css';
 
@@ -42,23 +42,18 @@ const InputComboBox = <T extends { id: string; displayedKeyword: string }>({
     <div className={S.Layout} ref={inputRef}>
       {label && <label className={S.Label}>{label}</label>}
 
-      <div className={S.InputBox}>
-        <input
-          {...props}
-          className={S.Input}
-          value={displayedValue}
-          onKeyDown={handleKeyDown}
-          onChange={(event) => {
-            onChangeValue(event.target.value);
-            handleDisplayedInputChange(event.target.value);
-          }}
-        />
-        {buttonType !== 'none' && ButtonImage && (
-          <button className={S.Button} type={canSubmitByInput ? buttonType : 'button'}>
-            <ButtonImage color={vars.colors.grey[900]} size={25} />
-          </button>
-        )}
-      </div>
+      <Input
+        {...props}
+        className={S.Input}
+        value={displayedValue}
+        onKeyDown={handleKeyDown}
+        onChange={(event) => {
+          onChangeValue(event.target.value);
+          handleDisplayedInputChange(event.target.value);
+        }}
+        buttonType={canSubmitByInput ? buttonType : 'button'}
+        buttonImage={ButtonImage}
+      />
 
       {comboBoxList && isComboBoxOpen && (
         <ComboBox comboBoxList={comboBoxList} selectedIndex={selectedIndex} ref={listRef} />
