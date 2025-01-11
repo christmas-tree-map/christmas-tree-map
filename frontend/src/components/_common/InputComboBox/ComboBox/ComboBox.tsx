@@ -4,11 +4,12 @@ import * as S from './ComboBox.css';
 interface ComboBoxProps<T> {
   comboBoxList: T[];
   selectedIndex: number;
+  onSelect: (index: number) => void;
 }
 
 const ComboBox = forwardRef(
   <T extends { id: string; displayedKeyword: string }>(
-    { comboBoxList, selectedIndex }: ComboBoxProps<T>,
+    { comboBoxList, selectedIndex, onSelect }: ComboBoxProps<T>,
     ref: React.ForwardedRef<HTMLUListElement>,
   ) => {
     useEffect(() => {
@@ -32,6 +33,8 @@ const ComboBox = forwardRef(
                   <li
                     key={item.id}
                     className={selectedIndex === index ? S.ComboBoxOption['selected'] : S.ComboBoxOption['default']}
+                    data-index={index}
+                    onClick={() => onSelect(index)}
                   >
                     {item.displayedKeyword}
                   </li>

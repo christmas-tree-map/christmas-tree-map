@@ -14,7 +14,7 @@ const useComboBox = <T extends { displayedKeyword: string }>({
   const [displayedValue, setDisplayedValue] = useState(value);
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [isComboBoxOpen, setIsComboBoxOpen] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
 
   useEffect(() => {
@@ -24,7 +24,23 @@ const useComboBox = <T extends { displayedKeyword: string }>({
       const foundIndex = items.findIndex((item) => item.displayedKeyword === value);
       setSelectedIndex(foundIndex !== -1 ? foundIndex : -1);
     }
-  }, [isComboBoxOpen, items, value]);
+  }, [items, value]);
+
+  const submitForm = (currentIndex: number) => {
+    if (!items || currentIndex < 0 || currentIndex >= items.length) return;
+
+    setDisplayedValue(items[currentIndex].displayedKeyword);
+    setSelectedIndex(currentIndex);
+
+    if (containerRef.current) {
+      const form = containerRef.current.closest('form');
+      if (form) {
+        setTimeout(() => {
+          form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true })); // submit 이벤트 트리거
+        }, 0);
+      }
+    }
+  };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (!items || items.length === 0 || value.trim() === '') return;
@@ -36,6 +52,7 @@ const useComboBox = <T extends { displayedKeyword: string }>({
     switch (event.key) {
       case 'ArrowDown': {
         event.preventDefault();
+        if (!isComboBoxOpen) break;
         const nextIndex = cycleIndex(selectedIndex, 1);
         setSelectedIndex(nextIndex);
         setDisplayedValue(items[nextIndex].displayedKeyword);
@@ -44,6 +61,7 @@ const useComboBox = <T extends { displayedKeyword: string }>({
 
       case 'ArrowUp': {
         event.preventDefault();
+        if (!isComboBoxOpen) break;
         const prevIndex = cycleIndex(selectedIndex, -1);
         setSelectedIndex(prevIndex);
         setDisplayedValue(items[prevIndex].displayedKeyword);
@@ -55,11 +73,7 @@ const useComboBox = <T extends { displayedKeyword: string }>({
           event.preventDefault();
           return;
         }
-        if (inputRef.current) {
-          const form = inputRef.current.closest('form');
-          if (form) form.dispatchEvent(new Event('submit', { cancelable: true }));
-          setIsComboBoxOpen(false);
-        }
+        submitForm(selectedIndex);
         break;
 
       case 'Escape':
@@ -78,10 +92,11 @@ const useComboBox = <T extends { displayedKeyword: string }>({
     selectedIndex,
     isComboBoxOpen,
     setIsComboBoxOpen,
-    inputRef,
+    containerRef,
     listRef,
     handleKeyDown,
     handleDisplayedInputChange,
+    submitForm,
   };
 };
 

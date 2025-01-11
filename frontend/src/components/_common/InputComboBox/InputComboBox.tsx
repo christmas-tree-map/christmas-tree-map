@@ -30,16 +30,30 @@ const InputComboBox = <T extends { id: string; displayedKeyword: string }>({
     selectedIndex,
     isComboBoxOpen,
     setIsComboBoxOpen,
-    inputRef,
+    containerRef,
     listRef,
     handleKeyDown,
     handleDisplayedInputChange,
+    submitForm,
   } = useComboBox({ items: comboBoxList, value, canSubmitByInput });
 
-  useClickOutside(inputRef, () => setIsComboBoxOpen(false));
+  const handleComboBoxOpen = () => {
+    if (isComboBoxOpen) {
+      setIsComboBoxOpen(false);
+    }
+  };
+
+  useClickOutside(containerRef, handleComboBoxOpen);
+
+  const handleSelect = (index: number) => {
+    if (!comboBoxList || comboBoxList.length === 0) return;
+
+    onChangeValue(comboBoxList[index].displayedKeyword);
+    submitForm(index);
+  };
 
   return (
-    <div className={S.Layout} ref={inputRef}>
+    <div className={S.Layout} ref={containerRef}>
       {label && <label className={S.Label}>{label}</label>}
 
       <Input
@@ -56,7 +70,7 @@ const InputComboBox = <T extends { id: string; displayedKeyword: string }>({
       />
 
       {comboBoxList && isComboBoxOpen && (
-        <ComboBox comboBoxList={comboBoxList} selectedIndex={selectedIndex} ref={listRef} />
+        <ComboBox comboBoxList={comboBoxList} selectedIndex={selectedIndex} ref={listRef} onSelect={handleSelect} />
       )}
     </div>
   );
