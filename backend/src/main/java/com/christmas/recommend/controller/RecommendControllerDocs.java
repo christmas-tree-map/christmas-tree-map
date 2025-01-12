@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.christmas.common.exception.ExceptionResponse;
+import com.christmas.recommend.dto.AttractionGetRequest;
+import com.christmas.recommend.dto.AttractionGetResponse;
 import com.christmas.recommend.dto.CourseGetRequest;
 import com.christmas.recommend.dto.CourseGetResponse;
 
@@ -26,5 +28,15 @@ public interface RecommendControllerDocs {
     ResponseEntity<CourseGetResponse> getCourse(
             @Parameter(description = "현재 위치의 경도 및 위도", required = true)
             @ModelAttribute CourseGetRequest courseGetRequest
+    );
+
+    @Operation(summary = "추천 볼거리를 최대 3개 반환한다. 만약 볼거리 개수가 3개 이하라면, 해당 개수로 반환된다.")
+    @ApiResponse(responseCode = "200", description = "추천 볼거리 반환에 성공한다.",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = AttractionGetResponse.class)))
+    @ApiResponse(responseCode = "4XX", description = "추천 볼거리 반환에 실패한다.",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponse.class)))
+    ResponseEntity<AttractionGetResponse> getAttractions(
+            @Parameter(description = "현재 위치의 경도 및 위도", required = true)
+            @ModelAttribute AttractionGetRequest request
     );
 }
