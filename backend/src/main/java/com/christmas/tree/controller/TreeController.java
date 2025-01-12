@@ -37,7 +37,7 @@ public class TreeController implements TreeControllerDocs {
     public ResponseEntity<List<TreeGetResponse>> getTreeByRange(
             @Valid @ModelAttribute final TreeGetRequest treeGetRequest) {
         final List<TreeGetResponse> trees = treeService.getTreeByRange(treeGetRequest);
-        return ResponseEntity.status(HttpStatus.OK.value())
+        return ResponseEntity.status(HttpStatus.OK)
                 .body(trees);
     }
 }

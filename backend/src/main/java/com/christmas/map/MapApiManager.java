@@ -14,8 +14,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
+@Slf4j
 @RequiredArgsConstructor
 @Component
 public class MapApiManager {
@@ -35,6 +37,7 @@ public class MapApiManager {
 
     public Mono<List<JsonNode>> findLocations(LocationCategory category, RecommendConditionDto condition) {
         String query = mapApiQuery.makeQuery(setParameters(category, condition));
+        log.info("카카오맵 api 요청 완료");
         Mono<JsonNode> result = getLocationsResult(query);
         return parseLocations(result);
     }

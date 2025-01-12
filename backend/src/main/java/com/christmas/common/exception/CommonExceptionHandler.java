@@ -16,7 +16,6 @@ public class CommonExceptionHandler {
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ExceptionResponse> handleCustomException(final CustomException e) {
         log.warn("cause & message: {}, invalidData: {}", NestedExceptionUtils.getMostSpecificCause(e), e.getInvalidData());
-
         return ResponseEntity.status(e.getStatus())
                 .body(ExceptionResponse.from(e));
     }
@@ -30,8 +29,7 @@ public class CommonExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(final Exception e) {
-        log.error("cause: {}, message: {}", NestedExceptionUtils.getMostSpecificCause(e), e.getMessage());
-
+        log.error("cause: {}, message: ", NestedExceptionUtils.getMostSpecificCause(e), e);
         return ResponseEntity.status(CommonErrorCode.INTERNAL_SERVER_ERROR.getStatus())
                 .body(ExceptionResponse.of(CommonErrorCode.INTERNAL_SERVER_ERROR));
     }
