@@ -5,6 +5,9 @@ const meta = {
   title: 'CourseDetail/CourseList',
   component: CourseList,
   tags: ['autodocs'],
+  parameters: {
+    controls: { exclude: ['courseList'] },
+  },
 } satisfies Meta<typeof CourseList>;
 
 export default meta;
