@@ -17,10 +17,6 @@ const App = () => {
             path: '',
             element: <Landing />,
           },
-          {
-            path: 'course',
-            element: <CourseDetail />,
-          },
         ],
       },
       {
@@ -40,6 +36,16 @@ const App = () => {
           {
             path: 'select',
             element: <MapMarkerSelector />,
+          },
+        ],
+      },
+      {
+        path: '/course',
+        element: <Layout />,
+        children: [
+          {
+            path: 'detail',
+            element: <CourseDetail />,
           },
         ],
       },
