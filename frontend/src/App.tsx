@@ -41,7 +41,7 @@ const App = () => {
       },
       {
         path: '/course',
-        element: <Layout />,
+        element: <Layout isSticky={true} />,
         children: [
           {
             path: 'detail',

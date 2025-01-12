@@ -2,12 +2,16 @@ import { Outlet } from 'react-router-dom';
 import Header from '@/components/_common/Header/Header';
 import NavBar from '@/components/_common/NavBar/NavBar';
 
-const Layout = () => {
+interface LayoutProps {
+  isSticky?: boolean;
+}
+
+const Layout = ({ isSticky = false }: LayoutProps) => {
   return (
     <>
       <Header />
       <Outlet />
-      <NavBar />
+      <NavBar isSticky={isSticky} />
     </>
   );
 };
