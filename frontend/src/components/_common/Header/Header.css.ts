@@ -44,3 +44,7 @@ export const Button = style({
     color: vars.colors.primary[800],
   },
 });
+
+export const TitleText = style({
+  font: vars.fonts.body,
+});

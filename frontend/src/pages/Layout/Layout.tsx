@@ -3,13 +3,14 @@ import Header from '@/components/_common/Header/Header';
 import NavBar from '@/components/_common/NavBar/NavBar';
 
 interface LayoutProps {
+  title?: string;
   isSticky?: boolean;
 }
 
-const Layout = ({ isSticky = false }: LayoutProps) => {
+const Layout = ({ title = '', isSticky = false }: LayoutProps) => {
   return (
     <>
-      <Header />
+      <Header title={title} />
       <Outlet />
       <NavBar isSticky={isSticky} />
     </>
