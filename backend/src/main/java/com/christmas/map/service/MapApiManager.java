@@ -29,6 +29,7 @@ public class MapApiManager {
 
     private static final String AUTH_VALUE_FORMAT = "KakaoAK %s";
     public static final String KEYWORD_SEARCH_URL = "/search/keyword.json";
+    public static final String CATEGORY_SEARCH_URL = "/search/category.json";
     public static final int MAX_LOCATION_SIZE = 15;
 
     @Value("${map.kakao.rest-api-key}")
@@ -41,29 +42,25 @@ public class MapApiManager {
     private final MapApiQuery mapApiQuery;
 
     public Mono<List<JsonNode>> findLocationsByKeyword(RecommendKeyword keyword, RecommendConditionDto condition) {
-        String query = mapApiQuery.makeQuery(setParameters(keyword, condition));
+        String query = mapApiQuery.makeQuery(setParametersByKeyword(keyword, condition));
+        String url = defaultUrl + KEYWORD_SEARCH_URL + query;
+        Mono<JsonNode> result = callKakaoMapApi(url);
         log.info("키워드 [{}]로 카카오맵 장소 찾기 api 요청 성공", keyword);
-        Mono<JsonNode> result = getLocationsResult(query);
         return parseLocations(result);
     }
 
-    private Mono<JsonNode> getLocationsResult(String query) {
-        String url = defaultUrl + KEYWORD_SEARCH_URL + query;
-        return webClient.get()
-                .uri(url)
-                .header("Authorization", String.format(AUTH_VALUE_FORMAT, apiKey))
-                .retrieve()
-                .bodyToMono(JsonNode.class);
-    }
-
-    private Map<String, String> setParameters(RecommendKeyword keyword, RecommendConditionDto condition) {
-        Map<String, String> parameters = new HashMap<>();
+    private Map<String, String> setParametersByKeyword(RecommendKeyword keyword, RecommendConditionDto condition) {
         if (keyword == null) {
             throw new IllegalKakaoMapRequest(MapErrorCode.KEYWORD_PARAMETER_NULL, Map.of("keyword", "null"));
         }
+        Map<String, String> parameters = setDefaultParameters(condition);
         parameters.put("query", keyword.name());
-        parameters.put("size", String.valueOf(MAX_LOCATION_SIZE));
+        return parameters;
+    }
 
+    private Map<String, String> setDefaultParameters(RecommendConditionDto condition) {
+        Map<String, String> parameters = new HashMap<>();
+        parameters.put("size", String.valueOf(MAX_LOCATION_SIZE));
         Optional.ofNullable(condition.category())
                 .ifPresent(category -> parameters.put(LocationCategory.FIELD_NAME, category.getCode()));
         Optional.ofNullable(condition.longitude())
@@ -73,6 +70,25 @@ public class MapApiManager {
         Optional.ofNullable(condition.radius())
                 .ifPresent(radius -> parameters.put("radius", String.valueOf(radius)));
         return parameters;
+    }
+
+    public Mono<List<JsonNode>> findLocationsByCategory(RecommendConditionDto condition) {
+        if (condition.category() == null) {
+            throw new IllegalKakaoMapRequest(MapErrorCode.KEYWORD_PARAMETER_NULL, Map.of("category", "null"));
+        }
+        String query = mapApiQuery.makeQuery(setDefaultParameters(condition));
+        String url = defaultUrl + CATEGORY_SEARCH_URL + query;
+        Mono<JsonNode> result = callKakaoMapApi(url);
+        log.info("카테고리 [{}]로 카카오맵 장소 찾기 api 요청 성공", condition.category());
+        return parseLocations(result);
+    }
+
+    private Mono<JsonNode> callKakaoMapApi(String url) {
+        return webClient.get()
+                .uri(url)
+                .header("Authorization", String.format(AUTH_VALUE_FORMAT, apiKey))
+                .retrieve()
+                .bodyToMono(JsonNode.class);
     }
 
     private Mono<List<JsonNode>> parseLocations(Mono<JsonNode> monoLocations) {

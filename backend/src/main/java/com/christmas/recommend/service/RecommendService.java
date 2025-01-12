@@ -10,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.christmas.map.domain.LocationCategory;
 import com.christmas.map.service.MapApiManager;
 import com.christmas.recommend.domain.RecommendKeyword;
+import com.christmas.recommend.dto.AttractionGetRequest;
+import com.christmas.recommend.dto.AttractionGetResponse;
 import com.christmas.recommend.dto.CourseGetRequest;
 import com.christmas.recommend.dto.CourseGetResponse;
 import com.christmas.recommend.service.dto.RecommendConditionDto;
@@ -24,14 +26,15 @@ import lombok.RequiredArgsConstructor;
 public class RecommendService {
 
     private static final int RECOMMEND_RADIUS = 2000;
+    public static final int RECOMMEND_ATTRACTION_COUNT = 3;
 
     private final MapApiManager mapApiManager;
     private final RandomIntPicker randomPicker;
 
     public CourseGetResponse getCourse(CourseGetRequest request) {
-        List<JsonNode> foods = findRandomLocations(request, LocationCategory.FOOD);
-        List<JsonNode> cafes = findRandomLocations(request, LocationCategory.CAFE);
-        List<JsonNode> attractions = findRandomLocations(request, LocationCategory.CULTURE);
+        List<JsonNode> foods = findLocationsByKeyword(request, LocationCategory.FOOD);
+        List<JsonNode> cafes = findLocationsByKeyword(request, LocationCategory.CAFE);
+        List<JsonNode> attractions = findLocationsByKeyword(request, LocationCategory.CULTURE);
 
         List<JsonNode> lunchAndDinner = getRandomLocations(foods, 2);
         JsonNode lunch = lunchAndDinner.stream()
@@ -48,12 +51,12 @@ public class RecommendService {
         return new CourseGetResponse(lunch, cafe, attraction, dinner);
     }
 
-    private List<JsonNode> findRandomLocations(CourseGetRequest request, LocationCategory category) {
+    private List<JsonNode> findLocationsByKeyword(CourseGetRequest request, LocationCategory category) {
         int minLength = 1;
         if (category.equals(LocationCategory.FOOD)) {
             minLength = 2;
         }
-        RecommendConditionDto condition = setCondition(request, category);
+        RecommendConditionDto condition = setConditionByKeyword(request, category);
         for (RecommendKeyword keyword : getKeywords(category)) {
             List<JsonNode> locations = mapApiManager.findLocationsByKeyword(keyword, condition)
                     .block();
@@ -61,14 +64,28 @@ public class RecommendService {
                 return locations;
             }
         }
-        return List.of();
+        return mapApiManager.findLocationsByCategory(condition)
+                .block();
     }
 
-    private RecommendConditionDto setCondition(CourseGetRequest request, LocationCategory category) {
+    private RecommendConditionDto setConditionByKeyword(CourseGetRequest request, LocationCategory category) {
         if (category.equals(LocationCategory.CULTURE)) {
             return new RecommendConditionDto(request.longitude(), request.latitude(), RECOMMEND_RADIUS, null);
         }
         return new RecommendConditionDto(request.longitude(), request.latitude(), RECOMMEND_RADIUS, category);
+    }
+
+    public AttractionGetResponse getAttributes(AttractionGetRequest request) {
+        RecommendConditionDto condition = new RecommendConditionDto(
+                request.longitude(),
+                request.latitude(),
+                RECOMMEND_RADIUS,
+                LocationCategory.CULTURE
+        );
+        List<JsonNode> attractions = mapApiManager.findLocationsByCategory(condition)
+                .block();
+        List<JsonNode> randomAttractions = getRandomLocations(attractions, RECOMMEND_ATTRACTION_COUNT);
+        return new AttractionGetResponse(randomAttractions);
     }
 
     private List<JsonNode> getRandomLocations(List<JsonNode> locations, int count) {
