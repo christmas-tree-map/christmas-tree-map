@@ -40,11 +40,7 @@ public class RecommendService {
         JsonNode lunch = lunchAndDinner.stream()
                 .findFirst()
                 .orElse(null);
-        JsonNode dinner = lunchAndDinner.stream()
-                .filter(list -> list.size() == 2)
-                .map(list -> list.get(1))
-                .findFirst()
-                .orElse(null);
+        JsonNode dinner = lunchAndDinner.size() == 2 ? lunchAndDinner.get(1) : null;
         JsonNode cafe = getRandomLocation(cafes);
         JsonNode attraction = getRandomLocation(attractions);
 
