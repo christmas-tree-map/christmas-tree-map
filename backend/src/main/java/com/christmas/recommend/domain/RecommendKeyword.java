@@ -1,14 +1,14 @@
 package com.christmas.recommend.domain;
 
-import static com.christmas.map.LocationCategory.CAFE;
-import static com.christmas.map.LocationCategory.CULTURE;
-import static com.christmas.map.LocationCategory.FOOD;
+import static com.christmas.map.domain.LocationCategory.CAFE;
+import static com.christmas.map.domain.LocationCategory.CULTURE;
+import static com.christmas.map.domain.LocationCategory.FOOD;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import com.christmas.map.LocationCategory;
+import com.christmas.map.domain.LocationCategory;
 import com.christmas.recommend.exception.NotExistKeywordCategory;
 import com.christmas.recommend.exception.code.RecommendErrorCode;
 

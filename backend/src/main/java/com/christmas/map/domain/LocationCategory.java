@@ -1,4 +1,4 @@
-package com.christmas.map;
+package com.christmas.map.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
