@@ -9,6 +9,7 @@ import * as S from './CourseDetail.css';
 const CourseDetail = () => {
   const [searchParams] = useSearchParams();
 
+  const keyword = searchParams.get('keyword');
   const latitude = searchParams.get('latitude');
   const longitude = searchParams.get('longitude');
 
@@ -23,7 +24,7 @@ const CourseDetail = () => {
 
   return (
     <div className={S.Layout}>
-      <h1 className={S.Title}>검색어 맞춤 코스</h1>
+      <h1 className={S.Title}>{keyword} 맞춤 코스 ✨</h1>
       <div className={S.MapContainer} />
       <CourseList courseList={courseDetails} />
       {isButtonOpen && (
