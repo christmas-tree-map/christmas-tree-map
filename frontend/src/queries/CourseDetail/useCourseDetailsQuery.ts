@@ -6,7 +6,7 @@ const DEFAULT_COURSE_DETAILS = { lunch: null, cafe: null, attraction: null, dinn
 
 const useCourseDetailsQuery = (latitude: string, longitude: string) => {
   const { data, refetch } = useQuery({
-    queryKey: [COURSE_KEYS.DETAIL, latitude, longitude],
+    queryKey: [COURSE_KEYS.DETAIL, { latitude, longitude }],
     queryFn: () => getCourseDetails(latitude, longitude),
   });
 
