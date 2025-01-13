@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { SearchedPlace } from '@/components/Course/CourseSearchedPlaceItem/CourseSearchedPlaceItem.typs';
+// import { SearchedPlace } from '@/components/Course/CourseSearchedPlaceItem/CourseSearchedPlaceItem.typs';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
 import treeImage from '@/assets/tree.png';
 
@@ -16,7 +16,7 @@ const useTreeMap = () => {
 
   const [map, setMap] = useState(null);
   const [currentAddress, setCurrentAddress] = useState('');
-  const [searchedPlaceList, setSearchedPlaceList] = useState<SearchedPlace[]>([]);
+  // const [searchedPlaceList, setSearchedPlaceList] = useState<SearchedPlace[]>([]);
 
   const MARKER_SIZE = new kakao.maps.Size(50, 55);
   const MARKER_OPTIONS = { offset: new kakao.maps.Point(25, 55) };
@@ -56,21 +56,21 @@ const useTreeMap = () => {
     });
   }, []);
 
-  const searchPlaces = (keyword: string, count: number) => {
-    if (!keyword) return;
+  // const searchPlaces = (keyword: string, count: number) => {
+  //   if (!keyword) return;
 
-    const places = new kakao.maps.services.Places();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return places.keywordSearch(keyword, (data: any[], status: any) => {
-      if (status === kakao.maps.services.Status.OK) {
-        setSearchedPlaceList(data.slice(0, count));
-      } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
-        return;
-      } else if (status === kakao.maps.services.Status.ERROR) {
-        return;
-      }
-    });
-  };
+  //   const places = new kakao.maps.services.Places();
+  //   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  //   return places.keywordSearch(keyword, (data: any[], status: any) => {
+  //     if (status === kakao.maps.services.Status.OK) {
+  //       setSearchedPlaceList(data.slice(0, count));
+  //     } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+  //       return;
+  //     } else if (status === kakao.maps.services.Status.ERROR) {
+  //       return;
+  //     }
+  //   });
+  // };
 
   useEffect(() => {
     if (!navigator.geolocation) {
@@ -83,7 +83,7 @@ const useTreeMap = () => {
     );
   }, []);
 
-  return { map, mapRef, currentAddress, addMarker, getAddress, searchPlaces, searchedPlaceList };
+  return { map, mapRef, currentAddress, addMarker, getAddress };
 };
 
 export default useTreeMap;

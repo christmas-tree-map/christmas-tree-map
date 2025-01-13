@@ -13,7 +13,7 @@ const Course = () => {
     longitude: number;
   } | null>(null);
 
-  const { getAddress, currentAddress, searchPlaces, searchedPlaceList } = useTreeMap();
+  const { getAddress, currentAddress } = useTreeMap();
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -21,17 +21,17 @@ const Course = () => {
     });
   }, []);
 
-  useEffect(() => {
-    if (!currentPosition) return;
-    getAddress(currentPosition.latitude, currentPosition.longitude);
-  }, [currentPosition]);
+  // useEffect(() => {
+  //   if (!currentPosition) return;
+  //   getAddress(currentPosition.latitude, currentPosition.longitude);
+  // }, [currentPosition]);
 
   const currentCity = extractAddressPart(currentAddress, '시');
-  useEffect(() => {
-    if (!currentCity || currentCity.length === 0) return;
+  // useEffect(() => {
+  //   if (!currentCity || currentCity.length === 0) return;
 
-    searchPlaces(`${currentCity} 가볼만한 곳`, 3);
-  }, [currentAddress]);
+  //   searchPlaces(`${currentCity} 가볼만한 곳`, 3);
+  // }, [currentAddress]);
 
   return (
     <div className={S.Layout}>
@@ -54,8 +54,8 @@ const Course = () => {
             <h1 className={S.Title}>{currentCity} 주변 가볼 만한 곳</h1>
             <p className={S.SubTitle}>장소를 누르면 카카오맵으로 연결됩니다.</p>
           </div>
-          {searchedPlaceList &&
-            searchedPlaceList.map((place) => <CourseSearchedPlaceItem place={place} key={place.id} />)}
+          {/* {searchedPlaceList &&
+            searchedPlaceList.map((place) => <CourseSearchedPlaceItem place={place} key={place.id} />)} */}
         </section>
       </div>
     </div>

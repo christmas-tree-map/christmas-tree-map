@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import * as S from './CourseSearchedPlaceItem.css';
-import { SearchedPlace } from './CourseSearchedPlaceItem.typs';
+import { SearchedPlace } from './CourseSearchedPlaceItem.type';
 
 interface CourseSearchedPlaceItemProps {
   place: SearchedPlace;
