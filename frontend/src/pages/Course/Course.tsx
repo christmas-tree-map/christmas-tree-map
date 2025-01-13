@@ -4,16 +4,22 @@ import { IoIosSearch } from '@react-icons/all-files/io/IoIosSearch';
 import InputComboBox from '@/components/_common/InputComboBox/InputComboBox';
 import CourseSearchedPlaceItem from '@/components/Course/CourseSearchedPlaceItem/CourseSearchedPlaceItem';
 import useTreeMap from '@/hooks/TreeMap/useTreeMap';
+import useAttractionsQuery from '@/queries/Course/useAttractionsQuery';
 import { extractAddressPart } from '@/utils/extractAddressPart';
+import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
 import * as S from './Course.css';
 
 const Course = () => {
   const [currentPosition, setCurrentPosition] = useState<{
     latitude: number;
     longitude: number;
-  } | null>(null);
+  }>({
+    latitude: DEFAULT_LATITUDE,
+    longitude: DEFAULT_LONGITUDE,
+  });
 
   const { getAddress, currentAddress } = useTreeMap();
+  const { attractionList } = useAttractionsQuery(currentPosition.latitude, currentPosition.longitude);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -21,17 +27,12 @@ const Course = () => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   if (!currentPosition) return;
-  //   getAddress(currentPosition.latitude, currentPosition.longitude);
-  // }, [currentPosition]);
+  useEffect(() => {
+    if (!currentPosition) return;
+    getAddress(currentPosition.latitude, currentPosition.longitude);
+  }, [currentPosition]);
 
   const currentCity = extractAddressPart(currentAddress, '시');
-  // useEffect(() => {
-  //   if (!currentCity || currentCity.length === 0) return;
-
-  //   searchPlaces(`${currentCity} 가볼만한 곳`, 3);
-  // }, [currentAddress]);
 
   return (
     <div className={S.Layout}>
@@ -54,8 +55,7 @@ const Course = () => {
             <h1 className={S.Title}>{currentCity} 주변 가볼 만한 곳</h1>
             <p className={S.SubTitle}>장소를 누르면 카카오맵으로 연결됩니다.</p>
           </div>
-          {/* {searchedPlaceList &&
-            searchedPlaceList.map((place) => <CourseSearchedPlaceItem place={place} key={place.id} />)} */}
+          {attractionList && attractionList.map((place) => <CourseSearchedPlaceItem place={place} key={place.id} />)}
         </section>
       </div>
     </div>

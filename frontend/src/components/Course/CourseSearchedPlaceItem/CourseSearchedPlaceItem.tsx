@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
+import { Attraction } from '@/pages/Course/Course.type';
 import * as S from './CourseSearchedPlaceItem.css';
-import { SearchedPlace } from './CourseSearchedPlaceItem.type';
 
 interface CourseSearchedPlaceItemProps {
-  place: SearchedPlace;
+  place: Attraction;
 }
 
 const CourseSearchedPlaceItem = ({ place }: CourseSearchedPlaceItemProps) => {

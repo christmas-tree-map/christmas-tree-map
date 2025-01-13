@@ -1,4 +1,4 @@
-export interface SearchedPlace {
+export interface Attraction {
   address_name: string;
   category_group_code: string;
   category_group_name: string;
@@ -11,4 +11,10 @@ export interface SearchedPlace {
   road_address_name: string;
   x: string;
   y: string;
+  meta: {
+    is_end: boolean;
+    pageable_count: number;
+    same_name: null | string | string[];
+    total_count: number;
+  };
 }

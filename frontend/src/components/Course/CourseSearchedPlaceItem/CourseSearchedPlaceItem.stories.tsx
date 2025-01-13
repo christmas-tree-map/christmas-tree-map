@@ -26,6 +26,12 @@ const SAMPLE_DATA = {
   road_address_name: '경기 용인시 처인구 포곡읍 에버랜드로 199',
   x: '127.20219830178264',
   y: '37.293101115700345',
+  meta: {
+    is_end: false,
+    pageable_count: 45,
+    same_name: null,
+    total_count: 412,
+  },
 };
 
 export const Default: Story = {

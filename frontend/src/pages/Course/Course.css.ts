@@ -6,8 +6,9 @@ export const Layout = style({
 
   width: '100%',
   height: '100vh',
+  paddingBottom: '92px',
 
-  overflow: 'hidden',
+  // overflow: 'hidden',
 });
 
 export const Container = style({
