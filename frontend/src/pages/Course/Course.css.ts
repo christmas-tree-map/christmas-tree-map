@@ -6,13 +6,11 @@ export const Layout = style({
 
   width: '100%',
   height: '100vh',
-  paddingBottom: '92px',
-
-  // overflow: 'hidden',
+  overflowX: 'hidden',
 });
 
 export const Container = style({
-  padding: '106px 16px 91px',
+  padding: '106px 16px 100px',
 });
 
 export const Circle = style({
