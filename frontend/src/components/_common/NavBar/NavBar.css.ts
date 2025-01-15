@@ -18,6 +18,7 @@ export const Bar = style({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  gap: '30px',
 
   width: '100%',
   height: '58px',
@@ -33,6 +34,8 @@ export const Link = style({
   flexDirection: 'column',
   alignItems: 'center',
   gap: '3px',
+
+  width: '70px',
 
   font: vars.fonts.tiny,
 

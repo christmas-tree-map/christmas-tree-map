@@ -5,3 +5,7 @@ export const FEED_KEYS = {
 export const TREE_KEYS = {
   TREES: 'trees',
 };
+
+export const COURSE_KEYS = {
+  ATTRACTIONS: 'attractions'
+}
