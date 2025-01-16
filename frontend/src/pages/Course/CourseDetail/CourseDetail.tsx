@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { IoRefresh } from '@react-icons/all-files/io5/IoRefresh';
-import CourseList from '@/components/CourseDetail/CourseList/CourseList';
-import useCourseDetailsQuery from '@/queries/CourseDetail/useCourseDetailsQuery';
+import CourseList from '@/components/Course/CourseList/CourseList';
+import useCourseDetailsQuery from '@/queries/Course/useCourseDetailsQuery';
 import { vars } from '@/styles/theme.css';
 import * as S from './CourseDetail.css';
 

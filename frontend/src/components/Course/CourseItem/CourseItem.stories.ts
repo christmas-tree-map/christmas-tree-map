@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import CourseItem from '@/components/CourseDetail/CourseItem/CourseItem';
+import CourseItem from '@/components/Course/CourseItem/CourseItem';
 
 const meta = {
   title: 'CourseDetail/CourseItem',

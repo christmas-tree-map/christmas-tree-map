@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { IoIosSearch } from '@react-icons/all-files/io/IoIosSearch';
 import InputComboBox from '@/components/_common/InputComboBox/InputComboBox';
-import CourseSearchedPlaceItem from '@/components/Course/CourseSearchedPlaceItem/CourseSearchedPlaceItem';
+import CourseItem from '@/components/Course/CourseItem/CourseItem';
 import useTreeMap from '@/hooks/TreeMap/useTreeMap';
 import useAttractionsQuery from '@/queries/Course/useAttractionsQuery';
 import { extractAddressPart } from '@/utils/extractAddressPart';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
-import * as S from './Course.css';
+import * as S from './CourseMain.css';
 
-const Course = () => {
+const CourseMain = () => {
   const [currentPosition, setCurrentPosition] = useState<{
     latitude: number;
     longitude: number;
@@ -55,11 +55,22 @@ const Course = () => {
             <h1 className={S.Title}>{currentCity} 주변 가볼 만한 곳</h1>
             <p className={S.SubTitle}>장소를 누르면 카카오맵으로 연결됩니다.</p>
           </div>
-          {attractionList && attractionList.map((place) => <CourseSearchedPlaceItem place={place} key={place.id} />)}
+          <div>
+            {attractionList &&
+              attractionList.map((place) => (
+                <CourseItem
+                  key={place.id}
+                  id={place.id}
+                  title={place.place_name}
+                  address={place.road_address_name}
+                  phone={place.phone}
+                />
+              ))}
+          </div>
         </section>
       </div>
     </div>
   );
 };
 
-export default Course;
+export default CourseMain;

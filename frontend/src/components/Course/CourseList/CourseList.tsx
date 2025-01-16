@@ -1,5 +1,5 @@
 import { FaWalking } from '@react-icons/all-files/fa/FaWalking';
-import CourseItem from '@/components/CourseDetail/CourseItem/CourseItem';
+import CourseItem from '@/components/Course/CourseItem/CourseItem';
 import { CourseDetails } from '@/apis/course';
 import { COURSE_TEXT } from '@/constants/course';
 import * as S from './CourseList.css';
@@ -16,7 +16,13 @@ const CourseList = ({ courseList }: CourseListProps) => {
           {value !== null && (
             <>
               <p className={S.TypeText}>{COURSE_TEXT[key]}</p>
-              <CourseItem title={value.place_name} address={value.address_name} phone={value.phone} />
+              <CourseItem
+                id={value.id}
+                title={value.place_name}
+                address={value.road_address_name}
+                phone={value.phone}
+                backgroundColor="grey"
+              />
               {key !== 'dinner' && (
                 <div className={S.TimeContainer}>
                   <div className={S.LineContainer}>

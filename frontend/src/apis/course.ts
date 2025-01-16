@@ -1,18 +1,11 @@
-import { Attraction } from '@/pages/Course/Course.type';
+import { Course } from '@/pages/Course/Course.type';
 import requestAPI from '@/apis/requestAPI';
 
-export interface CourseDetail {
-  id: number;
-  place_name: string;
-  address_name: string;
-  phone: string;
-}
-
 export interface CourseDetails {
-  lunch: CourseDetail | null;
-  cafe: CourseDetail | null;
-  attraction: CourseDetail | null;
-  dinner: CourseDetail | null;
+  lunch: Course | null;
+  cafe: Course | null;
+  attraction: Course | null;
+  dinner: Course | null;
 }
 
 export const getCourseDetails = async (latitude: string, longitude: string) => {
@@ -25,6 +18,6 @@ interface GetAttractionsRequest {
 }
 
 export const getAttractions = async ({ latitude, longitude }: GetAttractionsRequest) => {
-  const { attractions } = await requestAPI.get<{ attractions: Attraction[] }>('/attraction', { latitude, longitude });
+  const { attractions } = await requestAPI.get<{ attractions: Course[] }>('/attraction', { latitude, longitude });
   return attractions;
 };
