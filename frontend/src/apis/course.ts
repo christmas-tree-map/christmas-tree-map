@@ -1,3 +1,4 @@
+import { Attraction } from '@/pages/Course/Course.type';
 import requestAPI from '@/apis/requestAPI';
 
 export interface CourseDetail {
@@ -16,4 +17,14 @@ export interface CourseDetails {
 
 export const getCourseDetails = async (latitude: string, longitude: string) => {
   return await requestAPI.get<CourseDetails>('/course', { latitude, longitude });
+};
+
+interface GetAttractionsRequest {
+  latitude: number;
+  longitude: number;
+}
+
+export const getAttractions = async ({ latitude, longitude }: GetAttractionsRequest) => {
+  const { attractions } = await requestAPI.get<{ attractions: Attraction[] }>('/attraction', { latitude, longitude });
+  return attractions;
 };

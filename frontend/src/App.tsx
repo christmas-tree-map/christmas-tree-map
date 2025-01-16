@@ -4,6 +4,7 @@ import Landing from '@/pages/Landing/Landing';
 import Layout from '@/pages/Layout/Layout';
 import TreeMap from '@/pages/TreeMap/TreeMap';
 import FeedList from './components/Feed/FeedList/FeedList';
+import Course from './pages/Course/Course';
 import GlobalErrorFallback from './pages/Error/GlobalErrorFallback/GlobalErrorFallback';
 import MapMarkerSelector from './pages/MapMarkerSelector/MapMarkerSelector';
 
@@ -41,8 +42,12 @@ const App = () => {
       },
       {
         path: '/course',
-        element: <Layout isSticky={true} />,
+        element: <Layout title="맞춤 코스 추천" isSticky={true} />,
         children: [
+          {
+            path: '',
+            element: <Course />,
+          },
           {
             path: 'detail',
             element: <CourseDetail />,

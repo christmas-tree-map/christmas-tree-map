@@ -40,6 +40,8 @@ export const LinkBase = style({
   alignItems: 'center',
   gap: '3px',
 
+  width: '70px',
+
   font: vars.fonts.tiny,
 });
 

@@ -8,4 +8,5 @@ export const TREE_KEYS = {
 
 export const COURSE_KEYS = {
   DETAIL: 'courseDetail',
+  ATTRACTIONS: 'attractions',
 };
