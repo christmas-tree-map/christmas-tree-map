@@ -12,7 +12,7 @@ public class MapApiQuery {
     private static final String PARAMETER_FORMAT = "%s=%s";
     private static final String PARAMETER_DELIMITER = "&";
 
-    public String makeQuery(Map<String, String> parameters) {
+    public String makeQuery(Map<String, Object> parameters) {
         String query = parameters.entrySet()
                 .stream()
                 .map(entry -> String.format(PARAMETER_FORMAT, entry.getKey(), entry.getValue()))

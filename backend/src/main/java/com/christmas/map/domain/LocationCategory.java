@@ -11,7 +11,5 @@ public enum LocationCategory {
     CAFE("CE7"),
     CULTURE("CT1");
 
-    public static final String FIELD_NAME = "category_group_code";
-
     private String code;
 }

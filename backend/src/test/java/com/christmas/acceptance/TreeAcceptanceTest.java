@@ -49,8 +49,8 @@ class TreeAcceptanceTest extends AcceptanceFixture {
                 RestAssured
                         .given()
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
-                        .param("longitude", longitude)
-                        .param("latitude", latitude)
+                        .param("x", longitude)
+                        .param("y", latitude)
 
                         .when()
                         .log()

@@ -25,13 +25,13 @@ public class PointGenerator {
         if (longitude < MIN_LONGITUDE || longitude > MAX_LONGITUDE) {
             throw new PointOutOfRangeException(
                     TreeErrorCode.INVALID_LOCATION,
-                    Map.of("longitude", longitude.toString())
+                    Map.of("x", longitude.toString())
             );
         }
         if (latitude < MIN_LATITUDE || latitude > MAX_LATITUDE) {
             throw new PointOutOfRangeException(
                     TreeErrorCode.INVALID_LOCATION,
-                    Map.of("latitude", latitude.toString())
+                    Map.of("y", latitude.toString())
             );
         }
         return geometryFactory.createPoint(new Coordinate(longitude, latitude));

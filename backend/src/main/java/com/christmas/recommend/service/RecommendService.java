@@ -3,20 +3,35 @@ package com.christmas.recommend.service;
 import static com.christmas.recommend.domain.RecommendKeyword.getKeywords;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.christmas.map.domain.FacilityType;
 import com.christmas.map.domain.LocationCategory;
+import com.christmas.map.domain.PointType;
+import com.christmas.map.dto.DistanceConditionDto;
+import com.christmas.map.dto.DistanceRouteInfo;
+import com.christmas.map.dto.LocationConditionDto;
+import com.christmas.map.dto.XY;
+import com.christmas.map.service.DistanceApiManager;
+import com.christmas.map.service.DistanceApiParser;
 import com.christmas.map.service.MapApiManager;
+import com.christmas.map.service.MapApiParser;
 import com.christmas.recommend.domain.RecommendKeyword;
 import com.christmas.recommend.dto.AttractionGetRequest;
 import com.christmas.recommend.dto.AttractionGetResponse;
 import com.christmas.recommend.dto.CourseGetRequest;
 import com.christmas.recommend.dto.CourseGetResponse;
-import com.christmas.recommend.service.dto.RecommendConditionDto;
+import com.christmas.recommend.dto.PedestrianRoute;
 import com.christmas.util.RandomIntPicker;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,10 +40,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class RecommendService {
 
-    private static final int RECOMMEND_RADIUS = 2000;
+    private static final int RECOMMEND_RADIUS = 1000;
     public static final int RECOMMEND_ATTRACTION_COUNT = 3;
 
     private final MapApiManager mapApiManager;
+    private final DistanceApiManager distanceApiManager;
+    private final MapApiParser mapApiParser;
     private final RandomIntPicker randomPicker;
 
     public CourseGetResponse getCourse(CourseGetRequest request) {
@@ -44,7 +61,63 @@ public class RecommendService {
         JsonNode cafe = getRandomLocation(cafes);
         JsonNode attraction = getRandomLocation(attractions);
 
-        return new CourseGetResponse(lunch, cafe, attraction, dinner);
+        // todo: 각 값이 null일 경우 체크.
+        XY nowXY = new XY(request.longitude(), request.latitude());
+        XY lunchXY = mapApiParser.extractXYFromLocation(lunch);
+        XY cafeXY = mapApiParser.extractXYFromLocation(cafe);
+        XY attractionXY = mapApiParser.extractXYFromLocation(attraction);
+        XY dinnerXY = mapApiParser.extractXYFromLocation(dinner);
+        DistanceConditionDto condition = new DistanceConditionDto(nowXY, "현재 위치", dinnerXY, "코스 마지막 위치",
+                List.of(lunchXY, cafeXY, attractionXY));
+        JsonNode routesDistance = distanceApiManager.getPedestrianRoute(condition).block();
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+
+        // 경로 계산 로직
+        DistanceApiParser parser = DistanceApiParser.from(routesDistance);
+        // 1. 현재 위치에서 점심
+        DistanceRouteInfo lunchRoute = parser.getDistanceInfo(PointType.SP, PointType.PP1);
+        PedestrianRoute lunchInfo = new PedestrianRoute(lunchRoute.totalSeconds() / 60,
+                makeFacilityInfo(lunchRoute.facilityInfo()));
+        JsonNode lunchInfoJson = mapper.valueToTree(lunchInfo);
+        ObjectNode lunchResult = (ObjectNode) lunch;
+        lunchResult.set("pedestrian_route", lunchInfoJson);
+
+        // 2. 점심에서 카페
+        DistanceRouteInfo cafeRoute = parser.getDistanceInfo(PointType.PP1, PointType.PP2);
+        PedestrianRoute cafeInfo = new PedestrianRoute(cafeRoute.totalSeconds() / 60,
+                makeFacilityInfo(cafeRoute.facilityInfo()));
+        JsonNode cafeInfoJson = mapper.valueToTree(cafeInfo);
+        ObjectNode cafeResult = (ObjectNode) cafe;
+        cafeResult.set("pedestrian_route", cafeInfoJson);
+
+        // 3. 카페에서 어트랙션
+        DistanceRouteInfo attractionRoute = parser.getDistanceInfo(PointType.PP2, PointType.PP3);
+        PedestrianRoute attractionInfo = new PedestrianRoute(attractionRoute.totalSeconds() / 60,
+                makeFacilityInfo(attractionRoute.facilityInfo()));
+        JsonNode attractionInfoJson = mapper.valueToTree(attractionInfo);
+        ObjectNode attractionResult = (ObjectNode) attraction;
+        attractionResult.set("pedestrian_route", attractionInfoJson);
+
+        // 4. 어트랙션에서 저녁
+        DistanceRouteInfo dinnerRoute = parser.getDistanceInfo(PointType.PP3, PointType.EP);
+        PedestrianRoute dinnerInfo = new PedestrianRoute(dinnerRoute.totalSeconds() / 60,
+                makeFacilityInfo(dinnerRoute.facilityInfo()));
+        JsonNode dinnerInfoJson = mapper.valueToTree(dinnerInfo);
+        ObjectNode dinnerResult = (ObjectNode) dinner;
+        dinnerResult.set("pedestrian_route", dinnerInfoJson);
+
+        return new CourseGetResponse(lunchResult, cafeResult, attractionResult, dinnerResult);
+    }
+
+    private Map<String, Integer> makeFacilityInfo(Map<FacilityType, Integer> facilityTypeInfo) {
+        return facilityTypeInfo.entrySet()
+                .stream()
+                .filter(entry -> !entry.getKey().equals(FacilityType.일반보행자도로))
+                .collect(Collectors.toMap(
+                        entry -> entry.getKey().name(), Entry::getValue
+                ));
     }
 
     private List<JsonNode> findLocationsByKeyword(CourseGetRequest request, LocationCategory category) {
@@ -52,7 +125,7 @@ public class RecommendService {
         if (category.equals(LocationCategory.FOOD)) {
             minLength = 2;
         }
-        RecommendConditionDto condition = setConditionByKeyword(request, category);
+        LocationConditionDto condition = setConditionByKeyword(request, category);
         for (RecommendKeyword keyword : getKeywords(category)) {
             List<JsonNode> locations = mapApiManager.findLocationsByKeyword(keyword, condition)
                     .block();
@@ -64,15 +137,15 @@ public class RecommendService {
                 .block();
     }
 
-    private RecommendConditionDto setConditionByKeyword(CourseGetRequest request, LocationCategory category) {
+    private LocationConditionDto setConditionByKeyword(CourseGetRequest request, LocationCategory category) {
         if (category.equals(LocationCategory.CULTURE)) {
-            return new RecommendConditionDto(request.longitude(), request.latitude(), RECOMMEND_RADIUS, null);
+            return new LocationConditionDto(request.longitude(), request.latitude(), RECOMMEND_RADIUS, null);
         }
-        return new RecommendConditionDto(request.longitude(), request.latitude(), RECOMMEND_RADIUS, category);
+        return new LocationConditionDto(request.longitude(), request.latitude(), RECOMMEND_RADIUS, category);
     }
 
     public AttractionGetResponse getAttributes(AttractionGetRequest request) {
-        RecommendConditionDto condition = new RecommendConditionDto(
+        LocationConditionDto condition = new LocationConditionDto(
                 request.longitude(),
                 request.latitude(),
                 RECOMMEND_RADIUS,
