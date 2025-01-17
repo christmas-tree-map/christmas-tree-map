@@ -6,7 +6,8 @@ import com.christmas.common.exception.CustomErrorCode;
 import com.christmas.common.exception.CustomException;
 
 public class NotExistKeywordCategory extends CustomException {
-    public NotExistKeywordCategory(CustomErrorCode errorCode, Map<String, String> invalidData) {
+
+    public NotExistKeywordCategory(CustomErrorCode errorCode, Map<String, Object> invalidData) {
         super(errorCode, invalidData);
     }
 }

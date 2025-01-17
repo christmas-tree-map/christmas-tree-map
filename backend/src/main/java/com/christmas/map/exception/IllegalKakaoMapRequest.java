@@ -7,7 +7,7 @@ import com.christmas.common.exception.CustomException;
 
 public class IllegalKakaoMapRequest extends CustomException {
 
-    public IllegalKakaoMapRequest(CustomErrorCode errorCode, Map<String, String> invalidData) {
+    public IllegalKakaoMapRequest(CustomErrorCode errorCode, Map<String, Object> invalidData) {
         super(errorCode, invalidData);
     }
 }
