@@ -72,12 +72,12 @@ public class MapApiManager {
 
     public Mono<List<JsonNode>> findLocationsByCategory(LocationConditionDto condition) {
         if (condition.category() == null) {
-            throw new IllegalKakaoMapRequest(MapErrorCode.KEYWORD_PARAMETER_NULL, Map.of("category", "null"));
+            throw new IllegalKakaoMapRequest(MapErrorCode.CATEGORY_PARAMETER_NULL, Map.of("category", "null"));
         }
         String query = mapApiQuery.makeQuery(setDefaultParameters(condition));
         String url = defaultUrl + CATEGORY_SEARCH_URL + query;
         Mono<JsonNode> result = callKakaoMapApi(url);
-        log.info("카테고리 [{}]로 카카오맵 장소 찾기 api 요청 성공", condition.category());
+        log.info("카테고리 [{}]로 카카오맵 장소 찾기 api 요청 성공", condition.category().name());
         return mapApiParser.parseLocations(result);
     }
 

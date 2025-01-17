@@ -133,7 +133,8 @@ public class RecommendService {
                 return locations;
             }
         }
-        return mapApiManager.findLocationsByCategory(condition)
+        LocationConditionDto categoryCondition = setConditionByCategory(request, category);
+        return mapApiManager.findLocationsByCategory(categoryCondition)
                 .block();
     }
 
@@ -141,6 +142,10 @@ public class RecommendService {
         if (category.equals(LocationCategory.CULTURE)) {
             return new LocationConditionDto(request.longitude(), request.latitude(), RECOMMEND_RADIUS, null);
         }
+        return setConditionByCategory(request, category);
+    }
+
+    private LocationConditionDto setConditionByCategory(CourseGetRequest request, LocationCategory category) {
         return new LocationConditionDto(request.longitude(), request.latitude(), RECOMMEND_RADIUS, category);
     }
 
