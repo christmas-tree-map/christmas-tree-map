@@ -3,7 +3,7 @@ spring:
     name: christmas
   config:
     activate:
-      on-profile: local
+      on-profile: test
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/christmas

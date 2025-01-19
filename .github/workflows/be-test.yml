@@ -1,4 +1,4 @@
-name: 🎄Backend Build & Test With Local Profile
+name: 🎄Backend Build & Test With Test Profile
 
 on:
   pull_request:
