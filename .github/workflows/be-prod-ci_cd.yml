@@ -89,6 +89,7 @@ jobs:
           S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}
           SERVER_URL=${{ secrets.SERVER_URL }}
           KAKAO_MAP_REST_API_KEY=${{ secrets.KAKAO_MAP_REST_API_KEY }}
+          TMAP_APP_KEY=${{ secrets.TMAP_APP_KEY }}
           
           # Docker Compose yml environments
           DOCKER_REPO_NAME=${{ secrets.DOCKER_REPO_NAME }}

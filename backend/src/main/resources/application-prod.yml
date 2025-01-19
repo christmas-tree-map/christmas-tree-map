@@ -52,3 +52,6 @@ map:
   kakao:
     rest-api-key: ${KAKAO_MAP_REST_API_KEY}
     default-url: https://dapi.kakao.com/v2/local
+  tmap:
+    app-key: ${TMAP_APP_KEY}
+    default-url: https://apis.openapi.sk.com/tmap/routes
