@@ -1,11 +1,12 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import CourseDetail from '@/pages/Course/CourseDetail/CourseDetail';
+import CourseMain from '@/pages/Course/CourseMain/CourseMain';
+import GlobalErrorFallback from '@/pages/Error/GlobalErrorFallback/GlobalErrorFallback';
 import Landing from '@/pages/Landing/Landing';
 import Layout from '@/pages/Layout/Layout';
+import MapMarkerSelector from '@/pages/MapMarkerSelector/MapMarkerSelector';
 import TreeMap from '@/pages/TreeMap/TreeMap';
-import FeedList from './components/Feed/FeedList/FeedList';
-import Course from './pages/Course/Course';
-import GlobalErrorFallback from './pages/Error/GlobalErrorFallback/GlobalErrorFallback';
-import MapMarkerSelector from './pages/MapMarkerSelector/MapMarkerSelector';
+import FeedList from '@/components/Feed/FeedList/FeedList';
 
 const App = () => {
   const router = createBrowserRouter(
@@ -41,11 +42,15 @@ const App = () => {
       },
       {
         path: '/course',
-        element: <Layout title="맞춤 코스 추천" />,
+        element: <Layout title="맞춤 코스 추천" isSticky={true} />,
         children: [
           {
             path: '',
-            element: <Course />,
+            element: <CourseMain />,
+          },
+          {
+            path: 'detail',
+            element: <CourseDetail />,
           },
         ],
       },

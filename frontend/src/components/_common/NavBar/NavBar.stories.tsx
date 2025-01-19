@@ -21,6 +21,13 @@ const meta = {
 } satisfies Meta<typeof NavBar>;
 
 export default meta;
+
 type Story = StoryObj<typeof NavBar>;
 
 export const Default: Story = {};
+
+export const Sticky: Story = {
+  args: {
+    isSticky: true,
+  },
+};

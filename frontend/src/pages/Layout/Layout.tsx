@@ -4,14 +4,15 @@ import NavBar from '@/components/_common/NavBar/NavBar';
 
 interface LayoutProps {
   title?: string;
+  isSticky?: boolean;
 }
 
-const Layout = ({ title = '' }: LayoutProps) => {
+const Layout = ({ title = '', isSticky = false }: LayoutProps) => {
   return (
     <>
       <Header title={title} />
       <Outlet />
-      <NavBar />
+      <NavBar isSticky={isSticky} />
     </>
   );
 };
