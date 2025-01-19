@@ -1,4 +1,4 @@
-package com.christmas.map.domain;
+package com.christmas.infrastructure.route.domain;
 
 import lombok.RequiredArgsConstructor;
 

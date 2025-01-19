@@ -1,8 +1,8 @@
-package com.christmas.map.dto;
+package com.christmas.infrastructure.route.dto;
 
 import java.util.List;
 
-public record DistanceConditionDto(
+public record RouteConditionDto(
         XY start,
         String startName,
         XY end,

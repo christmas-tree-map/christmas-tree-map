@@ -1,4 +1,4 @@
-package com.christmas.map.exception;
+package com.christmas.infrastructure.search.exception;
 
 import java.util.Map;
 

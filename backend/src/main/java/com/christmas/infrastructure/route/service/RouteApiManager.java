@@ -1,4 +1,4 @@
-package com.christmas.map.service;
+package com.christmas.infrastructure.route.service;
 
 import java.util.Map;
 
@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import com.christmas.map.dto.DistanceConditionDto;
+import com.christmas.infrastructure.route.dto.RouteConditionDto;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class DistanceApiManager {
+public class RouteApiManager {
 
     @Value("${map.tmap.app-key}")
     private String appKey;
@@ -29,11 +29,11 @@ public class DistanceApiManager {
     private static final int MAX_PASS_LIST = 5;
 
     private final WebClient webClient;
-    private final DistanceApiBody distanceApiBody;
+    private final RouteApiBody routeApiBody;
 
-    public Mono<JsonNode> getPedestrianRoute(DistanceConditionDto condition) {
+    public Mono<JsonNode> getPedestrianRoute(RouteConditionDto condition) {
         String url = defaultUrl + PEDESTRIAN_ROUTE_URL;
-        Map<String, Object> body = distanceApiBody.makeBody(condition);
+        Map<String, Object> body = routeApiBody.makeBody(condition);
         Mono<JsonNode> result = callTMapApi(url, body);
         log.info("티맵 api 보행자 거리 완료");
         return result;

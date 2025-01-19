@@ -1,4 +1,4 @@
-package com.christmas.map.exception;
+package com.christmas.infrastructure.route.exception;
 
 import java.util.Map;
 

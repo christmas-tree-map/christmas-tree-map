@@ -1,4 +1,4 @@
-package com.christmas.map.service;
+package com.christmas.infrastructure.route.service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -6,15 +6,15 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import com.christmas.map.dto.DistanceConditionDto;
+import com.christmas.infrastructure.route.dto.RouteConditionDto;
 
 @Component
-public class DistanceApiBody {
+public class RouteApiBody {
 
     private static final String XY_DELIMITER_FORMAT = "%s,%s";
     private static final String PASS_LIST_DELIMITER = "_";
 
-    public Map<String, Object> makeBody(DistanceConditionDto condition) {
+    public Map<String, Object> makeBody(RouteConditionDto condition) {
         Map<String, Object> body = new HashMap<>();
         body.put("startX", condition.start().x());
         body.put("startY", condition.start().y());

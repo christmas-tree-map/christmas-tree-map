@@ -1,4 +1,4 @@
-package com.christmas.map.exception.code;
+package com.christmas.infrastructure.route.exception.code;
 
 import org.springframework.http.HttpStatus;
 

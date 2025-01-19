@@ -1,4 +1,4 @@
-package com.christmas.map.service;
+package com.christmas.infrastructure.search.service;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MapApiQuery {
+public class SearchApiQuery {
 
     private static final String QUERY_FORMAT = "?%s";
     private static final String PARAMETER_FORMAT = "%s=%s";

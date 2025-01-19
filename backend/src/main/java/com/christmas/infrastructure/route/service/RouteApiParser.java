@@ -1,41 +1,41 @@
-package com.christmas.map.service;
+package com.christmas.infrastructure.route.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.christmas.map.domain.FacilityType;
-import com.christmas.map.domain.PointType;
-import com.christmas.map.dto.DistanceFeature;
-import com.christmas.map.dto.DistanceRouteInfo;
+import com.christmas.infrastructure.route.domain.FacilityType;
+import com.christmas.infrastructure.route.dto.RouteFeature;
+import com.christmas.infrastructure.route.dto.RouteInfo;
+import com.christmas.infrastructure.route.domain.PointType;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class DistanceApiParser {
+public class RouteApiParser {
 
-    private final List<DistanceFeature> features;
+    private final List<RouteFeature> features;
 
-    public static DistanceApiParser from(JsonNode distance) {
-        List<DistanceFeature> features = new ArrayList<>();
+    public static RouteApiParser from(JsonNode distance) {
+        List<RouteFeature> features = new ArrayList<>();
         JsonNode jsonFeatures = distance.path("features");
         for (int i = 0; i < jsonFeatures.size(); i++) {
             JsonNode feature = jsonFeatures.get(i);
             JsonNode geometry = feature.path("geometry");
             JsonNode properties = feature.path("properties");
-            features.add(new DistanceFeature(geometry, properties));
+            features.add(new RouteFeature(geometry, properties));
         }
-        return new DistanceApiParser(features);
+        return new RouteApiParser(features);
     }
 
-    public DistanceRouteInfo getDistanceInfo(PointType start, PointType end) {
+    public RouteInfo getDistanceInfo(PointType start, PointType end) {
         int totalSeconds = 0;
         Map<FacilityType, Integer> facilityInfo = new HashMap<>();
         boolean startFlag = false;
 
-        for (DistanceFeature feature : features) {
+        for (RouteFeature feature : features) {
             JsonNode geometry = feature.geometry();
             JsonNode properties = feature.properties();
             if ("Point".equals(geometry.get("type").asText())) {
@@ -54,6 +54,6 @@ public class DistanceApiParser {
                 }
             }
         }
-        return new DistanceRouteInfo(totalSeconds, facilityInfo);
+        return new RouteInfo(totalSeconds, facilityInfo);
     }
 }

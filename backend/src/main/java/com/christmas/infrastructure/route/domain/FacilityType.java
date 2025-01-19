@@ -1,9 +1,9 @@
-package com.christmas.map.domain;
+package com.christmas.infrastructure.route.domain;
 
 import java.util.Map;
 
-import com.christmas.map.exception.IllegalTmapRequest;
-import com.christmas.map.exception.code.DistanceErrorCode;
+import com.christmas.infrastructure.route.exception.IllegalTmapRequest;
+import com.christmas.infrastructure.route.exception.code.DistanceErrorCode;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,18 +1,18 @@
-package com.christmas.map.service;
+package com.christmas.infrastructure.search.service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.christmas.map.dto.XY;
+import com.christmas.infrastructure.route.dto.XY;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import reactor.core.publisher.Mono;
 
 @Component
-public class MapApiParser {
+public class SearchApiParser {
 
     public Mono<List<JsonNode>> parseLocations(Mono<JsonNode> monoLocations) {
         return monoLocations.map(locations -> {
@@ -33,9 +33,5 @@ public class MapApiParser {
         double x = location.get("x").asDouble();
         double y = location.get("y").asDouble();
         return new XY(x, y);
-    }
-
-    public String extractPlaceName(JsonNode location) {
-        return location.get("place_name").asText();
     }
 }
