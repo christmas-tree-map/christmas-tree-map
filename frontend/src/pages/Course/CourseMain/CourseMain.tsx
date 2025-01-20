@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IoIosSearch } from '@react-icons/all-files/io/IoIosSearch';
 import InputComboBox from '@/components/_common/InputComboBox/InputComboBox';
 import CourseItem from '@/components/Course/CourseItem/CourseItem';
+import { useDebounce } from '@/hooks/_common/useDebounce';
 import useTreeMap from '@/hooks/TreeMap/useTreeMap';
 import useAttractionsQuery from '@/queries/Course/useAttractionsQuery';
 import { extractAddressPart } from '@/utils/extractAddressPart';
@@ -17,9 +19,23 @@ const CourseMain = () => {
     latitude: DEFAULT_LATITUDE,
     longitude: DEFAULT_LONGITUDE,
   });
+  const [inputValue, setInputValue] = useState('');
+  const debouncedInputValue = useDebounce(inputValue, 200);
 
-  const { getAddress, currentAddress } = useTreeMap();
+  const navigate = useNavigate();
+
+  const { getAddress, currentAddress, searchPlaces, searchedPlaceList } = useTreeMap();
   const { attractionList } = useAttractionsQuery(currentPosition.latitude, currentPosition.longitude);
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const data = formData.get('searchedComboBox');
+    const selectedPlace = searchedPlaceList.find((place) => place.place_name === data);
+    if (!selectedPlace) return;
+
+    navigate(`/course/detail?keyword=${inputValue}&latitude=${selectedPlace.x}&longitude=${selectedPlace.y}`);
+  };
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -32,21 +48,26 @@ const CourseMain = () => {
     getAddress(currentPosition.latitude, currentPosition.longitude);
   }, [currentPosition]);
 
+  useEffect(() => {
+    if (!debouncedInputValue || debouncedInputValue.length === 0) return;
+    searchPlaces(`${debouncedInputValue}`);
+  }, [debouncedInputValue]);
+
   const currentCity = extractAddressPart(currentAddress, '시');
 
   return (
     <div className={S.Layout}>
       <div className={S.Container}>
         <div className={S.Circle} />
-        <form className={S.FormSection}>
+        <form className={S.FormSection} onSubmit={handleSubmit}>
           <InputComboBox
             label="어디로 떠나시나요?<br/>직접 선별한 코스를 알려드려요!"
-            comboBoxList={[]}
-            value=""
+            comboBoxList={searchedPlaceList}
+            value={inputValue}
             canSubmitByInput={false}
             buttonType="submit"
             buttonImage={IoIosSearch}
-            onChangeValue={() => {}}
+            onChangeValue={setInputValue}
             name={'searchedComboBox'}
           />
         </form>

@@ -16,7 +16,7 @@ interface InputComboBoxProps<T> extends React.InputHTMLAttributes<HTMLInputEleme
   onChangeValue: (value: string) => void;
 }
 
-const InputComboBox = <T extends { id: string; displayedKeyword: string } & React.PropsWithChildren>({
+const InputComboBox = <T extends { id: string; place_name: string } & React.PropsWithChildren>({
   label,
   buttonType = 'none',
   buttonImage: ButtonImage,
@@ -49,7 +49,7 @@ const InputComboBox = <T extends { id: string; displayedKeyword: string } & Reac
   const handleSelect = (index: number) => {
     if (!comboBoxList || comboBoxList.length === 0) return;
 
-    onChangeValue(comboBoxList[index].displayedKeyword);
+    onChangeValue(comboBoxList[index].place_name);
     submitForm(index);
   };
 

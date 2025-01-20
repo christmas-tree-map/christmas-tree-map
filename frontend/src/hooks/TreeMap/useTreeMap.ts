@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { CourseWithPosition } from '@/pages/Course/Course.type';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
 import treeImage from '@/assets/tree.png';
 
@@ -15,6 +16,7 @@ const useTreeMap = () => {
 
   const [map, setMap] = useState(null);
   const [currentAddress, setCurrentAddress] = useState('');
+  const [searchedPlaceList, setSearchedPlaceList] = useState<CourseWithPosition[]>([]);
 
   const MARKER_SIZE = new kakao.maps.Size(50, 55);
   const MARKER_OPTIONS = { offset: new kakao.maps.Point(25, 55) };
@@ -54,6 +56,22 @@ const useTreeMap = () => {
     });
   }, []);
 
+  const searchPlaces = (keyword: string) => {
+    if (!keyword) return;
+
+    const places = new kakao.maps.services.Places();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    return places.keywordSearch(keyword, (data: any[], status: any) => {
+      if (status === kakao.maps.services.Status.OK) {
+        setSearchedPlaceList(data);
+      } else if (status === kakao.maps.services.Status.ZERO_RESULT) {
+        return;
+      } else if (status === kakao.maps.services.Status.ERROR) {
+        return;
+      }
+    });
+  };
+
   useEffect(() => {
     if (!navigator.geolocation) {
       initializeMap(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
@@ -65,7 +83,7 @@ const useTreeMap = () => {
     );
   }, []);
 
-  return { map, mapRef, currentAddress, addMarker, getAddress };
+  return { map, mapRef, currentAddress, addMarker, getAddress, searchPlaces, searchedPlaceList };
 };
 
 export default useTreeMap;
