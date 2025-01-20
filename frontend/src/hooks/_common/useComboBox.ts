@@ -6,7 +6,7 @@ interface useComboBoxProps<T> {
   canSubmitByInput: boolean;
 }
 
-const useComboBox = <T extends { displayedKeyword: string }>({
+const useComboBox = <T extends { place_name: string }>({
   items,
   value,
   canSubmitByInput,
@@ -21,7 +21,7 @@ const useComboBox = <T extends { displayedKeyword: string }>({
     setIsComboBoxOpen(value.trim() !== '');
 
     if (isComboBoxOpen && items && value.trim() !== '') {
-      const foundIndex = items.findIndex((item) => item.displayedKeyword === value);
+      const foundIndex = items.findIndex((item) => item.place_name === value);
       setSelectedIndex(foundIndex !== -1 ? foundIndex : -1);
     }
   }, [items, value]);
@@ -29,7 +29,7 @@ const useComboBox = <T extends { displayedKeyword: string }>({
   const submitForm = (currentIndex: number) => {
     if (!items || currentIndex < 0 || currentIndex >= items.length) return;
 
-    setDisplayedValue(items[currentIndex].displayedKeyword);
+    setDisplayedValue(items[currentIndex].place_name);
     setSelectedIndex(currentIndex);
 
     if (containerRef.current) {
@@ -55,7 +55,7 @@ const useComboBox = <T extends { displayedKeyword: string }>({
         if (!isComboBoxOpen) break;
         const nextIndex = cycleIndex(selectedIndex, 1);
         setSelectedIndex(nextIndex);
-        setDisplayedValue(items[nextIndex].displayedKeyword);
+        setDisplayedValue(items[nextIndex].place_name);
         break;
       }
 
@@ -64,7 +64,7 @@ const useComboBox = <T extends { displayedKeyword: string }>({
         if (!isComboBoxOpen) break;
         const prevIndex = cycleIndex(selectedIndex, -1);
         setSelectedIndex(prevIndex);
-        setDisplayedValue(items[prevIndex].displayedKeyword);
+        setDisplayedValue(items[prevIndex].place_name);
         break;
       }
 

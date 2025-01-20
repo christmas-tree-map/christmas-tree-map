@@ -8,7 +8,7 @@ interface ComboBoxProps<T> {
 }
 
 const ComboBox = forwardRef(
-  <T extends { id: string; displayedKeyword: string }>(
+  <T extends { id: string; place_name: string }>(
     { comboBoxList, selectedIndex, onSelect }: ComboBoxProps<T>,
     ref: React.ForwardedRef<HTMLUListElement>,
   ) => {
@@ -29,14 +29,14 @@ const ComboBox = forwardRef(
             <p className={S.ComboBoxLabel}>반드시 아래의 장소 중 하나로 선택해야 해요.</p>
             <ul className={S.ComboBoxOptionBox} ref={ref}>
               {comboBoxList.map((item, index) =>
-                item.displayedKeyword && typeof item.displayedKeyword === 'string' ? (
+                item.place_name && typeof item.place_name === 'string' ? (
                   <li
                     key={item.id}
                     className={selectedIndex === index ? S.ComboBoxOption['selected'] : S.ComboBoxOption['default']}
                     data-index={index}
                     onClick={() => onSelect(index)}
                   >
-                    {item.displayedKeyword}
+                    {item.place_name}
                   </li>
                 ) : null,
               )}
