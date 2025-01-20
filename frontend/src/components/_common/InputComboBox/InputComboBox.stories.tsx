@@ -16,23 +16,23 @@ type Story = StoryObj<typeof InputComboBox>;
 const SAMPLE_COMBOBOX_DATA = [
   {
     id: '1',
-    displayedKeyword: '강남구1',
+    place_name: '강남구1',
   },
   {
     id: '2',
-    displayedKeyword: '강남구2',
+    place_name: '강남구2',
   },
   {
     id: '3',
-    displayedKeyword: '강남구3',
+    place_name: '강남구3',
   },
   {
     id: '4',
-    displayedKeyword: '강남구4',
+    place_name: '강남구4',
   },
   {
     id: '5',
-    displayedKeyword: '강남구5',
+    place_name: '강남구5',
   },
 ];
 
