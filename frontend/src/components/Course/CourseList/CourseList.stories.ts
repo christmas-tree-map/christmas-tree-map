@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import CourseList from '@/components/Course/CourseList/CourseList';
 
 const meta = {
-  title: 'CourseDetail/CourseList',
+  title: 'Course/CourseList',
   component: CourseList,
   tags: ['autodocs'],
   parameters: {
