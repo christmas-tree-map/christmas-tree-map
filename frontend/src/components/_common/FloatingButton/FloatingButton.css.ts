@@ -8,8 +8,8 @@ export const Layout = style({
 
   position: 'fixed',
   bottom: '112px',
-  right: '20px',
-  zIndex: 300,
+  right: 'calc((100% - 320px) / 2 + 16px)',
+  zIndex: 100,
 
   width: '45px',
   height: '45px',
@@ -17,6 +17,11 @@ export const Layout = style({
 
   backgroundColor: vars.colors.primary[800],
   filter: 'drop-shadow(0px 3px 3px #00000040)',
+
+  '@media': {
+    '(min-width: 481px)': { right: 'calc((100% - 480px) / 2 + 16px)' },
+    '(min-width: 320px) and (max-width: 480px)': { right: '16px' },
+  },
 });
 
 export const EditIcon = style({

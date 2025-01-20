@@ -4,7 +4,7 @@ import { FEED_KEYS } from '@/queries/queryKeys';
 
 const useFeedsQuery = (treeId: number) => {
   const { data, ...rest } = useQuery({
-    queryKey: [FEED_KEYS.FEEDS],
+    queryKey: [FEED_KEYS.FEEDS, { treeId }],
     queryFn: () => getFeeds(treeId),
   });
 

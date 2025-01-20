@@ -46,9 +46,11 @@ export const vars = createThemeContract({
     black: null,
   },
   fonts: {
+    medium: null,
     body: null,
     label: null,
     button: null,
+    small: null,
     tiny: null,
   },
 });
@@ -95,9 +97,11 @@ createGlobalTheme(':root', vars, {
     black: '#000000',
   },
   fonts: {
+    medium: '18px Pretendard sans-serif',
     body: '16px Pretendard sans-serif',
     label: '14px Pretendard sans-serif',
     button: 'bold 12px Pretendard sans-serif',
+    small: '12px Pretendard sans-serif',
     tiny: '10px Pretendard sans-serif',
   },
 });

@@ -1,3 +1,4 @@
+import { IoIosSearch } from '@react-icons/all-files/io/IoIosSearch';
 import type { Meta, StoryObj } from '@storybook/react';
 import Input from '@/components/_common/Input/Input';
 
@@ -17,6 +18,14 @@ type Story = StoryObj<typeof Input>;
 export const Default: Story = {
   args: {
     label: '레이블',
+  },
+};
+
+export const Button: Story = {
+  args: {
+    label: '레이블',
+    buttonType: 'button',
+    buttonImage: IoIosSearch,
   },
 };
 

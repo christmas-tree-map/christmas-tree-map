@@ -33,3 +33,10 @@ export const Secondary: Story = {
     children: 'Hello World!',
   },
 };
+
+export const Disabled: Story = {
+  args: {
+    children: 'Hello World!',
+    disabled: true,
+  },
+};

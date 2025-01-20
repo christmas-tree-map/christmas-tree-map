@@ -23,10 +23,6 @@ export const SelectMarkerBox = style({
   border: `1px solid ${vars.colors.grey[400]}`,
 
   background: vars.colors.white,
-
-  ':active': {
-    background: vars.colors.grey[50],
-  },
 });
 
 export const MapIconWrapper = style({
@@ -40,9 +36,19 @@ export const MapIcon = style({
   objectFit: 'cover',
 });
 
+export const SelectMarkerTextBox = style({
+  flex: 1,
+});
+
 export const SelectMarkerText = style({
-  fontSize: vars.fonts.label,
+  fontSize: vars.fonts.tiny,
   color: vars.colors.grey[700],
+
+  whiteSpace: 'pre-line',
+});
+
+export const AddressSelectButtonBox = style({
+  flex: 0.5,
 });
 
 export const ImageUploadBox = style({
@@ -51,21 +57,36 @@ export const ImageUploadBox = style({
   gap: '8px',
 });
 
-export const LabelText = style({
-  font: vars.fonts.label,
-  color: vars.colors.grey[700],
-});
-
 export const UploadedImage = style({
   width: '100%',
   height: 'auto',
   aspectRatio: '1',
   objectFit: 'cover',
 
-  borderRadius: '10px',
-
-  background: vars.colors.grey[50],
   cursor: 'pointer',
+  borderRadius: '10px',
+  background: vars.colors.grey[50],
+});
+
+export const UploadBox = style({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: '5px',
+
+  width: '100%',
+  height: '100%',
+  aspectRatio: '1',
+
+  cursor: 'pointer',
+  borderRadius: '10px',
+  background: vars.colors.grey[50],
+});
+
+export const LabelText = style({
+  font: vars.fonts.label,
+  color: vars.colors.grey[700],
 });
 
 export const ImageInput = style({

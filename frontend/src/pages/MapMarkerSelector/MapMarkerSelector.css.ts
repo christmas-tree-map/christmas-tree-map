@@ -2,7 +2,14 @@ import { style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 
 export const Layout = style({
-  width: '100vw',
+  position: 'relative',
+  width: '100%',
+  minWidth: '320px',
+  maxWidth: '480px',
+});
+
+export const MapLayout = style({
+  width: '100%',
   height: '100vh',
 });
 

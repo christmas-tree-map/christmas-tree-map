@@ -1,4 +1,5 @@
-import { BrowserRouter as Router } from 'react-router-dom';
+import React from 'react';
+import { MemoryRouter } from 'react-router-dom';
 import type { Decorator, Preview } from '@storybook/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { worker } from '../src/mocks/browser';
@@ -15,13 +16,16 @@ export const parameters = {
 const queryClient = new QueryClient();
 
 export const decorators: Decorator[] = [
-  (Story) => (
-    <Router>
+  (Story, context) => {
+    const initialEntry = context.args.initialEntry || '/';
+    return (
       <QueryClientProvider client={queryClient}>
-        <Story />
+        <MemoryRouter initialEntries={[initialEntry]}>
+          <Story />
+        </MemoryRouter>
       </QueryClientProvider>
-    </Router>
-  ),
+    );
+  },
 ];
 
 const preview: Preview = {

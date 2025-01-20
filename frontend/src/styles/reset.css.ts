@@ -2,7 +2,18 @@
 import { globalStyle } from '@vanilla-extract/css';
 import * as layers from './layers.css.ts';
 
+globalStyle('html', {
+  display: 'flex',
+  justifyContent: 'center',
+
+  width: '100%',
+});
+
 globalStyle('body', {
+  width: '100%',
+  minWidth: '320px',
+  maxWidth: '480px',
+
   '@layer': {
     base: {
       backgroundColor: '#ffffff',
