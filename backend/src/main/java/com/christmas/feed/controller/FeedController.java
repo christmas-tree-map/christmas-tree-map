@@ -65,7 +65,7 @@ public class FeedController implements FeedControllerDocs {
     public ResponseEntity<FeedUpdateResponse> updateFeed(
             @PathVariable("id") long id,
             @RequestPart("image") MultipartFile image,
-            @RequestPart("request") FeedUpdateRequest request
+            @Valid @RequestPart("request") FeedUpdateRequest request
     ) {
         FeedUpdateResponse response = feedService.updateFeed(id, image, request);
         return ResponseEntity.status(HttpStatus.OK)
@@ -73,7 +73,7 @@ public class FeedController implements FeedControllerDocs {
     }
 
     @DeleteMapping("/feed/{id}")
-    public ResponseEntity<Long> deleteFeed(@PathVariable("id") long id, @RequestBody FeedDeleteRequest request) {
+    public ResponseEntity<Long> deleteFeed(@PathVariable("id") long id, @Valid @RequestBody FeedDeleteRequest request) {
         long deletedId = feedService.deleteFeed(id, request.password());
         return ResponseEntity.status(HttpStatus.OK)
                 .body(deletedId);

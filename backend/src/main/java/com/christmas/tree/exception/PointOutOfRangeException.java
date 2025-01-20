@@ -7,7 +7,7 @@ import com.christmas.common.exception.CustomException;
 
 public class PointOutOfRangeException extends CustomException {
 
-    public PointOutOfRangeException(final CustomErrorCode errorCode, final Map<String, String> invalidData) {
+    public PointOutOfRangeException(final CustomErrorCode errorCode, final Map<String, Object> invalidData) {
         super(errorCode, invalidData);
     }
 }

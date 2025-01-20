@@ -38,7 +38,7 @@ public class ExceptionResponse {
     public static ExceptionResponse from(final MethodArgumentNotValidException e) {
         final BindingResult bindingResult = e.getBindingResult();
         final List<String> allErrorMessage = new ArrayList<>();
-        final Map<String, String> invalidData = new HashMap<>();
+        final Map<String, Object> invalidData = new HashMap<>();
         for (final FieldError fieldError : bindingResult.getFieldErrors()) {
             invalidData.put(fieldError.getField(), getRejectedValue(fieldError));
             allErrorMessage.add(fieldError.getDefaultMessage());

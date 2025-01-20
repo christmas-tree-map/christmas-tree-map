@@ -1,4 +1,4 @@
-name: 🎄Backend Build & Test With Local Profile
+name: 🎄Backend Build & Test With Test Profile
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ jobs:
   build-and-test:
     runs-on: ubuntu-latest
     env:
-      SPRING_PROFILE: local
+      SPRING_PROFILE: test
     defaults:
       run:
         working-directory: ./backend
