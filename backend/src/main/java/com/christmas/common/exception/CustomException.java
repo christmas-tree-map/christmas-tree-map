@@ -17,18 +17,35 @@ public class CustomException extends RuntimeException {
 
     private final HttpStatus status;
     private final String message;
-    private final Map<String, String> invalidData;
+    private final Map<String, Object> invalidData;
+    private final Throwable cause;
 
-    public CustomException(final CustomErrorCode errorCode, final Map<String, String> invalidData) {
+    public CustomException(final CustomErrorCode errorCode, final Map<String, Object> invalidData, final Throwable cause) {
         this.status = errorCode.getStatus();
         this.message = errorCode.getMessage();
         this.invalidData = invalidData;
+        this.cause = cause;
     }
 
-    public CustomException(final HttpStatus status, final String message, final Map<String, String> invalidData) {
+    public CustomException(final CustomErrorCode errorCode, final Map<String, Object> invalidData) {
+        this.status = errorCode.getStatus();
+        this.message = errorCode.getMessage();
+        this.invalidData = invalidData;
+        this.cause = null;
+    }
+
+    public CustomException(final HttpStatus status, final String message, final Map<String, Object> invalidData, final Throwable cause) {
         this.status = status;
         this.message = message;
         this.invalidData = invalidData;
+        this.cause = cause;
+    }
+
+    public CustomException(final HttpStatus status, final String message, final Map<String, Object> invalidData) {
+        this.status = status;
+        this.message = message;
+        this.invalidData = invalidData;
+        this.cause = null;
     }
 
     public String getInvalidDataFormat() {

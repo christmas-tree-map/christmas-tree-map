@@ -3,7 +3,7 @@ spring:
     name: christmas
   config:
     activate:
-      on-profile: local
+      on-profile: test
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/christmas
@@ -40,3 +40,14 @@ cloud:
       auto: false
     stack:
       auto: false
+
+server:
+  url: http://localhost:8080
+
+map:
+  kakao:
+    rest-api-key: "test_api_key"
+    default-url: https://dapi.kakao.com/v2/local
+  tmap:
+    app-key: "tmap_app_key"
+    default-url: https://apis.openapi.sk.com/tmap/routes

@@ -6,7 +6,7 @@ import com.christmas.common.exception.CustomErrorCode;
 import com.christmas.common.exception.CustomException;
 
 public class NegativeValueException extends CustomException {
-    public NegativeValueException(CustomErrorCode errorCode, Map<String, String> invalidData) {
+    public NegativeValueException(CustomErrorCode errorCode, Map<String, Object> invalidData) {
         super(errorCode, invalidData);
     }
 }
