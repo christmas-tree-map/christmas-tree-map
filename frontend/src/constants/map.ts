@@ -1,2 +1,3 @@
 export const DEFAULT_LATITUDE = 37.574187;
 export const DEFAULT_LONGITUDE = 126.976882;
+export const DEFAULT_ZOOM_LEVEL = 3;

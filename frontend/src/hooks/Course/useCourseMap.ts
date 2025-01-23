@@ -1,17 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
-import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
+import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE, DEFAULT_ZOOM_LEVEL } from '@/constants/map';
 
 const { kakao } = window;
 
-const DEFAULT_ZOOM_LEVEL = 3;
+interface TooltipState {
+  overlay: any;
+}
 
 const useCourseMap = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
+  const currentTooltipRef = useRef<TooltipState | null>(null);
 
   const [map, setMap] = useState(null);
-
-  //   const MARKER_SIZE = new kakao.maps.Size(50, 55);
-  //   const MARKER_OPTIONS = { offset: new kakao.maps.Point(25, 55) };
 
   const initializeMap = (latitude: number, longitude: number) => {
     if (mapRef.current && kakao && kakao.maps) {
@@ -20,6 +21,15 @@ const useCourseMap = () => {
 
       setMap(map);
     }
+  };
+
+  const addMarker = (map: any, latitude: string, longitude: string) => {
+    const markerPosition = new kakao.maps.LatLng(latitude, longitude);
+    const marker = new kakao.maps.Marker({ position: markerPosition, clickable: true });
+
+    marker.setMap(map);
+
+    return marker;
   };
 
   useEffect(() => {
@@ -33,7 +43,7 @@ const useCourseMap = () => {
     );
   }, []);
 
-  return { map, mapRef };
+  return { map, mapRef, currentTooltipRef, addMarker };
 };
 
 export default useCourseMap;

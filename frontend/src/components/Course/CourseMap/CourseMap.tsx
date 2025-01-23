@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Course } from '@/pages/Course/Course.type';
@@ -9,10 +9,6 @@ import useCourseMap from '@/hooks/Course/useCourseMap';
 import * as S from './CourseMap.css';
 
 const { kakao } = window;
-
-interface TooltipState {
-  overlay: any;
-}
 
 const CourseMap = () => {
   const location = useLocation();
@@ -25,15 +21,10 @@ const CourseMap = () => {
     navigate(-1);
   }
 
-  const { map, mapRef } = useCourseMap();
-  const currentTooltipRef = useRef<TooltipState | null>(null);
+  const { map, mapRef, currentTooltipRef, addMarker } = useCourseMap();
 
-  const addMarker = (map: any, type: string, courseItem: Course) => {
-    const markerPosition = new kakao.maps.LatLng(courseItem.y, courseItem.x);
-    const marker = new kakao.maps.Marker({ position: markerPosition, clickable: true });
-
-    marker.setMap(map);
-
+  const addTooltip = (map: any, type: string, courseItem: Course) => {
+    const marker = addMarker(map, courseItem.y, courseItem.x);
     const tooltipContainer = document.createElement('div');
     const root = createRoot(tooltipContainer);
 
@@ -43,13 +34,13 @@ const CourseMap = () => {
     });
 
     const openTooltip = () => {
+      // 현재 열려 있는 툴팁이 있다면, 열려 있는 툴팁 닫기
       if (currentTooltipRef.current) {
         currentTooltipRef.current.overlay.setMap(null);
       }
 
       root.render(<CourseTooltip id={courseItem.id} type={type} title={courseItem.place_name} />);
       tooltip.setMap(map);
-
       currentTooltipRef.current = { overlay: tooltip };
     };
 
@@ -58,7 +49,7 @@ const CourseMap = () => {
 
   useEffect(() => {
     if (courseList) {
-      Object.entries(courseList).forEach(([key, value]) => addMarker(map, key, value));
+      Object.entries(courseList).forEach(([key, value]) => addTooltip(map, key, value));
     }
 
     return () => {
