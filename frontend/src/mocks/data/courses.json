@@ -1,26 +1,120 @@
 {
   "lunch": {
-    "id": 1,
-    "place_name": "농민백암순대",
-    "address_name": "서울 강남구 선릉로86길 40-4 알앤지타운 1층",
-    "phone": "02-555-9603"
+    "address_name": "서울 강남구 논현동 95-21",
+    "category_group_code": "FD6",
+    "category_group_name": "음식점",
+    "category_name": "음식점 > 일식",
+    "distance": "928",
+    "id": "1356302565",
+    "phone": "02-6203-0021",
+    "place_name": "해목",
+    "place_url": "http://place.map.kakao.com/1356302565",
+    "road_address_name": "서울 강남구 선릉로145길 14",
+    "x": "127.038291830551",
+    "y": "37.5215248852172",
+    "meta": {
+      "is_end": false,
+      "pageable_count": 45,
+      "same_name": {
+        "keyword": "일식",
+        "region": [],
+        "selected_region": ""
+      },
+      "total_count": 125
+    },
+    "pedestrian_route": {
+      "duration_minutes": 17,
+      "facility_type": {
+        "횡단보도": 5
+      }
+    }
   },
   "cafe": {
-    "id": 1,
-    "place_name": "농민백암순대",
-    "address_name": "서울 강남구 선릉로86길 40-4 알앤지타운 1층",
-    "phone": "02-555-9603"
+    "address_name": "서울 강남구 삼성동 38-29",
+    "category_group_code": "CE7",
+    "category_group_name": "카페",
+    "category_name": "음식점 > 카페",
+    "distance": "702",
+    "id": "1281563577",
+    "phone": "02-6080-1983",
+    "place_name": "해머스미스커피 삼성점",
+    "place_url": "http://place.map.kakao.com/1281563577",
+    "road_address_name": "서울 강남구 봉은사로 417",
+    "x": "127.045753808805",
+    "y": "37.5111372633151",
+    "meta": {
+      "is_end": true,
+      "pageable_count": 14,
+      "same_name": {
+        "keyword": "분위기있는",
+        "region": [],
+        "selected_region": ""
+      },
+      "total_count": 14
+    },
+    "pedestrian_route": {
+      "duration_minutes": 22,
+      "facility_type": {
+        "횡단보도": 6
+      }
+    }
   },
   "attraction": {
-    "id": 1,
-    "place_name": "농민백암순대",
-    "address_name": "서울 강남구 선릉로86길 40-4 알앤지타운 1층",
-    "phone": "02-555-9603"
+    "address_name": "서울 강남구 논현동 101-2",
+    "category_group_code": "CT1",
+    "category_group_name": "문화시설",
+    "category_name": "문화,예술 > 문화시설 > 전시관",
+    "distance": "833",
+    "id": "923544463",
+    "phone": "02-6953-0553",
+    "place_name": "두아르트스퀘이라 서울",
+    "place_url": "http://place.map.kakao.com/923544463",
+    "road_address_name": "서울 강남구 도산대로54길 27",
+    "x": "127.039094678551",
+    "y": "37.5209137422836",
+    "meta": {
+      "is_end": false,
+      "pageable_count": 21,
+      "same_name": {
+        "keyword": "전시",
+        "region": [],
+        "selected_region": ""
+      },
+      "total_count": 21
+    },
+    "pedestrian_route": {
+      "duration_minutes": 20,
+      "facility_type": {
+        "횡단보도": 5
+      }
+    }
   },
   "dinner": {
-    "id": 1,
-    "place_name": "농민백암순대",
-    "address_name": "서울 강남구 선릉로86길 40-4 알앤지타운 1층",
-    "phone": "02-555-9603"
+    "address_name": "서울 강남구 청담동 62-14",
+    "category_group_code": "FD6",
+    "category_group_name": "음식점",
+    "category_name": "음식점 > 일식 > 돈까스,우동",
+    "distance": "612",
+    "id": "16037890",
+    "phone": "02-518-3177",
+    "place_name": "소스 청담동본점",
+    "place_url": "http://place.map.kakao.com/16037890",
+    "road_address_name": "서울 강남구 삼성로146길 4",
+    "x": "127.048525661401",
+    "y": "37.522769913655",
+    "meta": {
+      "is_end": false,
+      "pageable_count": 45,
+      "same_name": {
+        "keyword": "일식",
+        "region": [],
+        "selected_region": ""
+      },
+      "total_count": 125
+    },
+    "pedestrian_route": {
+      "duration_minutes": 17,
+      "facility_type": {}
+    }
   }
 }

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { IoRefresh } from '@react-icons/all-files/io5/IoRefresh';
 import CourseList from '@/components/Course/CourseList/CourseList';
 import useCourseDetailsQuery from '@/queries/Course/useCourseDetailsQuery';
@@ -25,7 +25,11 @@ const CourseDetail = () => {
   return (
     <div className={S.Layout}>
       <h1 className={S.Title}>{keyword} 맞춤 코스 ✨</h1>
-      <div className={S.MapContainer} />
+      <div className={S.MapContainer}>
+        <Link to="map" state={{ isValid: true, courseList: courseDetails }}>
+          자세히 보기
+        </Link>
+      </div>
       <CourseList courseList={courseDetails} />
       {isButtonOpen && (
         <button className={S.RefreshButton} onClick={() => refetch()}>
