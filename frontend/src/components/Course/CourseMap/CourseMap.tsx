@@ -2,9 +2,8 @@
 import { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Course } from '@/pages/Course/Course.type';
+import { Course, CourseDetails } from '@/pages/Course/Course.type';
 import CourseTooltip from '@/components/Course/CourseTooltip/CourseTooltip';
-import { CourseDetails } from '@/apis/course';
 import useCourseMap from '@/hooks/Course/useCourseMap';
 import * as S from './CourseMap.css';
 
@@ -49,7 +48,7 @@ const CourseMap = () => {
 
   useEffect(() => {
     if (courseList) {
-      Object.entries(courseList).forEach(([key, value]) => addTooltip(map, key, value));
+      Object.entries(courseList).forEach(([key, value]: [string, Course]) => addTooltip(map, key, value));
     }
 
     return () => {

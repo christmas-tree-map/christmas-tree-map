@@ -1,12 +1,5 @@
-import { Course } from '@/pages/Course/Course.type';
+import { Course, CourseDetails } from '@/pages/Course/Course.type';
 import requestAPI from '@/apis/requestAPI';
-
-export interface CourseDetails {
-  lunch: Course | null;
-  cafe: Course | null;
-  attraction: Course | null;
-  dinner: Course | null;
-}
 
 export const getCourseDetails = async (latitude: string, longitude: string) => {
   return await requestAPI.get<CourseDetails>('/course', { latitude, longitude });
