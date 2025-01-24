@@ -79,35 +79,47 @@ public class RecommendService {
         // 1. 현재 위치에서 점심
 
         RouteInfo lunchRoute = parser.getDistanceInfo(PointType.SP, PointType.PP1);
-        PedestrianRoute lunchInfo = new PedestrianRoute(lunchRoute.totalSeconds() / 60,
-                makeFacilityInfo(lunchRoute.facilityInfo()));
+        PedestrianRoute lunchInfo = new PedestrianRoute(
+                lunchRoute.totalSeconds() / 60,
+                makeFacilityInfo(lunchRoute.facilityInfo()),
+                lunchRoute.route()
+        );
         JsonNode lunchInfoJson = mapper.valueToTree(lunchInfo);
         ObjectNode lunchResult = (ObjectNode) lunch;
-        lunchResult.set("pedestrian_route", lunchInfoJson);
+        lunchResult.set("pedestrian", lunchInfoJson);
 
         // 2. 점심에서 카페
         RouteInfo cafeRoute = parser.getDistanceInfo(PointType.PP1, PointType.PP2);
-        PedestrianRoute cafeInfo = new PedestrianRoute(cafeRoute.totalSeconds() / 60,
-                makeFacilityInfo(cafeRoute.facilityInfo()));
+        PedestrianRoute cafeInfo = new PedestrianRoute(
+                cafeRoute.totalSeconds() / 60,
+                makeFacilityInfo(cafeRoute.facilityInfo()),
+                cafeRoute.route()
+        );
         JsonNode cafeInfoJson = mapper.valueToTree(cafeInfo);
         ObjectNode cafeResult = (ObjectNode) cafe;
-        cafeResult.set("pedestrian_route", cafeInfoJson);
+        cafeResult.set("pedestrian", cafeInfoJson);
 
         // 3. 카페에서 어트랙션
         RouteInfo attractionRoute = parser.getDistanceInfo(PointType.PP2, PointType.PP3);
-        PedestrianRoute attractionInfo = new PedestrianRoute(attractionRoute.totalSeconds() / 60,
-                makeFacilityInfo(attractionRoute.facilityInfo()));
+        PedestrianRoute attractionInfo = new PedestrianRoute(
+                attractionRoute.totalSeconds() / 60,
+                makeFacilityInfo(attractionRoute.facilityInfo()),
+                attractionRoute.route()
+        );
         JsonNode attractionInfoJson = mapper.valueToTree(attractionInfo);
         ObjectNode attractionResult = (ObjectNode) attraction;
-        attractionResult.set("pedestrian_route", attractionInfoJson);
+        attractionResult.set("pedestrian", attractionInfoJson);
 
         // 4. 어트랙션에서 저녁
         RouteInfo dinnerRoute = parser.getDistanceInfo(PointType.PP3, PointType.EP);
-        PedestrianRoute dinnerInfo = new PedestrianRoute(dinnerRoute.totalSeconds() / 60,
-                makeFacilityInfo(dinnerRoute.facilityInfo()));
+        PedestrianRoute dinnerInfo = new PedestrianRoute(
+                dinnerRoute.totalSeconds() / 60,
+                makeFacilityInfo(dinnerRoute.facilityInfo()),
+                dinnerRoute.route()
+        );
         JsonNode dinnerInfoJson = mapper.valueToTree(dinnerInfo);
         ObjectNode dinnerResult = (ObjectNode) dinner;
-        dinnerResult.set("pedestrian_route", dinnerInfoJson);
+        dinnerResult.set("pedestrian", dinnerInfoJson);
 
         return new CourseGetResponse(lunchResult, cafeResult, attractionResult, dinnerResult);
     }

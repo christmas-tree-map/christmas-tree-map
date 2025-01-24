@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.christmas.infrastructure.route.domain.FacilityType;
+import com.christmas.infrastructure.route.domain.PointType;
 import com.christmas.infrastructure.route.dto.RouteFeature;
 import com.christmas.infrastructure.route.dto.RouteInfo;
-import com.christmas.infrastructure.route.domain.PointType;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import lombok.RequiredArgsConstructor;
@@ -33,6 +33,7 @@ public class RouteApiParser {
     public RouteInfo getDistanceInfo(PointType start, PointType end) {
         int totalSeconds = 0;
         Map<FacilityType, Integer> facilityInfo = new HashMap<>();
+        List<JsonNode> route = new ArrayList<>();
         boolean startFlag = false;
 
         for (RouteFeature feature : features) {
@@ -44,16 +45,23 @@ public class RouteApiParser {
                 }
                 if (!startFlag && start.name().equals(properties.get("pointType").asText())) {
                     startFlag = true;
+                    JsonNode coordinates = geometry.get("coordinates");
+                    route.add(coordinates);
                 }
-            } else {
+            }
+            if ("LineString".equals(geometry.get("type").asText())) {
                 if (startFlag) {
                     totalSeconds += properties.get("time").asInt();
                     int code = properties.get("facilityType").asInt();
                     FacilityType facilityType = FacilityType.convertCode(code);
                     facilityInfo.put(facilityType, facilityInfo.getOrDefault(facilityType, 0) + 1);
+                    JsonNode coordinates = geometry.get("coordinates");
+                    for (int i = 1; i < coordinates.size(); i++) {
+                        route.add(coordinates.get(i));
+                    }
                 }
             }
         }
-        return new RouteInfo(totalSeconds, facilityInfo);
+        return new RouteInfo(totalSeconds, facilityInfo, route);
     }
 }
