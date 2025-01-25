@@ -12,7 +12,8 @@ export interface Course {
   road_address_name: string;
   x: string;
   y: string;
-  pedestrian_route: {
+  pedestrian: {
     duration_minutes: number;
+    route: [number, number][];
   };
 }

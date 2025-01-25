@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE, DEFAULT_ZOOM_LEVEL } from '@/constants/map';
+import { vars } from '@/styles/theme.css';
 
 const { kakao } = window;
 
@@ -30,6 +31,20 @@ const useCourseMap = () => {
     marker.setMap(map);
 
     return marker;
+  };
+
+  const addPolyline = (map: any, routes: [number, number][]) => {
+    const linePath = routes.map((route) => new kakao.maps.LatLng(route[1], route[0]));
+
+    const polyline = new kakao.maps.Polyline({
+      path: linePath,
+      strokeWeight: 3,
+      strokeColor: vars.colors.grey[600],
+      strokeOpacity: 1,
+      strokeStyle: 'solid',
+    });
+
+    polyline.setMap(map);
   };
 
   useEffect(() => {
