@@ -14,6 +14,6 @@ export interface Course {
   y: string;
   pedestrian: {
     duration_minutes: number;
-    route: [number, number][];
+    route: number[][];
   };
 }

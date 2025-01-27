@@ -47,7 +47,7 @@ const CourseMap = () => {
     kakao.maps.event.addListener(marker, 'click', openTooltip);
   };
 
-  const addPolyline = (map: any, routes: [number, number][]) => {
+  const addPolyline = (map: any, routes: number[][]) => {
     const linePath = routes.map((route) => new kakao.maps.LatLng(route[1], route[0]));
 
     const polyline = new kakao.maps.Polyline({
