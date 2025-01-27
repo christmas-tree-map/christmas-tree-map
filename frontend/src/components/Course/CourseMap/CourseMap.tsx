@@ -24,7 +24,7 @@ const CourseMap = () => {
   const { map, mapRef, currentTooltipRef, addMarker } = useCourseMap();
 
   const addTooltip = (map: any, type: string, courseItem: Course) => {
-    const marker = addMarker(map, courseItem.y, courseItem.x);
+    const marker = addMarker(map, type, courseItem.y, courseItem.x);
     const tooltipContainer = document.createElement('div');
     const root = createRoot(tooltipContainer);
 

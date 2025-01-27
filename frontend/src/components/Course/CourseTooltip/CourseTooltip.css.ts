@@ -3,7 +3,7 @@ import { vars } from '@/styles/theme.css';
 
 export const Layout = style({
   position: 'absolute',
-  bottom: '60px',
+  bottom: '50px',
   left: '50%',
   transform: 'translateX(-50%)',
   zIndex: 100,

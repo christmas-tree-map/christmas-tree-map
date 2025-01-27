@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
+import { COURSE_MARKER } from '@/constants/course';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE, DEFAULT_ZOOM_LEVEL } from '@/constants/map';
-import { vars } from '@/styles/theme.css';
 
 const { kakao } = window;
 
@@ -24,27 +24,17 @@ const useCourseMap = () => {
     }
   };
 
-  const addMarker = (map: any, latitude: string, longitude: string) => {
+  const MARKER_SIZE = new kakao.maps.Size(36, 36);
+  const MARKER_OPTIONS = { offset: new kakao.maps.Point(18, 36) };
+
+  const addMarker = (map: any, type: string, latitude: string, longitude: string) => {
     const markerPosition = new kakao.maps.LatLng(latitude, longitude);
-    const marker = new kakao.maps.Marker({ position: markerPosition, clickable: true });
+    const markerImage = new kakao.maps.MarkerImage(COURSE_MARKER[type], MARKER_SIZE, MARKER_OPTIONS);
+    const marker = new kakao.maps.Marker({ position: markerPosition, image: markerImage, clickable: true });
 
     marker.setMap(map);
 
     return marker;
-  };
-
-  const addPolyline = (map: any, routes: [number, number][]) => {
-    const linePath = routes.map((route) => new kakao.maps.LatLng(route[1], route[0]));
-
-    const polyline = new kakao.maps.Polyline({
-      path: linePath,
-      strokeWeight: 3,
-      strokeColor: vars.colors.grey[600],
-      strokeOpacity: 1,
-      strokeStyle: 'solid',
-    });
-
-    polyline.setMap(map);
   };
 
   useEffect(() => {
