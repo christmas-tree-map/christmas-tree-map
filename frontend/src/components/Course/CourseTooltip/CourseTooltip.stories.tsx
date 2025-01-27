@@ -38,26 +38,8 @@ type Story = StoryObj<typeof CourseTooltip>;
 
 export const Default: Story = {
   args: {
-    isOpen: true,
     id: '1',
     type: 'lunch',
     title: '가게 이름',
-    children: (
-      <button
-        style={{
-          position: 'relative',
-
-          width: '100px',
-          height: '50px',
-
-          backgroundColor: '#FFF',
-          borderRadius: '10px',
-          color: '#000',
-          textAlign: 'center',
-        }}
-      >
-        툴팁 버튼
-      </button>
-    ),
   },
 };
