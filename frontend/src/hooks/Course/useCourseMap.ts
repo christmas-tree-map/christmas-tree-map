@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react';
+import { Course, CourseDetails } from '@/pages/Course/Course.type';
 import { COURSE_MARKER } from '@/constants/course';
-import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE, DEFAULT_ZOOM_LEVEL } from '@/constants/map';
 
 const { kakao } = window;
 
@@ -9,17 +9,20 @@ interface TooltipState {
   overlay: any;
 }
 
-const useCourseMap = () => {
+const useCourseMap = (courseList: CourseDetails) => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const currentTooltipRef = useRef<TooltipState | null>(null);
 
   const [map, setMap] = useState(null);
 
-  const initializeMap = (latitude: number, longitude: number) => {
-    if (mapRef.current && kakao && kakao.maps) {
-      const options = { center: new kakao.maps.LatLng(latitude, longitude), level: DEFAULT_ZOOM_LEVEL };
-      const map = new kakao.maps.Map(mapRef.current, options);
+  const initializeMap = () => {
+    const courses = Object.values(courseList);
+    const latitude = courses.reduce((acc: number, cur: Course) => (acc += Number(cur.y)), 0) / courses.length;
+    const longitude = courses.reduce((acc: number, cur: Course) => (acc += Number(cur.x)), 0) / courses.length;
 
+    if (mapRef.current && kakao && kakao.maps) {
+      const options = { center: new kakao.maps.LatLng(latitude, longitude), level: 5 };
+      const map = new kakao.maps.Map(mapRef.current, options);
       setMap(map);
     }
   };
@@ -38,14 +41,7 @@ const useCourseMap = () => {
   };
 
   useEffect(() => {
-    if (!navigator.geolocation) {
-      initializeMap(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition((position) =>
-      initializeMap(position.coords.latitude, position.coords.longitude),
-    );
+    initializeMap();
   }, []);
 
   return { map, mapRef, currentTooltipRef, addMarker };
