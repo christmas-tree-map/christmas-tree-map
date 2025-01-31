@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { IoRefresh } from '@react-icons/all-files/io5/IoRefresh';
+import ScreenOverlay from '@/components/_common/ScreenOverlay/ScreenOverlay';
 import CourseList from '@/components/Course/CourseList/CourseList';
+import CourseMap from '@/components/Course/CourseMap/CourseMap';
 import useCourseDetailsQuery from '@/queries/Course/useCourseDetailsQuery';
 import { vars } from '@/styles/theme.css';
 import * as S from './CourseDetail.css';
@@ -15,6 +17,7 @@ const CourseDetail = () => {
 
   const { courseDetails, refetch } = useCourseDetailsQuery(latitude || '', longitude || '');
 
+  const [isMapOpen, setIsMapOpen] = useState(false);
   const [isButtonOpen, setIsButtonOpen] = useState(false);
 
   useEffect(() => {
@@ -26,9 +29,9 @@ const CourseDetail = () => {
     <div className={S.Layout}>
       <h1 className={S.Title}>{keyword} 맞춤 코스 ✨</h1>
       <div className={S.MapContainer}>
-        <Link to="map" state={{ isValid: true, courseList: courseDetails }}>
+        <button type="button" onClick={() => setIsMapOpen(true)}>
           자세히 보기
-        </Link>
+        </button>
       </div>
       <CourseList courseList={courseDetails} />
       {isButtonOpen && (
@@ -36,6 +39,11 @@ const CourseDetail = () => {
           <IoRefresh size="18px" color={vars.colors.secondary[700]} />
           <p className={S.RefreshText}>다시 추천 받기</p>
         </button>
+      )}
+      {isMapOpen && (
+        <ScreenOverlay title="맞춤 코스 추천" isOpen={isMapOpen} closeOverlay={() => setIsMapOpen(false)}>
+          <CourseMap courseList={courseDetails} />
+        </ScreenOverlay>
       )}
     </div>
   );

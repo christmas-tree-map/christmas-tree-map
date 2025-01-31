@@ -6,7 +6,6 @@ import Landing from '@/pages/Landing/Landing';
 import Layout from '@/pages/Layout/Layout';
 import MapMarkerSelector from '@/pages/MapMarkerSelector/MapMarkerSelector';
 import TreeMap from '@/pages/TreeMap/TreeMap';
-import CourseMap from '@/components/Course/CourseMap/CourseMap';
 import FeedList from '@/components/Feed/FeedList/FeedList';
 
 const App = () => {
@@ -52,16 +51,6 @@ const App = () => {
           {
             path: '/course/detail',
             element: <CourseDetail />,
-          },
-        ],
-      },
-      {
-        path: '/course/detail/map',
-        element: <Layout title="맞춤 코스 추천" />,
-        children: [
-          {
-            path: '',
-            element: <CourseMap />,
           },
         ],
       },

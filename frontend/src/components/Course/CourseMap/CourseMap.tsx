@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import { useLocation, useNavigate } from 'react-router-dom';
+// import { useLocation, useNavigate } from 'react-router-dom';
 import { Course, CourseDetails } from '@/pages/Course/Course.type';
 import CourseTooltip from '@/components/Course/CourseTooltip/CourseTooltip';
 import useCourseMap from '@/hooks/Course/useCourseMap';
@@ -10,16 +10,20 @@ import * as S from './CourseMap.css';
 
 const { kakao } = window;
 
-const CourseMap = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+interface CourseMapProps {
+  courseList: CourseDetails;
+}
 
-  const isValid: boolean | null = location.state.isValid;
-  const courseList: CourseDetails | null = location.state.courseList;
+const CourseMap = ({ courseList }: CourseMapProps) => {
+  // const location = useLocation();
+  // const navigate = useNavigate();
 
-  if (!isValid) {
-    navigate(-1);
-  }
+  // const isValid: boolean | null = location.state.isValid;
+  // const courseList: CourseDetails | null = location.state.courseList;
+
+  // if (!isValid) {
+  //   navigate(-1);
+  // }
 
   const { map, mapRef, currentTooltipRef, addMarker } = useCourseMap();
 
