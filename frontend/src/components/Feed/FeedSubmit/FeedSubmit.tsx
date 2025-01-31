@@ -20,6 +20,8 @@ const FeedSubmit = () => {
     content,
     password,
     center,
+    isContentError,
+    isPasswordError,
     handleContentChange,
     handlePasswordChange,
     handleSubmit,
@@ -67,10 +69,23 @@ const FeedSubmit = () => {
         <input type="file" accept="image/*" onChange={handleImageChange} className={S.ImageInput} ref={fileInputRef} />
       </div>
 
-      <TextArea value={content} onChange={handleContentChange}>
+      <TextArea
+        value={content}
+        onChange={handleContentChange}
+        status={isContentError ? 'error' : 'default'}
+        errorMessage="내용을 작성해 주세요."
+      >
         <TextArea.Label label="설명" />
       </TextArea>
-      <Input label="비밀번호" buttonType="submit" type="password" value={password} onChange={handlePasswordChange} />
+      <Input
+        label="비밀번호"
+        buttonType="submit"
+        type="password"
+        value={password}
+        onChange={handlePasswordChange}
+        status={isPasswordError ? 'error' : 'default'}
+        errorMessage="영문과 숫자 조합으로 8자 이상 16자 이하로 작성해 주세요."
+      />
       <Button type="submit" color="primary">
         제출
       </Button>
