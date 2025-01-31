@@ -1,9 +1,10 @@
+import { CourseType } from '@/pages/Course/Course.type';
 import { COURSE_TEXT } from '@/constants/course';
 import * as S from './CourseTooltip.css';
 
 interface CourseTooltipProps {
   id: string;
-  type: string;
+  type: CourseType;
   title: string;
 }
 

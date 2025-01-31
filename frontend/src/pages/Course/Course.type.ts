@@ -1,3 +1,5 @@
+export type CourseType = 'lunch' | 'cafe' | 'attraction' | 'dinner';
+
 export interface CourseDetails {
   lunch: Course | null;
   cafe: Course | null;

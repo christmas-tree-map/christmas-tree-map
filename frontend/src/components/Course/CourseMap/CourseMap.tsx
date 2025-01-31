@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Course, CourseDetails } from '@/pages/Course/Course.type';
+import { Course, CourseDetails, CourseType } from '@/pages/Course/Course.type';
 import CourseTooltip from '@/components/Course/CourseTooltip/CourseTooltip';
 import useCourseMap from '@/hooks/Course/useCourseMap';
 import { vars } from '@/styles/theme.css';
@@ -16,7 +16,7 @@ interface CourseMapProps {
 const CourseMap = ({ courseList }: CourseMapProps) => {
   const { map, mapRef, currentTooltipRef, addMarker } = useCourseMap(courseList);
 
-  const addTooltip = (map: any, type: string, courseItem: Course) => {
+  const addTooltip = (map: any, type: CourseType, courseItem: Course) => {
     const marker = addMarker(map, type, courseItem.y, courseItem.x);
     const tooltipContainer = document.createElement('div');
     const root = createRoot(tooltipContainer);
@@ -56,9 +56,13 @@ const CourseMap = ({ courseList }: CourseMapProps) => {
 
   useEffect(() => {
     if (courseList) {
-      Object.entries(courseList).forEach(([key, value]: [string, Course]) => {
-        addTooltip(map, key, value);
-        addPolyline(map, value.pedestrian.route);
+      Object.entries(courseList).forEach(([key, value]: [string, Course | null]) => {
+        const type = key as CourseType;
+
+        if (value) {
+          addTooltip(map, type, value);
+          addPolyline(map, value.pedestrian.route);
+        }
       });
     }
 
