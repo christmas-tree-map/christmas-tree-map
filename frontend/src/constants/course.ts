@@ -17,3 +17,10 @@ export const COURSE_MARKER: Record<CourseType, string> = {
   attraction: courseMarker3,
   dinner: courseMarker4,
 };
+
+export const DEFAULT_COURSE_DETAILS: Record<CourseType, null> = {
+  lunch: null,
+  cafe: null,
+  attraction: null,
+  dinner: null,
+};
