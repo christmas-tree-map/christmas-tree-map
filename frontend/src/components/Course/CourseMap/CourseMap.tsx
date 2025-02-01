@@ -13,12 +13,13 @@ interface CourseMapProps {
   courseList: CourseDetails;
   mapLevel?: number;
   draggable?: boolean;
+  isClickableTooltip?: boolean;
 }
 
-const CourseMap = ({ courseList, mapLevel, draggable = true }: CourseMapProps) => {
+const CourseMap = ({ courseList, mapLevel, draggable, isClickableTooltip = true }: CourseMapProps) => {
   const { map, mapRef, currentTooltipRef, addMarker } = useCourseMap({ courseList, mapLevel, draggable });
   const addTooltip = (map: any, type: CourseType, courseItem: Course) => {
-    const marker = addMarker(map, type, courseItem.y, courseItem.x);
+    const marker = addMarker(map, type, courseItem.y, courseItem.x, isClickableTooltip || false);
     const tooltipContainer = document.createElement('div');
     const root = createRoot(tooltipContainer);
 

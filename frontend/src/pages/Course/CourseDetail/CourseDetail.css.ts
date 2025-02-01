@@ -57,3 +57,7 @@ export const RefreshButton = style({
 export const RefreshText = style({
   paddingTop: '2px',
 });
+
+export const DetailButton = style({
+  color: vars.colors.grey[500],
+});

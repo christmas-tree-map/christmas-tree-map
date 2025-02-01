@@ -40,10 +40,10 @@ const useCourseMap = ({ courseList, mapLevel = 5, draggable = true }: UseCourseM
   const MARKER_SIZE = new kakao.maps.Size(36, 36);
   const MARKER_OPTIONS = { offset: new kakao.maps.Point(18, 36) };
 
-  const addMarker = (map: any, type: CourseType, latitude: string, longitude: string) => {
+  const addMarker = (map: any, type: CourseType, latitude: string, longitude: string, clickable: boolean) => {
     const markerPosition = new kakao.maps.LatLng(latitude, longitude);
     const markerImage = new kakao.maps.MarkerImage(COURSE_MARKER[type], MARKER_SIZE, MARKER_OPTIONS);
-    const marker = new kakao.maps.Marker({ position: markerPosition, image: markerImage, clickable: true });
+    const marker = new kakao.maps.Marker({ position: markerPosition, image: markerImage, clickable });
 
     marker.setMap(map);
 
