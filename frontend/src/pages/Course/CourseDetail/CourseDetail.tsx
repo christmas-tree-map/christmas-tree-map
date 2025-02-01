@@ -33,7 +33,7 @@ const CourseDetail = () => {
           자세히 보기
         </button>
         <div className={S.CourseMapContainer}>
-          <CourseMap courseList={courseDetails} mapLevel={7} draggable={false} isClickableTooltip={false} />
+          <CourseMap courseList={courseDetails} mapLevel={7} isStaticMap={true} />
         </div>
       </div>
       <CourseList courseList={courseDetails} />

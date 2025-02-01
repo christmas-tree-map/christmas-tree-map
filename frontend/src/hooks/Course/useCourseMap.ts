@@ -12,10 +12,10 @@ interface TooltipState {
 interface UseCourseMapProps {
   courseList: CourseDetails;
   mapLevel?: number;
-  draggable?: boolean;
+  isStaticMap?: boolean;
 }
 
-const useCourseMap = ({ courseList, mapLevel = 5, draggable = true }: UseCourseMapProps) => {
+const useCourseMap = ({ courseList, mapLevel = 5, isStaticMap = false }: UseCourseMapProps) => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const currentTooltipRef = useRef<TooltipState | null>(null);
 
@@ -31,7 +31,12 @@ const useCourseMap = ({ courseList, mapLevel = 5, draggable = true }: UseCourseM
     const latitude = courses.reduce((acc: number, cur: Course) => (acc += Number(cur.y)), 0) / courses.length;
     const longitude = courses.reduce((acc: number, cur: Course) => (acc += Number(cur.x)), 0) / courses.length;
     if (mapRef.current && kakao && kakao.maps) {
-      const options = { center: new kakao.maps.LatLng(latitude, longitude), level: mapLevel, draggable };
+      const options = {
+        center: new kakao.maps.LatLng(latitude, longitude),
+        level: mapLevel,
+        draggable: !isStaticMap,
+        disableDoubleClick: isStaticMap,
+      };
       const map = new kakao.maps.Map(mapRef.current, options);
       setMap(map);
     }
