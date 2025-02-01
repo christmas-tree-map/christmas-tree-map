@@ -32,6 +32,9 @@ const CourseDetail = () => {
         <button type="button" onClick={() => setIsMapOpen(true)}>
           자세히 보기
         </button>
+        <div className={S.CourseMapContainer}>
+          <CourseMap courseList={courseDetails} mapLevel={7} draggable={false} />
+        </div>
       </div>
       <CourseList courseList={courseDetails} />
       {isButtonOpen && (

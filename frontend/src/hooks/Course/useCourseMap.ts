@@ -9,7 +9,13 @@ interface TooltipState {
   overlay: any;
 }
 
-const useCourseMap = (courseList: CourseDetails) => {
+interface UseCourseMapProps {
+  courseList: CourseDetails;
+  mapLevel?: number;
+  draggable?: boolean;
+}
+
+const useCourseMap = ({ courseList, mapLevel = 5, draggable = true }: UseCourseMapProps) => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const currentTooltipRef = useRef<TooltipState | null>(null);
 
@@ -17,11 +23,15 @@ const useCourseMap = (courseList: CourseDetails) => {
 
   const initializeMap = () => {
     const courses = Object.values(courseList);
+
+    if (courses.every((course) => course === null)) {
+      return;
+    }
+
     const latitude = courses.reduce((acc: number, cur: Course) => (acc += Number(cur.y)), 0) / courses.length;
     const longitude = courses.reduce((acc: number, cur: Course) => (acc += Number(cur.x)), 0) / courses.length;
-
     if (mapRef.current && kakao && kakao.maps) {
-      const options = { center: new kakao.maps.LatLng(latitude, longitude), level: 5 };
+      const options = { center: new kakao.maps.LatLng(latitude, longitude), level: mapLevel, draggable };
       const map = new kakao.maps.Map(mapRef.current, options);
       setMap(map);
     }
@@ -42,7 +52,7 @@ const useCourseMap = (courseList: CourseDetails) => {
 
   useEffect(() => {
     initializeMap();
-  }, []);
+  }, [courseList]);
 
   return { map, mapRef, currentTooltipRef, addMarker };
 };

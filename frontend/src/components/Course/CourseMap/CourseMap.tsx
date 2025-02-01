@@ -11,11 +11,12 @@ const { kakao } = window;
 
 interface CourseMapProps {
   courseList: CourseDetails;
+  mapLevel?: number;
+  draggable?: boolean;
 }
 
-const CourseMap = ({ courseList }: CourseMapProps) => {
-  const { map, mapRef, currentTooltipRef, addMarker } = useCourseMap(courseList);
-
+const CourseMap = ({ courseList, mapLevel, draggable = true }: CourseMapProps) => {
+  const { map, mapRef, currentTooltipRef, addMarker } = useCourseMap({ courseList, mapLevel, draggable });
   const addTooltip = (map: any, type: CourseType, courseItem: Course) => {
     const marker = addMarker(map, type, courseItem.y, courseItem.x);
     const tooltipContainer = document.createElement('div');
