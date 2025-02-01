@@ -29,7 +29,7 @@ export const postFeed = async ({ imageFile, treeId, content, password }: PostFee
   formData.append('image', imageFile);
   formData.append('request', blob);
 
-  requestAPI.post('/feed', formData);
+  await requestAPI.post('/feed', formData);
 };
 
 interface PostLikeFeedRequest {
