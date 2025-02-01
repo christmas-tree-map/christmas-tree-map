@@ -49,7 +49,7 @@ const App = () => {
             element: <CourseMain />,
           },
           {
-            path: 'detail',
+            path: '/course/detail',
             element: <CourseDetail />,
           },
         ],
