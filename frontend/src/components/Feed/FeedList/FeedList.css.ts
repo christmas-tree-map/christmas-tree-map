@@ -5,7 +5,7 @@ export const Layout = style({
   flexDirection: 'column',
   gap: '40px',
 
-  height: '1px',
+  height: 'fit-content',
 
   boxShadow: '6px 0 30px 0 rgba(0, 0, 0, 0.12), 12px 0px 38px 0 rgba(0, 0, 0, 0.08)',
 });
