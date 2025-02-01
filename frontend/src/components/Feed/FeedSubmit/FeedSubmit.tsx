@@ -86,7 +86,7 @@ const FeedSubmit = () => {
         status={isPasswordError ? 'error' : 'default'}
         errorMessage="영문과 숫자 조합으로 8자 이상 16자 이하로 작성해 주세요."
       />
-      <Button type="submit" color="primary">
+      <Button type="submit" color="primary" disabled={isContentError || isPasswordError ? true : false}>
         제출
       </Button>
     </form>

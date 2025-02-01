@@ -20,8 +20,8 @@ const useFeedSubmit = ({ imageFile, location, navigate }: UseFeedSubmitProps) =>
     longitude: DEFAULT_LONGITUDE,
   };
 
-  const [isContentError, setIsContentError] = useState(false);
-  const [isPasswordError, setIsPasswordError] = useState(false);
+  const [isContentError, setIsContentError] = useState(true);
+  const [isPasswordError, setIsPasswordError] = useState(true);
 
   const { addFeedMutation } = useFeedMutation();
   const { addTree } = useTreeMutation();
