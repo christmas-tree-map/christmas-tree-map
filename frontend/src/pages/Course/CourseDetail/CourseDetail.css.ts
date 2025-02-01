@@ -10,13 +10,27 @@ export const Title = style({
 });
 
 export const MapContainer = style({
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: '10px',
+
   width: '100%',
   height: '180px',
   marginTop: '10px',
   marginBottom: '32px',
+  padding: '10px 22px',
   borderRadius: '15px',
 
   backgroundColor: vars.colors.secondary[50],
+});
+
+export const CourseMapContainer = style({
+  width: '100%',
+  height: '100%',
+  borderRadius: '15px',
+  overflow: 'hidden',
 });
 
 export const RefreshButton = style({
