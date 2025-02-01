@@ -2,12 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { CourseWithPosition } from '@/pages/Course/Course.type';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
 import treeImage from '@/assets/tree.png';
-import { useDebounce } from '../_common/useDebounce';
 
 const { kakao } = window;
 
 const DEFAULT_ZOOM_LEVEL = 3;
-const DEBOUNCE_DELAY = 500;
 
 const MARKER_IMAGE: Record<string, string> = {
   TREE_01: treeImage,
@@ -17,10 +15,6 @@ const useTreeMap = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
 
   const [map, setMap] = useState<typeof kakao | null>(null);
-  const [currentPosition, setCurrentPosition] = useState({
-    latitude: DEFAULT_LATITUDE,
-    longitude: DEFAULT_LONGITUDE,
-  });
   const [centerPosition, setCenterPosition] = useState({
     latitude: DEFAULT_LATITUDE,
     longitude: DEFAULT_LONGITUDE,
@@ -28,8 +22,6 @@ const useTreeMap = () => {
 
   const [currentAddress, setCurrentAddress] = useState('');
   const [searchedPlaceList, setSearchedPlaceList] = useState<CourseWithPosition[]>([]);
-
-  const debouncedCenter = useDebounce(centerPosition, DEBOUNCE_DELAY);
 
   const MARKER_SIZE = new kakao.maps.Size(50, 55);
   const MARKER_OPTIONS = { offset: new kakao.maps.Point(25, 55) };
@@ -106,19 +98,15 @@ const useTreeMap = () => {
   useEffect(() => {
     if (!map) return;
 
-    kakao.maps.event.addListener(map, 'center_changed', handleCenterChanged);
-    return () => kakao.maps.event.removeListener(map, 'center_changed', handleCenterChanged);
+    kakao.maps.event.addListener(map, 'dragend', handleCenterChanged);
+    return () => kakao.maps.event.removeListener(map, 'dragend', handleCenterChanged);
   }, [map]);
-
-  useEffect(() => {
-    setCurrentPosition(debouncedCenter);
-  }, [debouncedCenter]);
 
   return {
     map,
     mapRef,
     currentAddress,
-    currentPosition,
+    centerPosition,
     addMarker,
     getAddress,
     searchPlaces,

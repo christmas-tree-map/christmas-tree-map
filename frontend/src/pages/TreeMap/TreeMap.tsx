@@ -13,8 +13,8 @@ const TreeMap = () => {
   const navigate = useNavigate();
 
   const { isModalOpen, openModal, closeModal } = useModal();
-  const { map, mapRef, addMarker, currentPosition } = useTreeMap();
-  const { trees, isSuccess } = useTreesQuery(currentPosition);
+  const { map, mapRef, addMarker, centerPosition } = useTreeMap();
+  const { trees, isSuccess } = useTreesQuery(centerPosition);
   const handleMarkerClick = (treeId: number) => {
     openModal();
     navigate(`/map/${treeId}?modal=feeds`);
@@ -33,7 +33,7 @@ const TreeMap = () => {
   const modalContent = useModalContent(modalType);
 
   const handleButtonClick = () => {
-    navigate('/map?modal=submit', { state: { center: currentPosition } });
+    navigate('/map?modal=submit', { state: { center: centerPosition } });
   };
 
   useEffect(() => {
