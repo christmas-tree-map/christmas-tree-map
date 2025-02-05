@@ -87,7 +87,7 @@ const ContainerBase = style({
   zIndex: 200,
 
   width: '100%',
-  height: '100vh',
+  height: 'calc(100vh - 48px)',
 
   padding: '33px 24px 0',
 
@@ -110,7 +110,7 @@ export const ContentWrapper = style({
 
   width: '100%',
   height: '100%',
-  padding: '17px 0',
+  padding: '17px 0 34px',
 
   /* 크롬, 사파리, 오페라 */
   '::-webkit-scrollbar': {

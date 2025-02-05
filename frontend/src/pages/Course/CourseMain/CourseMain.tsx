@@ -11,6 +11,8 @@ import { extractAddressPart } from '@/utils/extractAddressPart';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
 import * as S from './CourseMain.css';
 
+const DEBOUNCE_DELAY = 200;
+
 const CourseMain = () => {
   const [currentPosition, setCurrentPosition] = useState<{
     latitude: number;
@@ -20,7 +22,7 @@ const CourseMain = () => {
     longitude: DEFAULT_LONGITUDE,
   });
   const [inputValue, setInputValue] = useState('');
-  const debouncedInputValue = useDebounce(inputValue, 200);
+  const debouncedInputValue = useDebounce(inputValue, DEBOUNCE_DELAY);
 
   const navigate = useNavigate();
 
@@ -34,7 +36,7 @@ const CourseMain = () => {
     const selectedPlace = searchedPlaceList.find((place) => place.place_name === data);
     if (!selectedPlace) return;
 
-    navigate(`/course/detail?keyword=${inputValue}&latitude=${selectedPlace.x}&longitude=${selectedPlace.y}`);
+    navigate(`/course/detail?keyword=${data}&latitude=${selectedPlace.y}&longitude=${selectedPlace.x}`);
   };
 
   useEffect(() => {

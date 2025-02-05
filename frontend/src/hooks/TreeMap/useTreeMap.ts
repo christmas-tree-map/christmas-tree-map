@@ -14,7 +14,12 @@ const MARKER_IMAGE: Record<string, string> = {
 const useTreeMap = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
 
-  const [map, setMap] = useState(null);
+  const [map, setMap] = useState<typeof kakao | null>(null);
+  const [centerPosition, setCenterPosition] = useState({
+    latitude: DEFAULT_LATITUDE,
+    longitude: DEFAULT_LONGITUDE,
+  });
+
   const [currentAddress, setCurrentAddress] = useState('');
   const [searchedPlaceList, setSearchedPlaceList] = useState<CourseWithPosition[]>([]);
 
@@ -72,6 +77,13 @@ const useTreeMap = () => {
     });
   };
 
+  const handleCenterChanged = useCallback(() => {
+    if (map) {
+      const center = map.getCenter();
+      setCenterPosition({ latitude: center.getLat(), longitude: center.getLng() });
+    }
+  }, [map]);
+
   useEffect(() => {
     if (!navigator.geolocation) {
       initializeMap(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
@@ -83,7 +95,23 @@ const useTreeMap = () => {
     );
   }, []);
 
-  return { map, mapRef, currentAddress, addMarker, getAddress, searchPlaces, searchedPlaceList };
+  useEffect(() => {
+    if (!map) return;
+
+    kakao.maps.event.addListener(map, 'dragend', handleCenterChanged);
+    return () => kakao.maps.event.removeListener(map, 'dragend', handleCenterChanged);
+  }, [map]);
+
+  return {
+    map,
+    mapRef,
+    currentAddress,
+    centerPosition,
+    addMarker,
+    getAddress,
+    searchPlaces,
+    searchedPlaceList,
+  };
 };
 
 export default useTreeMap;
