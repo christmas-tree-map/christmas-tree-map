@@ -1,3 +1,5 @@
+import { FEED } from '@/constants/feed';
+
 export const validatePassword = (password: string): boolean => {
   const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,16}$/;
 
@@ -5,7 +7,7 @@ export const validatePassword = (password: string): boolean => {
 };
 
 export const validateContent = (content: string): boolean => {
-  if (content.trim() === '') return false;
+  if (content.trim() === '' || content.length > FEED.contentMaxLength) return false;
 
   return true;
 };

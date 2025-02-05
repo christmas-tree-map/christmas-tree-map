@@ -7,6 +7,7 @@ import TextArea from '@/components/_common/TextArea/TextArea';
 import useFeedSubmit from '@/hooks/Feed/useFeedSubmit';
 import useImageUploader from '@/hooks/Feed/useImageUploader';
 import useTreeMap from '@/hooks/TreeMap/useTreeMap';
+import { FEED } from '@/constants/feed';
 import mapIcon from '@/assets/map.png';
 import * as S from './FeedSubmit.css';
 
@@ -74,6 +75,7 @@ const FeedSubmit = () => {
         onChange={handleContentChange}
         status={isContentError ? 'error' : 'default'}
         errorMessage="내용을 작성해 주세요."
+        maxLength={FEED.contentMaxLength}
       >
         <TextArea.Label label="설명" />
       </TextArea>
