@@ -29,9 +29,12 @@ const CourseDetail = () => {
     <div className={S.Layout}>
       <h1 className={S.Title}>{keyword} 맞춤 코스 ✨</h1>
       <div className={S.MapContainer}>
-        <button type="button" onClick={() => setIsMapOpen(true)}>
+        <button className={S.DetailButton} type="button" onClick={() => setIsMapOpen(true)}>
           자세히 보기
         </button>
+        <div className={S.CourseMapContainer}>
+          <CourseMap courseList={courseDetails} mapLevel={7} isStaticMap={true} />
+        </div>
       </div>
       <CourseList courseList={courseDetails} />
       {isButtonOpen && (
