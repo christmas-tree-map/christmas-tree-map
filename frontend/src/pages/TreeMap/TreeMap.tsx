@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FloatingButton from '@/components/_common/FloatingButton/FloatingButton';
 import Modal from '@/components/_common/Modal/Modal';
@@ -6,28 +6,15 @@ import useModal from '@/hooks/_common/useModal';
 import useModalContent from '@/hooks/TreeMap/useModalContent';
 import useTreeMap from '@/hooks/TreeMap/useTreeMap';
 import useTreesQuery from '@/queries/Tree/useTreesQuery';
-import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
 import * as S from './TreeMap.css';
 
 const TreeMap = () => {
-  const [currentPosition, setCurrentPosition] = useState({
-    latitude: DEFAULT_LATITUDE,
-    longitude: DEFAULT_LONGITUDE,
-  });
-
-  useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      setCurrentPosition({ latitude: position.coords.latitude, longitude: position.coords.longitude });
-    });
-  }, []);
-
   const location = useLocation();
   const navigate = useNavigate();
 
   const { isModalOpen, openModal, closeModal } = useModal();
-  const { map, mapRef, addMarker } = useTreeMap();
-  const { trees, isSuccess } = useTreesQuery(currentPosition);
-
+  const { map, mapRef, addMarker, centerPosition } = useTreeMap();
+  const { trees, isSuccess } = useTreesQuery(centerPosition);
   const handleMarkerClick = (treeId: number) => {
     openModal();
     navigate(`/map/${treeId}?modal=feeds`);
@@ -46,7 +33,7 @@ const TreeMap = () => {
   const modalContent = useModalContent(modalType);
 
   const handleButtonClick = () => {
-    navigate('/map?modal=submit', { state: { center: currentPosition } });
+    navigate('/map?modal=submit', { state: { center: centerPosition } });
   };
 
   useEffect(() => {

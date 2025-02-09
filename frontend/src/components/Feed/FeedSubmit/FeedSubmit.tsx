@@ -7,6 +7,7 @@ import TextArea from '@/components/_common/TextArea/TextArea';
 import useFeedSubmit from '@/hooks/Feed/useFeedSubmit';
 import useImageUploader from '@/hooks/Feed/useImageUploader';
 import useTreeMap from '@/hooks/TreeMap/useTreeMap';
+import { FEED } from '@/constants/feed';
 import mapIcon from '@/assets/map.png';
 import * as S from './FeedSubmit.css';
 
@@ -20,6 +21,8 @@ const FeedSubmit = () => {
     content,
     password,
     center,
+    isContentError,
+    isPasswordError,
     handleContentChange,
     handlePasswordChange,
     handleSubmit,
@@ -67,11 +70,25 @@ const FeedSubmit = () => {
         <input type="file" accept="image/*" onChange={handleImageChange} className={S.ImageInput} ref={fileInputRef} />
       </div>
 
-      <TextArea value={content} onChange={handleContentChange}>
+      <TextArea
+        value={content}
+        onChange={handleContentChange}
+        status={isContentError ? 'error' : 'default'}
+        errorMessage="내용을 작성해 주세요."
+        maxLength={FEED.contentMaxLength}
+      >
         <TextArea.Label label="설명" />
       </TextArea>
-      <Input label="비밀번호" buttonType="submit" type="password" value={password} onChange={handlePasswordChange} />
-      <Button type="submit" color="primary">
+      <Input
+        label="비밀번호"
+        buttonType="submit"
+        type="password"
+        value={password}
+        onChange={handlePasswordChange}
+        status={isPasswordError ? 'error' : 'default'}
+        errorMessage="영문과 숫자 조합으로 8자 이상 16자 이하로 작성해 주세요."
+      />
+      <Button type="submit" color="primary" disabled={isContentError || isPasswordError ? true : false}>
         제출
       </Button>
     </form>

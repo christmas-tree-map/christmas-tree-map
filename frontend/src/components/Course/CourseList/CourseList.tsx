@@ -1,6 +1,6 @@
 import { FaWalking } from '@react-icons/all-files/fa/FaWalking';
+import { Course, CourseDetails, CourseType } from '@/pages/Course/Course.type';
 import CourseItem from '@/components/Course/CourseItem/CourseItem';
-import { CourseDetails } from '@/apis/course';
 import { COURSE_TEXT } from '@/constants/course';
 import * as S from './CourseList.css';
 
@@ -11,11 +11,11 @@ interface CourseListProps {
 const CourseList = ({ courseList }: CourseListProps) => {
   return (
     <>
-      {Object.entries(courseList).map(([key, value]) => (
+      {Object.entries(courseList).map(([key, value]: [string, Course | null]) => (
         <div key={key}>
           {value !== null && (
             <>
-              <p className={S.TypeText}>{COURSE_TEXT[key]}</p>
+              <p className={S.TypeText}>{COURSE_TEXT[key as CourseType]}</p>
               <CourseItem
                 id={value.id}
                 title={value.place_name}
@@ -31,7 +31,7 @@ const CourseList = ({ courseList }: CourseListProps) => {
                       <FaWalking size="15px" />
                     </div>
                   </div>
-                  걸어서 10분
+                  걸어서 {value.pedestrian.duration_minutes}분
                 </div>
               )}
             </>

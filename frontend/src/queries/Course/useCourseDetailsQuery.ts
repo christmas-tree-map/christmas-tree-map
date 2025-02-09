@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getCourseDetails } from '@/apis/course';
 import { COURSE_KEYS } from '@/queries/queryKeys';
-
-const DEFAULT_COURSE_DETAILS = { lunch: null, cafe: null, attraction: null, dinner: null };
+import { DEFAULT_COURSE_DETAILS } from '@/constants/course';
 
 const useCourseDetailsQuery = (latitude: string, longitude: string) => {
   const { data, refetch } = useQuery({
