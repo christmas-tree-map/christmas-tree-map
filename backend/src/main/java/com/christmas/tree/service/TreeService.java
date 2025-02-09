@@ -30,7 +30,7 @@ public class TreeService {
 
     public List<TreeGetResponse> getTreeByRange(final TreeGetRequest request) {
         final Point location = PointGenerator.generate(request.longitude(), request.latitude());
-        List<TreeEntity> trees = treeRepository.findByLocationInRange(location, SEARCH_RADIUS_KM);
+        final List<TreeEntity> trees = treeRepository.findByLocationInRangeOrderByAsc(location, SEARCH_RADIUS_KM);
         return trees.stream()
                 .map(tree -> {
                     final Point point = tree.getLocation();
