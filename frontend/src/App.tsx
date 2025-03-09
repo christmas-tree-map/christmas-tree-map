@@ -42,7 +42,7 @@ const App = () => {
       },
       {
         path: '/course',
-        element: <Layout title="맞춤 코스 추천" isSticky={true} />,
+        element: <Layout title="맞춤 코스 추천" backgroundColor="white" isSticky={true} />,
         children: [
           {
             path: '',

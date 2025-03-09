@@ -2,7 +2,7 @@ import { style } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 
 export const Layout = style({
-  padding: '20px 16px',
+  padding: '48px 16px 20px',
 });
 
 export const Title = style({
