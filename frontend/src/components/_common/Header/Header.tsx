@@ -13,7 +13,7 @@ const Header = ({ title = '', backgroundColor }: HeaderProp) => {
 
   return (
     <header className={S.Layout[backgroundColor]}>
-      <button className={S.Button} onClick={() => navigate(-1)}>
+      <button className={S.Button[backgroundColor]} onClick={() => navigate(-1)}>
         <IoIosArrowBack />
       </button>
       <p className={S.TitleText}>{title}</p>

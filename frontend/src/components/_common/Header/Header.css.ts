@@ -24,7 +24,7 @@ export const Layout = styleVariants({
   white: [LayoutBase, { backgroundColor: vars.colors.white }],
 });
 
-export const Button = style({
+export const ButtonBase = style({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -35,7 +35,6 @@ export const Button = style({
 
   backgroundColor: vars.colors.white,
   color: vars.colors.grey[800],
-  filter: 'drop-shadow(0px 3px 3px #00000040)',
 
   transition: '0.2s all ease',
 
@@ -48,6 +47,11 @@ export const Button = style({
   ':active': {
     color: vars.colors.primary[800],
   },
+});
+
+export const Button = styleVariants({
+  transparent: [ButtonBase, { filter: 'drop-shadow(0px 3px 3px #00000040)' }],
+  white: [ButtonBase, { filter: 'none' }],
 });
 
 export const TitleText = style({
