@@ -7,6 +7,7 @@ import Layout from '@/pages/Layout/Layout';
 import MapMarkerSelector from '@/pages/MapMarkerSelector/MapMarkerSelector';
 import TreeMap from '@/pages/TreeMap/TreeMap';
 import FeedList from '@/components/Feed/FeedList/FeedList';
+import GlobalErrorBoundary from './pages/Error/ErrorBoundary/GlobalErrorBoundary';
 
 const App = () => {
   const router = createBrowserRouter(
@@ -16,13 +17,21 @@ const App = () => {
         children: [
           {
             path: '',
-            element: <Landing />,
+            element: (
+              <GlobalErrorBoundary>
+                <Landing />
+              </GlobalErrorBoundary>
+            ),
           },
         ],
       },
       {
         path: '/map',
-        element: <Layout />,
+        element: (
+          <GlobalErrorBoundary>
+            <Layout />
+          </GlobalErrorBoundary>
+        ),
         children: [
           {
             path: '',
@@ -42,7 +51,11 @@ const App = () => {
       },
       {
         path: '/course',
-        element: <Layout title="맞춤 코스 추천" isSticky={true} />,
+        element: (
+          <GlobalErrorBoundary>
+            <Layout title="맞춤 코스 추천" backgroundColor="white" isSticky={true} />
+          </GlobalErrorBoundary>
+        ),
         children: [
           {
             path: '',

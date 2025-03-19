@@ -4,13 +4,14 @@ import NavBar from '@/components/_common/NavBar/NavBar';
 
 interface LayoutProps {
   title?: string;
+  backgroundColor?: 'transparent' | 'white';
   isSticky?: boolean;
 }
 
-const Layout = ({ title = '', isSticky = false }: LayoutProps) => {
+const Layout = ({ title = '', backgroundColor = 'transparent', isSticky = false }: LayoutProps) => {
   return (
     <>
-      <Header title={title} />
+      <Header title={title} backgroundColor={backgroundColor} />
       <Outlet />
       <NavBar isSticky={isSticky} />
     </>

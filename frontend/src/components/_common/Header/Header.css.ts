@@ -1,7 +1,7 @@
-import { style } from '@vanilla-extract/css';
+import { style, styleVariants } from '@vanilla-extract/css';
 import { vars } from '@/styles/theme.css';
 
-export const Layout = style({
+const LayoutBase = style({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
@@ -19,7 +19,12 @@ export const Layout = style({
   padding: '0 16px',
 });
 
-export const Button = style({
+export const Layout = styleVariants({
+  transparent: [LayoutBase, { backgroundColor: 'transparent' }],
+  white: [LayoutBase, { backgroundColor: vars.colors.white }],
+});
+
+export const ButtonBase = style({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -30,7 +35,6 @@ export const Button = style({
 
   backgroundColor: vars.colors.white,
   color: vars.colors.grey[800],
-  filter: 'drop-shadow(0px 3px 3px #00000040)',
 
   transition: '0.2s all ease',
 
@@ -45,6 +49,13 @@ export const Button = style({
   },
 });
 
+export const Button = styleVariants({
+  transparent: [ButtonBase, { filter: 'drop-shadow(0px 3px 3px #00000040)' }],
+  white: [ButtonBase, { filter: 'none' }],
+});
+
 export const TitleText = style({
+  flex: 1,
   font: vars.fonts.body,
+  textAlign: 'center',
 });
