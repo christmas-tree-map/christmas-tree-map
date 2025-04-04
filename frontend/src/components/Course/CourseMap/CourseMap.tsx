@@ -42,6 +42,8 @@ const CourseMap = ({ courseList, mapLevel, isStaticMap = false }: CourseMapProps
   };
 
   const addPolyline = (map: any, routes: number[][]) => {
+    if (!map || !routes) return;
+
     const linePath = routes.map((route) => new kakao.maps.LatLng(route[1], route[0]));
 
     const polyline = new kakao.maps.Polyline({
@@ -62,7 +64,7 @@ const CourseMap = ({ courseList, mapLevel, isStaticMap = false }: CourseMapProps
 
         if (value) {
           addTooltip(map, type, value);
-          addPolyline(map, value.pedestrian.route);
+          addPolyline(map, value.pedestrian_route.route);
         }
       });
     }
