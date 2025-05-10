@@ -132,7 +132,7 @@ jobs:
         uses: thollander/actions-comment-pull-request@v2
         with:
           comment_tag: ${{github.event.number}}-storybook
-          message: |
+          message: | 
             **Storybook Published**  
             💄 [View Storybook](${{ needs.PUBLISH_STORYBOOK.outputs.storybook_url }})
             🕖 Update Time : ${{ needs.PUBLISH_STORYBOOK.outputs.current_time }}
