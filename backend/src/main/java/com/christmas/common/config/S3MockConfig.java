@@ -24,7 +24,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Configuration
-@Profile({"local", "test"})
+@Profile({"local", "test", "test-code"})
 public class S3MockConfig {
 
     @Value("${cloud.aws.region.static}")
