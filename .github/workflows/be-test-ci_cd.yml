@@ -1,15 +1,15 @@
-name: 🎄Backend CI & CD With Prod Profile
+name: 🎄Backend CI & CD With Test Profile
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "BE/dev" ]
 
 jobs:
   build:
-    environment: production
+    environment: test
     runs-on: ubuntu-latest
     env:
-      SPRING_PROFILE: prod
+      SPRING_PROFILE: test
     defaults:
       run:
         working-directory: ./backend
@@ -54,10 +54,10 @@ jobs:
           path: ${{ github.workspace }}/backend/docker/docker-compose.yml
 
   deploy:
-    environment: production
-    runs-on: [ "merrytreesmas-prod" ]
+    environment: test
+    runs-on: [ "merrytreesmas-test" ]
     env:
-      SPRING_PROFILE: prod
+      SPRING_PROFILE: test
     needs: build
     defaults:
       run:
@@ -81,13 +81,10 @@ jobs:
           SPRING_PROFILE=${{ env.SPRING_PROFILE }}
           
           # Application yml environments
-          DB_URL=${{ secrets.DB_URL }}
-          DB_USERNAME=${{ secrets.DB_USERNAME }}
-          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-          S3_ACCESS_KEY=${{ secrets.S3_ACCESS_KEY }}
-          S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }}
-          S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}
-          SERVER_URL=${{ secrets.SERVER_URL }}
+          TEST_DB_URL=${{ secrets.TEST_DB_URL }}
+          TEST_DB_USERNAME=${{ secrets.TEST_DB_USERNAME }}
+          TEST_DB_PASSWORD=${{ secrets.TEST_DB_PASSWORD }}
+          TEST_SERVER_URL=${{ secrets.TEST_SERVER_URL }}
           KAKAO_MAP_REST_API_KEY=${{ secrets.KAKAO_MAP_REST_API_KEY }}
           TMAP_APP_KEY=${{ secrets.TMAP_APP_KEY }}
           
@@ -113,3 +110,4 @@ jobs:
         run: |
           sudo docker ps
           sudo docker images
+
