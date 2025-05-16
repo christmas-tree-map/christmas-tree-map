@@ -53,7 +53,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: treesmas-docker-compose
-          path: ${{ github.workspace }}/backend/docker/docker-compose.yml
+          path: ${{ github.workspace }}/backend/docker/test-docker-compose.yml
 
   deploy:
     environment: test
@@ -74,7 +74,7 @@ jobs:
 
       - name: Move docker-compose YAML
         run: |
-          sudo mv ./docker/docker-compose.yml ${{ secrets.DOCKER_COMPOSE_PATH }}/
+          sudo mv ./docker/test-docker-compose.yml ${{ secrets.DOCKER_COMPOSE_PATH }}/
 
       - name: Set docker-compose environment variables
         run: |
@@ -97,12 +97,12 @@ jobs:
 
       - name: Stop and Remove existing container
         run: |
-          sudo docker-compose -f ${{ secrets.DOCKER_COMPOSE_PATH }}/docker-compose.yml down
+          sudo test-docker-compose -f ${{ secrets.DOCKER_COMPOSE_PATH }}/test-docker-compose.yml down
           sudo docker image prune -f
 
       - name: Start new container
         run: |
-          sudo docker-compose --env-file ${{ secrets.DOCKER_COMPOSE_PATH }}/.treesmas-env -f ${{ secrets.DOCKER_COMPOSE_PATH }}/docker-compose.yml up --pull always -d
+          sudo docker-compose --env-file ${{ secrets.DOCKER_COMPOSE_PATH }}/.treesmas-env -f ${{ secrets.DOCKER_COMPOSE_PATH }}/test-docker-compose.yml up --pull always -d
 
       - name: Remove old images
         run: |
