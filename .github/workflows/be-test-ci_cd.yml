@@ -97,7 +97,7 @@ jobs:
 
       - name: Stop and Remove existing container
         run: |
-          sudo docker-compose -f ${{ secrets.DOCKER_COMPOSE_PATH }}/test-docker-compose.yml down
+          sudo docker-compose --env-file ${{ secrets.DOCKER_COMPOSE_PATH }}/.treesmas-env -f ${{ secrets.DOCKER_COMPOSE_PATH }}/test-docker-compose.yml down
           sudo docker image prune -f
 
       - name: Start new container
