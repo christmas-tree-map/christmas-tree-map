@@ -1,0 +1,25 @@
+services:
+  springboot:
+    container_name: treesmas-springboot
+    image: ${DOCKER_REPO_NAME}/treesmas-springboot-app:${DOCKER_IMAGE_VERSION}
+    env_file:
+      - .treesmas-env
+    ports:
+      - 8080:8080
+    restart: on-failure
+
+  mysql:
+    image: mysql:8.0
+    container_name: treesmas-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${TEST_DB_PASSWORD}
+      MYSQL_DATABASE: merrytreesmas
+      MYSQL_USER: ${TEST_DB_USERNAME}
+      MYSQL_PASSWORD: ${TEST_DB_PASSWORD}
+    ports:
+      - 3306:3306
+    volumes:
+      - data:/var/lib/mysql
+
+volumes:
+  data:

@@ -1,4 +1,4 @@
-name: 🎄Backend Build & Test With Test Profile
+name: 🎄Backend Run Test Code
 
 on:
   pull_request:
@@ -7,8 +7,6 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    env:
-      SPRING_PROFILE: test
     defaults:
       run:
         working-directory: ./backend
@@ -35,7 +33,7 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build Application
-        run: ./gradlew clean build -Dspring.profiles.active=${{ env.SPRING_PROFILE }} --exclude-task test
+        run: ./gradlew clean build --exclude-task test
 
       - name: Running Test Code
-        run: ./gradlew --info test -Dspring.profiles.active=${{ env.SPRING_PROFILE }}
+        run: ./gradlew --info test
