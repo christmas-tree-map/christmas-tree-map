@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { CourseWithPosition } from '@/pages/Course/Course.type';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
-import treeImage from '@/assets/tree.png';
+import treeImage from '@/assets/TREE_01.png';
 
 const { kakao } = window;
 
