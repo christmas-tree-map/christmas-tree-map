@@ -1,17 +1,17 @@
 package com.christmas.infrastructure.route.service;
 
+import com.christmas.infrastructure.route.dto.RouteConditionDto;
+import com.christmas.infrastructure.route.exception.JsonParseException;
+import com.christmas.infrastructure.route.exception.code.DistanceErrorCode;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
-
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-
-import com.christmas.infrastructure.route.dto.RouteConditionDto;
-import com.fasterxml.jackson.databind.JsonNode;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Slf4j
@@ -47,6 +47,16 @@ public class RouteApiManager {
                 .header("appKey", appKey)
                 .body(BodyInserters.fromValue(body))
                 .retrieve()
-                .bodyToMono(JsonNode.class);
+                .bodyToMono(String.class)
+                .map(this::removeControlCode);
+    }
+
+    private JsonNode removeControlCode(String rawJson) {
+        String cleaned = rawJson.replaceAll("\\p{Cntrl}", "");
+        try {
+            return new ObjectMapper().readTree(cleaned);
+        } catch (Exception e) {
+            throw new JsonParseException(DistanceErrorCode.TMAP_JSON_PARSE_ERROR, Map.of("컨트롤 코드 제거한 tmap api 응답", cleaned), e);
+        }
     }
 }
