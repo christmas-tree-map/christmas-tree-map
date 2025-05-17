@@ -5,5 +5,5 @@ export const FEED = {
 };
 
 export const TREE_IMAGE = {
-  TREE_01: TREE_01,
+  TREE_01,
 } as const;
