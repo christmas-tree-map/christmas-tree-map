@@ -3,6 +3,7 @@ import HeartWithCount from '@/components/_common/HeartWithCount/HeartWithCount';
 import useFeedMutation from '@/queries/Feed/useFeedMutation';
 import { formatDateTime } from '@/utils/formatDateTime';
 import { manageLikedFeeds } from '@/utils/manageLikedFeeds';
+import TREE_01 from '@/assets/TREE_01.png';
 import * as S from './FeedItem.css';
 import type { FeedItemType } from './FeedItem.type';
 
@@ -19,6 +20,9 @@ const FeedItem = ({ feed }: FeedItemProps) => {
 
   const likedFeedList = JSON.parse(localStorage.getItem('liked_feeds') ?? '{}');
   const isSelected = likedFeedList[treeId] ? likedFeedList[treeId].includes(id) : false;
+  const treeImage = {
+    TREE_01: TREE_01,
+  } as const;
 
   const handleLiked = () => {
     if (isSelected) {
@@ -28,12 +32,13 @@ const FeedItem = ({ feed }: FeedItemProps) => {
     }
     manageLikedFeeds(treeId, id);
   };
+  console.log(treeImageCode);
 
   return (
     <div className={S.Layout}>
       <div className={S.Header}>
         <div className={S.NicknameBox}>
-          <img src={treeImageCode} />
+          <img src={treeImage[treeImageCode as keyof typeof treeImage]} className={S.TreeImage} />
           <p className={S.BodyText}>{nickname}</p>
         </div>
         <p className={S.UpdatedAtText}>{formatDateTime(updatedAt)}</p>
