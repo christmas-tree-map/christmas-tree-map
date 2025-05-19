@@ -23,7 +23,13 @@ export const Header = style({
 
 export const NicknameBox = style({
   display: 'flex',
-  gap: '0.5px',
+  alignItems: 'center',
+});
+
+export const TreeImage = style({
+  width: '20px',
+  height: '20px',
+  margin: '0 5px 0 0',
 });
 
 export const BodyText = style({

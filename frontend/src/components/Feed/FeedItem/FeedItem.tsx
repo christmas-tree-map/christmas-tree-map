@@ -3,6 +3,7 @@ import HeartWithCount from '@/components/_common/HeartWithCount/HeartWithCount';
 import useFeedMutation from '@/queries/Feed/useFeedMutation';
 import { formatDateTime } from '@/utils/formatDateTime';
 import { manageLikedFeeds } from '@/utils/manageLikedFeeds';
+import { TREE_IMAGE } from '@/constants/feed';
 import * as S from './FeedItem.css';
 import type { FeedItemType } from './FeedItem.type';
 
@@ -28,12 +29,13 @@ const FeedItem = ({ feed }: FeedItemProps) => {
     }
     manageLikedFeeds(treeId, id);
   };
+  console.log(treeImageCode);
 
   return (
     <div className={S.Layout}>
       <div className={S.Header}>
         <div className={S.NicknameBox}>
-          <img src={treeImageCode} />
+          <img src={TREE_IMAGE[treeImageCode as keyof typeof TREE_IMAGE]} className={S.TreeImage} />
           <p className={S.BodyText}>{nickname}</p>
         </div>
         <p className={S.UpdatedAtText}>{formatDateTime(updatedAt)}</p>
