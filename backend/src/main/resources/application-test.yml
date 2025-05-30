@@ -4,11 +4,12 @@ spring:
   config:
     activate:
       on-profile: test
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/christmas
-    username: root
-    password: 15911591
+    url: ${TEST_DB_URL}
+    username: ${TEST_DB_USERNAME}
+    password: ${TEST_DB_PASSWORD}
 
   servlet:
     multipart:
@@ -42,12 +43,12 @@ cloud:
       auto: false
 
 server:
-  url: http://localhost:8080
+  url: ${TEST_SERVER_URL}
 
 map:
   kakao:
-    rest-api-key: "test_api_key"
+    rest-api-key: ${KAKAO_MAP_REST_API_KEY}
     default-url: https://dapi.kakao.com/v2/local
   tmap:
-    app-key: "tmap_app_key"
+    app-key: ${TMAP_APP_KEY}
     default-url: https://apis.openapi.sk.com/tmap/routes

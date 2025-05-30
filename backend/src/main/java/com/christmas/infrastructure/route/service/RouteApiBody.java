@@ -22,11 +22,13 @@ public class RouteApiBody {
         body.put("endX", condition.end().x());
         body.put("endY", condition.end().y());
         body.put("endName", condition.endName());
-        String passList = condition.passList()
-                .stream()
-                .map(xy -> String.format(XY_DELIMITER_FORMAT, xy.x(), xy.y()))
-                .collect(Collectors.joining(PASS_LIST_DELIMITER));
-        body.put("passList", passList);
+        if (!condition.passList().isEmpty()) {
+            String passList = condition.passList()
+                    .stream()
+                    .map(xy -> String.format(XY_DELIMITER_FORMAT, xy.x(), xy.y()))
+                    .collect(Collectors.joining(PASS_LIST_DELIMITER));
+            body.put("passList", passList);
+        }
         body.put("searchOption", 4);
         return body;
     }

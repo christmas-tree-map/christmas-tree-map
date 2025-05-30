@@ -1,15 +1,15 @@
-name: 🎄Backend CI & CD With Prod Profile
+name: 🎄Backend CI & CD With Test Profile
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "BE/dev" ]
 
 jobs:
   build:
-    environment: production
+    environment: test
     runs-on: ubuntu-latest
     env:
-      SPRING_PROFILE: prod
+      SPRING_PROFILE: test
     defaults:
       run:
         working-directory: ./backend
@@ -51,13 +51,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: treesmas-docker-compose
-          path: ${{ github.workspace }}/backend/docker/docker-compose.yml
+          path: ${{ github.workspace }}/backend/docker/test-docker-compose.yml
 
   deploy:
-    environment: production
-    runs-on: [ "merrytreesmas-prod" ]
+    environment: test
+    runs-on: [ "merrytreesmas-test" ]
     env:
-      SPRING_PROFILE: prod
+      SPRING_PROFILE: test
     needs: build
     defaults:
       run:
@@ -72,7 +72,7 @@ jobs:
 
       - name: Move docker-compose YAML
         run: |
-          sudo mv ./docker/docker-compose.yml ${{ secrets.DOCKER_COMPOSE_PATH }}/
+          sudo mv ./docker/test-docker-compose.yml ${{ secrets.DOCKER_COMPOSE_PATH }}/
 
       - name: Set docker-compose environment variables
         run: |
@@ -81,13 +81,10 @@ jobs:
           SPRING_PROFILE=${{ env.SPRING_PROFILE }}
           
           # Application yml environments
-          DB_URL=${{ secrets.DB_URL }}
-          DB_USERNAME=${{ secrets.DB_USERNAME }}
-          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-          S3_ACCESS_KEY=${{ secrets.S3_ACCESS_KEY }}
-          S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }}
-          S3_BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}
-          SERVER_URL=${{ secrets.SERVER_URL }}
+          TEST_DB_URL=${{ secrets.TEST_DB_URL }}
+          TEST_DB_USERNAME=${{ secrets.TEST_DB_USERNAME }}
+          TEST_DB_PASSWORD=${{ secrets.TEST_DB_PASSWORD }}
+          TEST_SERVER_URL=${{ secrets.TEST_SERVER_URL }}
           KAKAO_MAP_REST_API_KEY=${{ secrets.KAKAO_MAP_REST_API_KEY }}
           TMAP_APP_KEY=${{ secrets.TMAP_APP_KEY }}
           
@@ -98,12 +95,12 @@ jobs:
 
       - name: Stop and Remove existing container
         run: |
-          sudo docker-compose -f ${{ secrets.DOCKER_COMPOSE_PATH }}/docker-compose.yml down
+          sudo docker-compose --env-file ${{ secrets.DOCKER_COMPOSE_PATH }}/.treesmas-env -f ${{ secrets.DOCKER_COMPOSE_PATH }}/test-docker-compose.yml down
           sudo docker image prune -f
 
       - name: Start new container
         run: |
-          sudo docker-compose --env-file ${{ secrets.DOCKER_COMPOSE_PATH }}/.treesmas-env -f ${{ secrets.DOCKER_COMPOSE_PATH }}/docker-compose.yml up --pull always -d
+          sudo docker-compose --env-file ${{ secrets.DOCKER_COMPOSE_PATH }}/.treesmas-env -f ${{ secrets.DOCKER_COMPOSE_PATH }}/test-docker-compose.yml up --pull always -d
 
       - name: Remove old images
         run: |
@@ -113,3 +110,4 @@ jobs:
         run: |
           sudo docker ps
           sudo docker images
+

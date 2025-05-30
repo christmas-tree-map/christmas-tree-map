@@ -51,6 +51,31 @@ class TreeServiceTest {
         assertThat(actual).hasSize(1);
     }
 
+    @DisplayName("현재 위치와 가까운 순서대로 트리를 반환한다.")
+    @Test
+    void get_tree_order_by_asc() {
+        // given
+        final List<Double> nearest = List.of(126.978900190292, 37.57068050838813);
+        final List<Double> secondNearest = List.of(126.97762075424428, 37.5717389421641);
+        final List<Double> thirdNearest = List.of(126.98022692200705, 37.572557060470906);
+        final List<List<Double>> treesByOrder = List.of(nearest, secondNearest, thirdNearest);
+        for (List<Double> trees : treesByOrder) {
+            createTree(trees.get(0), trees.get(1));
+        }
+        final Double nowX = 126.97790401142962;
+        final Double nowY = 37.57085151524508;
+        final TreeGetRequest request = new TreeGetRequest(nowX, nowY);
+
+        // when
+        final List<TreeGetResponse> actual = treeService.getTreeByRange(request);
+        final List<List<Double>> actualTrees = actual.stream()
+                .map(response -> List.of(response.longitude(), response.latitude()))
+                .toList();
+
+        // then
+        assertThat(actualTrees).containsExactlyElementsOf(treesByOrder);
+    }
+
     private void createTree(final Double longitude, final Double latitude) {
         final TreeCreateRequest treeCreateRequest = new TreeCreateRequest(longitude, latitude, "test");
         treeService.createTree(treeCreateRequest);

@@ -1,5 +1,10 @@
 package com.christmas.infrastructure.route.domain;
 
+import java.util.Map;
+
+import com.christmas.infrastructure.route.exception.NotFoundPointType;
+import com.christmas.infrastructure.route.exception.code.DistanceErrorCode;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -16,4 +21,13 @@ public enum PointType {
     GP("일반 안내점");
 
     private final String description;
+
+    public static PointType findByName(String name) {
+        for (PointType pointType : PointType.values()) {
+            if (pointType.name().equals(name)) {
+                return pointType;
+            }
+        }
+        throw new NotFoundPointType(DistanceErrorCode.NOT_FOUND_POINT_TYPE_BY_NAME, Map.of("pointType name", name));
+    }
 }

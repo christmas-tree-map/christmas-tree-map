@@ -2,6 +2,7 @@ package com.christmas.recommend.service;
 
 import static com.christmas.recommend.domain.RecommendKeyword.getKeywords;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -61,55 +62,94 @@ public class RecommendService {
         JsonNode cafe = getRandomLocation(cafes);
         JsonNode attraction = getRandomLocation(attractions);
 
-        // todo: 각 값이 null일 경우 체크.
-        XY nowXY = new XY(request.longitude(), request.latitude());
-        XY lunchXY = searchApiParser.extractXYFromLocation(lunch);
-        XY cafeXY = searchApiParser.extractXYFromLocation(cafe);
-        XY attractionXY = searchApiParser.extractXYFromLocation(attraction);
-        XY dinnerXY = searchApiParser.extractXYFromLocation(dinner);
-        RouteConditionDto condition = new RouteConditionDto(nowXY, "현재 위치", dinnerXY, "코스 마지막 위치",
-                List.of(lunchXY, cafeXY, attractionXY));
+        List<XY> locationsNotNull = new ArrayList<>();
+        locationsNotNull.add(new XY(request.longitude(), request.latitude())); // 무조건 존재
+        if (lunch != null) {
+            locationsNotNull.add(searchApiParser.extractXYFromLocation(lunch));
+        }
+        if (cafe != null) {
+            locationsNotNull.add(searchApiParser.extractXYFromLocation(cafe));
+        }
+        if (attraction != null) {
+            locationsNotNull.add(searchApiParser.extractXYFromLocation(attraction));
+        }
+        if (dinner != null) {
+            locationsNotNull.add(searchApiParser.extractXYFromLocation(dinner));
+        }
+
+        if (locationsNotNull.size() == 1) {
+            return new CourseGetResponse(null, null, null, null);
+        }
+        RouteConditionDto condition = makeRouteCondition(locationsNotNull);
         JsonNode routesDistance = routeApiManager.getPedestrianRoute(condition).block();
 
+        // 경로 계산 로직
         ObjectMapper mapper = new ObjectMapper();
         mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+        List<RouteInfo> routes = getRoutes(locationsNotNull, routesDistance);
+        int count = 0;
 
-        // 경로 계산 로직
-        RouteApiParser parser = RouteApiParser.from(routesDistance);
-        // 1. 현재 위치에서 점심
+        RouteInfo lunchRoute = lunch != null ? routes.get(count++) : null;
+        ObjectNode lunchResult = makeRoute(lunch, lunchRoute, mapper);
 
-        RouteInfo lunchRoute = parser.getDistanceInfo(PointType.SP, PointType.PP1);
-        PedestrianRoute lunchInfo = new PedestrianRoute(lunchRoute.totalSeconds() / 60,
-                makeFacilityInfo(lunchRoute.facilityInfo()));
-        JsonNode lunchInfoJson = mapper.valueToTree(lunchInfo);
-        ObjectNode lunchResult = (ObjectNode) lunch;
-        lunchResult.set("pedestrian_route", lunchInfoJson);
+        RouteInfo cafeRoute = cafe != null ? routes.get(count++) : null;
+        ObjectNode cafeResult = makeRoute(cafe, cafeRoute, mapper);
 
-        // 2. 점심에서 카페
-        RouteInfo cafeRoute = parser.getDistanceInfo(PointType.PP1, PointType.PP2);
-        PedestrianRoute cafeInfo = new PedestrianRoute(cafeRoute.totalSeconds() / 60,
-                makeFacilityInfo(cafeRoute.facilityInfo()));
-        JsonNode cafeInfoJson = mapper.valueToTree(cafeInfo);
-        ObjectNode cafeResult = (ObjectNode) cafe;
-        cafeResult.set("pedestrian_route", cafeInfoJson);
+        RouteInfo attractionRoute = attraction != null ? routes.get(count++) : null;
+        ObjectNode attractionResult = makeRoute(attraction, attractionRoute, mapper);
 
-        // 3. 카페에서 어트랙션
-        RouteInfo attractionRoute = parser.getDistanceInfo(PointType.PP2, PointType.PP3);
-        PedestrianRoute attractionInfo = new PedestrianRoute(attractionRoute.totalSeconds() / 60,
-                makeFacilityInfo(attractionRoute.facilityInfo()));
-        JsonNode attractionInfoJson = mapper.valueToTree(attractionInfo);
-        ObjectNode attractionResult = (ObjectNode) attraction;
-        attractionResult.set("pedestrian_route", attractionInfoJson);
-
-        // 4. 어트랙션에서 저녁
-        RouteInfo dinnerRoute = parser.getDistanceInfo(PointType.PP3, PointType.EP);
-        PedestrianRoute dinnerInfo = new PedestrianRoute(dinnerRoute.totalSeconds() / 60,
-                makeFacilityInfo(dinnerRoute.facilityInfo()));
-        JsonNode dinnerInfoJson = mapper.valueToTree(dinnerInfo);
-        ObjectNode dinnerResult = (ObjectNode) dinner;
-        dinnerResult.set("pedestrian_route", dinnerInfoJson);
-
+        RouteInfo dinnerRoute = dinner != null ? routes.get(count) : null;
+        ObjectNode dinnerResult = makeRoute(dinner, dinnerRoute, mapper);
         return new CourseGetResponse(lunchResult, cafeResult, attractionResult, dinnerResult);
+    }
+
+    private ObjectNode makeRoute(JsonNode location, RouteInfo routeInfo, ObjectMapper mapper) {
+        if (location == null) {
+            return null;
+        }
+        PedestrianRoute route = new PedestrianRoute(
+                routeInfo.totalSeconds() / 60,
+                makeFacilityInfo(routeInfo.facilityInfo()),
+                routeInfo.route()
+        );
+        JsonNode infoJson = mapper.valueToTree(route);
+        ObjectNode result = (ObjectNode) location;
+        result.set("pedestrian", infoJson);
+        return result;
+    }
+
+    private RouteConditionDto makeRouteCondition(List<XY> locationsNotNull) {
+        if (locationsNotNull.size() == 2) {
+            return new RouteConditionDto(locationsNotNull.get(0), "시작 장소", locationsNotNull.get(1), "종료 장소", List.of());
+        }
+        List<XY> passPlace = new ArrayList<>();
+        for (int i = 1; i < locationsNotNull.size() - 1; i++) {
+            passPlace.add(locationsNotNull.get(i));
+        }
+        return new RouteConditionDto(locationsNotNull.get(0), "시작 장소",
+                locationsNotNull.get(locationsNotNull.size() - 1), "종료 장소", passPlace);
+    }
+
+    private List<RouteInfo> getRoutes(List<XY> locationsNotNull, JsonNode routesDistance) {
+        RouteApiParser parser = RouteApiParser.from(routesDistance);
+        if (locationsNotNull.size() == 2) {
+            return List.of(parser.getDistanceInfo(PointType.SP, PointType.EP));
+        }
+
+        List<RouteInfo> routeInfos = new ArrayList<>();
+        for (int i = 0; i < locationsNotNull.size() - 1; i++) {
+            if (i == 0) {
+                routeInfos.add(parser.getDistanceInfo(PointType.SP, PointType.PP1));
+            } else if (i == locationsNotNull.size() - 2) {
+                PointType start = PointType.findByName("PP" + i);
+                routeInfos.add(parser.getDistanceInfo(start, PointType.EP));
+            } else {
+                PointType start = PointType.findByName("PP" + i);
+                PointType end = PointType.findByName("PP" + (i + 1));
+                routeInfos.add(parser.getDistanceInfo(start, end));
+            }
+        }
+        return routeInfos;
     }
 
     private List<JsonNode> findLocationsByKeyword(CourseGetRequest request, LocationCategory category) {
