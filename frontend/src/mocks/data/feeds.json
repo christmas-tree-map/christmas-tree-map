@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "treeImageCode": "TREE_01",
+    "nickname": "호랑이",
+    "updatedAt": "2024-11-24T03:11:24.851Z",
+    "imageUrl": "https://sloanes.co.th/wp-content/uploads/2022/10/800px-Christmas_Tree_56651310.jpeg",
+    "likeCount": 10,
+    "content": "안녕하세요"
+  },
+  {
+    "id": 2,
+    "treeImageCode": "TREE_01",
+    "nickname": "다람쥐",
+    "updatedAt": "2024-11-25T03:11:24.851Z",
+    "imageUrl": "https://thechristmaspalace.com/cdn/shop/files/store-photo.jpg?v=1728644130&width=2644",
+    "likeCount": 20,
+    "content": "ㅎㅇㅎㅇ"
+  }
+]
