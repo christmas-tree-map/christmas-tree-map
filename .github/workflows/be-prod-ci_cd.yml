@@ -2,7 +2,7 @@ name: 🎄Backend CI & CD With Prod Profile
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "BE/main" ]
 
 jobs:
   build:
