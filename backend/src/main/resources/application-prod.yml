@@ -1,0 +1,57 @@
+spring:
+  application:
+    name: christmas
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+
+springdoc:
+  default-consumes-media-type: application/json;charset=UTF-8
+  default-produces-media-type: application/json;charset=UTF-8
+  swagger-ui:
+    path: /api/api-docs
+    disable-swagger-default-url: true
+    display-request-duration: true
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
+    s3:
+      bucket: ${S3_BUCKET_NAME}
+    region:
+      static: ap-northeast-2
+      auto: false
+    stack:
+      auto: false
+
+server:
+  url: ${SERVER_URL}
+
+map:
+  kakao:
+    rest-api-key: ${KAKAO_MAP_REST_API_KEY}
+    default-url: https://dapi.kakao.com/v2/local
+  tmap:
+    app-key: ${TMAP_APP_KEY}
+    default-url: https://apis.openapi.sk.com/tmap/routes

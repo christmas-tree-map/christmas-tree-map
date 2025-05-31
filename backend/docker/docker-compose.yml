@@ -1,0 +1,9 @@
+services:
+  springboot:
+    container_name: treesmas-springboot
+    image: ${DOCKER_REPO_NAME}/treesmas-springboot-app:${DOCKER_IMAGE_VERSION}
+    env_file:
+      - .treesmas-env
+    ports:
+      - 8080:8080
+    restart: on-failure
