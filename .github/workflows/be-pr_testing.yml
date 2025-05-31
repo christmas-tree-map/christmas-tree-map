@@ -2,7 +2,7 @@ name: 🎄Backend Run Test Code
 
 on:
   pull_request:
-    branches: [ "BE/dev", "main"]
+    branches: [ "BE/dev", "BE/main"]
 
 jobs:
   build-and-test:
