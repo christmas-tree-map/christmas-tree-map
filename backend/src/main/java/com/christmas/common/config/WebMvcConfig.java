@@ -18,9 +18,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://merrytreesmas.site", "https://fe-dev--merrytreesmas.netlify.app", "http://localhost:5173")
+//                .allowedOrigins("https://merrytreesmas.site", "https://fe-dev--merrytreesmas.netlify.app", "http://localhost:5173")
+                .allowedOrigins("*")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH", "HEAD")
-                .allowedHeaders("*")
-                .allowCredentials(true);
+                .allowedHeaders("*");
+//                .allowCredentials(true);
     }
 }
