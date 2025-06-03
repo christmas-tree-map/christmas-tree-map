@@ -8,6 +8,6 @@ public class CommonController {
 
     @GetMapping("/health-check")
     public String getHealthCheck() {
-        return "😭 christmas tree health-check success 🐧";
+        return "헬스 체크 성공이용";
     }
 }
