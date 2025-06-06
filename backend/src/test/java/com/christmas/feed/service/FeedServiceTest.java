@@ -5,16 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.christmas.feed.dto.FeedCreateRequest;
 import com.christmas.feed.repository.FeedImageFileRepository;
 import com.christmas.feed.repository.FeedRepository;
@@ -24,6 +14,15 @@ import com.christmas.feed.repository.entity.ImageFileEntity;
 import com.christmas.tree.domain.PointGenerator;
 import com.christmas.tree.repository.TreeEntity;
 import com.christmas.tree.repository.TreeRepository;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Transactional
 @SpringBootTest
@@ -66,26 +65,47 @@ class FeedServiceTest {
         assertThat(feedImageFileRepository.findAll()).hasSize(1);
     }
 
-    @Test
     @Disabled
+    @Test
     @DisplayName("피드 생성 시 닉네임이 DB에 존재하면 닉네임 뒤에 중복 개수를 붙인다.")
     void create_duplicate_nickname() {
         // given
-        final TreeEntity treeEntity = treeRepository.save(
+        TreeEntity treeEntity = treeRepository.save(
                 new TreeEntity(PointGenerator.generate(127.2, 30.5), "IMAGE_CODE"));
         String nickname = "귀여운산타클로스";
-        int count = 2;
-        for (int i = 0; i < count; i++) {
-            feedRepository.save(new FeedEntity(treeEntity, nickname, "abcde123", "내용", 0L));
-        }
+        feedRepository.save(new FeedEntity(treeEntity, nickname, "abcde123", "내용", 0L));
         MultipartFile image = new MockMultipartFile("testImage", "content".getBytes());
         FeedCreateRequest request = new FeedCreateRequest(treeEntity.getId(), "피드 내용", "abc234!!");
-
+        ImageFileEntity imageFileEntity = imageFileRepository.save(new ImageFileEntity("test", "test", "test"));
+        when(imageFileService.createImage(any()))
+                .thenReturn(imageFileEntity);
+        // todo: 닉네임 제너레이터 인터페이스로 바꾸기
+        feedService.createFeed(request, image);
+        int count = 2;
 
         // when
         long feedId = feedService.createFeed(request, image);
+        FeedEntity feedEntity = feedRepository.findById(feedId)
+                .orElseThrow();
 
         // then
+        assertThat(feedEntity.getNickname()).isEqualTo(nickname + count);
+    }
 
+    @Test
+    @DisplayName("피드 비밀번호가 다르면 false를 반환한다.")
+    void verify_password() {
+        // given
+        TreeEntity treeEntity = treeRepository.save(new TreeEntity(PointGenerator.generate(127.2, 30.5), "IMAGE_CODE"));
+        String truePassword = "realpwd1234";
+        String falsePassword = "nonopwd!!";
+        FeedEntity feedEntity = new FeedEntity(treeEntity, "hoho", truePassword, "hi", 1L);
+        FeedEntity save = feedRepository.save(feedEntity);
+
+        // when
+        boolean isVerify = feedService.canUpdateFeed(save.getId(), falsePassword);
+
+        // then
+        assertThat(isVerify).isFalse();
     }
 }
