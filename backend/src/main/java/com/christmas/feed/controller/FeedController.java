@@ -1,5 +1,6 @@
 package com.christmas.feed.controller;
 
+import com.christmas.feed.dto.FeedVerifyRequest;
 import java.net.URI;
 import java.util.List;
 
@@ -51,11 +52,20 @@ public class FeedController implements FeedControllerDocs {
                 .body(likeCount);
     }
 
+
+
     @GetMapping("/feed")
     public ResponseEntity<List<FeedGetResponse>> getAllFeed(@RequestParam("treeId") long treeId) {
         List<FeedGetResponse> response = feedService.getAllFeedByTree(treeId);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(response);
+    }
+
+    @PostMapping("/feed/{id}/verify-password")
+    public ResponseEntity<Boolean> canUpdateFeed(@PathVariable("id") long id, @Valid @RequestBody FeedVerifyRequest request) {
+        final boolean canUpdateFeed = feedService.canUpdateFeed(id, request.password());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(canUpdateFeed);
     }
 
     @PatchMapping(
@@ -64,8 +74,8 @@ public class FeedController implements FeedControllerDocs {
     )
     public ResponseEntity<FeedUpdateResponse> updateFeed(
             @PathVariable("id") long id,
-            @RequestPart("image") MultipartFile image,
-            @Valid @RequestPart("request") FeedUpdateRequest request
+            @RequestPart(value = "image", required = false) MultipartFile image,
+            @Valid @RequestPart(value = "request", required = false) FeedUpdateRequest request
     ) {
         FeedUpdateResponse response = feedService.updateFeed(id, image, request);
         return ResponseEntity.status(HttpStatus.OK)
