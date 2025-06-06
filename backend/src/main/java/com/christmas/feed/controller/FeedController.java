@@ -74,8 +74,8 @@ public class FeedController implements FeedControllerDocs {
     )
     public ResponseEntity<FeedUpdateResponse> updateFeed(
             @PathVariable("id") long id,
-            @RequestPart("image") MultipartFile image,
-            @Valid @RequestPart("request") FeedUpdateRequest request
+            @RequestPart(value = "image", required = false) MultipartFile image,
+            @Valid @RequestPart(value = "request", required = false) FeedUpdateRequest request
     ) {
         FeedUpdateResponse response = feedService.updateFeed(id, image, request);
         return ResponseEntity.status(HttpStatus.OK)

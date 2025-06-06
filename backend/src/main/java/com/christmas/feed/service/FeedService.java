@@ -107,7 +107,7 @@ public class FeedService {
             FeedImageFileEntity feedImageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity);
             imageFileService.updateImage(feedImageFileEntity.getImageFileEntity(), image);
         }
-        if (request.content() != null) {
+        if (request != null) {
             feedEntity.updateContent(request.content());
         }
         ImageFileEntity imageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity)
