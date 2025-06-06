@@ -1,18 +1,10 @@
 package com.christmas.feed.service;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
 import com.christmas.feed.domain.NicknameGenerator;
 import com.christmas.feed.dto.FeedCreateRequest;
 import com.christmas.feed.dto.FeedGetResponse;
 import com.christmas.feed.dto.FeedUpdateRequest;
+import com.christmas.feed.dto.FeedUpdateResponse;
 import com.christmas.feed.exception.InvalidPasswordException;
 import com.christmas.feed.exception.code.FeedErrorCode;
 import com.christmas.feed.repository.FeedImageFileRepository;
@@ -20,13 +12,18 @@ import com.christmas.feed.repository.FeedRepository;
 import com.christmas.feed.repository.entity.FeedEntity;
 import com.christmas.feed.repository.entity.FeedImageFileEntity;
 import com.christmas.feed.repository.entity.ImageFileEntity;
-import com.christmas.feed.dto.FeedUpdateResponse;
 import com.christmas.tree.exception.NotFoundTreeException;
 import com.christmas.tree.exception.code.TreeErrorCode;
 import com.christmas.tree.repository.TreeEntity;
 import com.christmas.tree.repository.TreeRepository;
-
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Transactional
 @RequiredArgsConstructor
@@ -106,9 +103,6 @@ public class FeedService {
                         FeedErrorCode.FEED_NOT_FOUND,
                         Map.of("id", String.valueOf(id)))
                 );
-        if (invalidPassword(feedEntity, request.password())) {
-            throw new InvalidPasswordException(FeedErrorCode.INVALID_PASSWORD, Map.of("password", request.password()));
-        }
         if (image != null) {
             FeedImageFileEntity feedImageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity);
             imageFileService.updateImage(feedImageFileEntity.getImageFileEntity(), image);
@@ -153,5 +147,15 @@ public class FeedService {
                 );
         feedEntity.removeLike();
         return feedEntity.getLikeCount();
+    }
+
+    public boolean canUpdateFeed(final long id, final String password) {
+        final FeedEntity feedEntity = feedRepository.findById(id)
+                .orElseThrow(() -> new NotFoundTreeException(
+                        FeedErrorCode.FEED_NOT_FOUND,
+                        Map.of("id", String.valueOf(id)))
+                );
+        return feedEntity.getPassword()
+                .equals(password);
     }
 }
