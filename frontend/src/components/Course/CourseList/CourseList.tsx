@@ -31,7 +31,7 @@ const CourseList = ({ courseList }: CourseListProps) => {
                       <FaWalking size="15px" />
                     </div>
                   </div>
-                  걸어서 {value.pedestrian_route.duration_minutes}분
+                  걸어서 {value.pedestrian.duration_minutes}분
                 </div>
               )}
             </>

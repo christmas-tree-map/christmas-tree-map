@@ -64,7 +64,7 @@ const CourseMap = ({ courseList, mapLevel, isStaticMap = false }: CourseMapProps
 
         if (value) {
           addTooltip(map, type, value);
-          addPolyline(map, value.pedestrian_route.route);
+          addPolyline(map, value.pedestrian.route);
         }
       });
     }
