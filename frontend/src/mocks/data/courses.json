@@ -22,7 +22,7 @@
       },
       "total_count": 125
     },
-    "pedestrian_route": {
+    "pedestrian": {
       "duration_minutes": 15,
       "facility_type": {
         "횡단보도": 6
@@ -96,7 +96,7 @@
       },
       "total_count": 14
     },
-    "pedestrian_route": {
+    "pedestrian": {
       "duration_minutes": 16,
       "facility_type": {
         "횡단보도": 5
@@ -185,7 +185,7 @@
       },
       "total_count": 20
     },
-    "pedestrian_route": {
+    "pedestrian": {
       "duration_minutes": 28,
       "facility_type": {
         "횡단보도": 4
@@ -306,7 +306,7 @@
       },
       "total_count": 125
     },
-    "pedestrian_route": {
+    "pedestrian": {
       "duration_minutes": 24,
       "facility_type": {
         "횡단보도": 4
