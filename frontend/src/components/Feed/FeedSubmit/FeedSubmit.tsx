@@ -32,6 +32,8 @@ const FeedSubmit = () => {
     location,
     navigate,
   });
+  const { treeId } = location.state;
+  console.log(treeId);
 
   useEffect(() => {
     getAddress(center.latitude, center.longitude);
