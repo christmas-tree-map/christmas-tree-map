@@ -31,7 +31,7 @@ const FeedItem = ({ feed, treeId }: FeedItemProps) => {
     {
       name: '수정',
       onClick: () => {
-        navigate(`/map/${treeId}?modal=password`);
+        navigate(`/map/${treeId}?modal=password`, { state: { feedId: id } });
       },
     },
   ];

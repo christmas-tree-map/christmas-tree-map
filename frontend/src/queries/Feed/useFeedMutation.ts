@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { queryClient } from '@/main';
 import { useMutation } from '@tanstack/react-query';
-import { deleteLikeFeed, postFeed, postLikeFeed, updateFeed } from '@/apis/feed';
+import { deleteLikeFeed, postFeed, postFeedPassword, postLikeFeed, updateFeed } from '@/apis/feed';
 import { FEED_KEYS } from '../queryKeys';
 
 const useFeedMutation = () => {
@@ -38,7 +38,11 @@ const useFeedMutation = () => {
     },
   });
 
-  return { addFeedMutation, updateFeedMutation, addLikeFeedMutation, deleteLikeFeedMutation };
+  const { mutate: postFeedPasswordMutation } = useMutation({
+    mutationFn: postFeedPassword,
+  });
+
+  return { addFeedMutation, updateFeedMutation, addLikeFeedMutation, deleteLikeFeedMutation, postFeedPasswordMutation };
 };
 
 export default useFeedMutation;

@@ -63,3 +63,12 @@ interface DeleteLikeFeedRequest {
 export const deleteLikeFeed = async ({ feedId }: DeleteLikeFeedRequest) => {
   await requestAPI.delete(`/feed/${feedId}/like`);
 };
+
+interface PostFeedPasswordRequest {
+  feedId: number;
+  password: string;
+}
+
+export const postFeedPassword = async ({ feedId, password }: PostFeedPasswordRequest) => {
+  return await requestAPI.post<boolean>(`/feed/${feedId}/verify-password`, { password });
+};
