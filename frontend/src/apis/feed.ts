@@ -1,6 +1,6 @@
 import requestAPI from './requestAPI';
 
-interface Feeds {
+interface Feed {
   id: number;
   treeImageCode: string;
   nickname: string;
@@ -11,25 +11,41 @@ interface Feeds {
 }
 
 export const getFeeds = async (treeId: number) => {
-  return await requestAPI.get<Feeds[]>('/feed', { treeId });
+  return await requestAPI.get<Feed[]>('/feed', { treeId });
 };
 
-interface PostFeedRequest {
+interface FormDataRequest {
   imageFile: File;
   treeId: number;
   content: string;
   password: string;
 }
 
-export const postFeed = async ({ imageFile, treeId, content, password }: PostFeedRequest) => {
+const createFormData = (data: FormDataRequest): FormData => {
   const formData = new FormData();
+  const { treeId, content, password, imageFile } = data;
   const value = { treeId, content, password };
   const blob = new Blob([JSON.stringify(value)], { type: 'application/json' });
 
   formData.append('image', imageFile);
   formData.append('request', blob);
 
+  return formData;
+};
+
+export const postFeed = async (data: FormDataRequest) => {
+  const formData = createFormData(data);
   await requestAPI.post('/feed', formData);
+};
+
+interface UpdateFeedRequest {
+  feedId: number;
+  data: FormDataRequest;
+}
+
+export const updateFeed = async ({ feedId, data }: UpdateFeedRequest) => {
+  const formData = createFormData(data);
+  await requestAPI.patch(`/feed/${feedId}`, formData);
 };
 
 interface PostLikeFeedRequest {
