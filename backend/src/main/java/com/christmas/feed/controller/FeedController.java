@@ -52,8 +52,6 @@ public class FeedController implements FeedControllerDocs {
                 .body(likeCount);
     }
 
-
-
     @GetMapping("/feed")
     public ResponseEntity<List<FeedGetResponse>> getAllFeed(@RequestParam("treeId") long treeId) {
         List<FeedGetResponse> response = feedService.getAllFeedByTree(treeId);

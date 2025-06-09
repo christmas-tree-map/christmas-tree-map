@@ -34,4 +34,8 @@ public class SearchApiParser {
         double y = location.get("y").asDouble();
         return new XY(x, y);
     }
+
+    public String extractNameFromLocation(JsonNode location) {
+        return location.get("place_name").asText();
+    }
 }

@@ -1,6 +1,7 @@
 package com.christmas.infrastructure.route.service;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class RouteApiParser {
 
     public RouteInfo getDistanceInfo(PointType start, PointType end) {
         int totalSeconds = 0;
-        Map<FacilityType, Integer> facilityInfo = new HashMap<>();
+        Map<FacilityType, Integer> facilityInfo = new EnumMap<>(FacilityType.class);
         List<JsonNode> route = new ArrayList<>();
         boolean startFlag = false;
 

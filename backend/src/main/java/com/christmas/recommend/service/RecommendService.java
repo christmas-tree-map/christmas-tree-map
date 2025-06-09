@@ -2,6 +2,7 @@ package com.christmas.recommend.service;
 
 import static com.christmas.recommend.domain.RecommendKeyword.getKeywords;
 
+import com.christmas.infrastructure.image.ImageApiCrawler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +49,7 @@ public class RecommendService {
     private final RouteApiManager routeApiManager;
     private final SearchApiParser searchApiParser;
     private final RandomIntPicker randomPicker;
+    private final ImageApiCrawler imageApiCrawler;
 
     public CourseGetResponse getCourse(CourseGetRequest request) {
         List<JsonNode> foods = findLocationsByKeyword(request, LocationCategory.FOOD);
@@ -89,21 +91,45 @@ public class RecommendService {
         List<RouteInfo> routes = getRoutes(locationsNotNull, routesDistance);
         int count = 0;
 
-        RouteInfo lunchRoute = lunch != null ? routes.get(count++) : null;
-        ObjectNode lunchResult = makeRoute(lunch, lunchRoute, mapper);
+        RouteInfo lunchRoute = null;
+        ObjectNode lunchResult = null;
+        if (lunch != null) {
+            lunchRoute = routes.get(count++);
+            String placeName = searchApiParser.extractNameFromLocation(lunch);
+            String imageUrl = imageApiCrawler.crawlImage(placeName);
+            lunchResult = makeRoute(lunch, lunchRoute, imageUrl, mapper);
+        }
 
-        RouteInfo cafeRoute = cafe != null ? routes.get(count++) : null;
-        ObjectNode cafeResult = makeRoute(cafe, cafeRoute, mapper);
+        RouteInfo cafeRoute = null;
+        ObjectNode cafeResult = null;
+        if (cafe != null) {
+            cafeRoute = routes.get(count++);
+            String placeName = searchApiParser.extractNameFromLocation(cafe);
+            String imageUrl = imageApiCrawler.crawlImage(placeName);
+            cafeResult = makeRoute(cafe, cafeRoute, imageUrl, mapper);
+        }
 
-        RouteInfo attractionRoute = attraction != null ? routes.get(count++) : null;
-        ObjectNode attractionResult = makeRoute(attraction, attractionRoute, mapper);
+        RouteInfo attractionRoute = null;
+        ObjectNode attractionResult = null;
+        if (attraction != null) {
+            attractionRoute = routes.get(count++);
+            String placeName = searchApiParser.extractNameFromLocation(attraction);
+            String imageUrl = imageApiCrawler.crawlImage(placeName);
+            attractionResult = makeRoute(attraction, attractionRoute, imageUrl, mapper);
+        }
 
-        RouteInfo dinnerRoute = dinner != null ? routes.get(count) : null;
-        ObjectNode dinnerResult = makeRoute(dinner, dinnerRoute, mapper);
+        RouteInfo dinnerRoute = null;
+        ObjectNode dinnerResult = null;
+        if (dinner != null) {
+            dinnerRoute = routes.get(count);
+            String placeName = searchApiParser.extractNameFromLocation(dinner);
+            String imageUrl = imageApiCrawler.crawlImage(placeName);
+            dinnerResult = makeRoute(dinner, dinnerRoute, imageUrl, mapper);
+        }
         return new CourseGetResponse(lunchResult, cafeResult, attractionResult, dinnerResult);
     }
 
-    private ObjectNode makeRoute(JsonNode location, RouteInfo routeInfo, ObjectMapper mapper) {
+    private ObjectNode makeRoute(JsonNode location, RouteInfo routeInfo, String imageUrl, ObjectMapper mapper) {
         if (location == null) {
             return null;
         }
@@ -112,8 +138,9 @@ public class RecommendService {
                 makeFacilityInfo(routeInfo.facilityInfo()),
                 routeInfo.route()
         );
-        JsonNode infoJson = mapper.valueToTree(route);
         ObjectNode result = (ObjectNode) location;
+        result.put("imageUrl", imageUrl);
+        JsonNode infoJson = mapper.valueToTree(route);
         result.set("pedestrian", infoJson);
         return result;
     }
@@ -200,6 +227,11 @@ public class RecommendService {
         List<JsonNode> attractions = searchApiManager.findLocationsByCategory(condition)
                 .block();
         List<JsonNode> randomAttractions = getRandomLocations(attractions, RECOMMEND_ATTRACTION_COUNT);
+        for (JsonNode attraction : randomAttractions) {
+            String placeName = searchApiParser.extractNameFromLocation(attraction);
+            String imageUrl = imageApiCrawler.crawlImage(placeName);
+            ((ObjectNode) attraction).put("image_url", imageUrl);
+        }
         return new AttractionGetResponse(randomAttractions);
     }
 
