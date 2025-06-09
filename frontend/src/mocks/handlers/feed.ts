@@ -38,6 +38,48 @@ export const handlers = [
     }
   }),
 
+  http.patch(`${API_URL}/feed/:id`, async ({ request }) => {
+    try {
+      const url = new URL(request.url);
+      const feedId = Number(url.pathname.split('/').at(-1));
+
+      const formData = await request.formData();
+      const imageFile = formData.get('image') as File;
+      const requestData = formData.get('request');
+
+      if (!imageFile || !requestData) {
+        return HttpResponse.json({ message: '이미지와 요청 데이터가 필요합니다.' }, { status: 400 });
+      }
+      if (!feedId) {
+        return HttpResponse.json({ message: 'feedId가 없습니다.' }, { status: 400 });
+      }
+
+      const parsedRequest = JSON.parse(requestData as string);
+      const { content }: { content: string } = parsedRequest;
+
+      const previousFeed = mockFeeds.find((feed) => feed.id === feedId);
+
+      if (!previousFeed) {
+        return HttpResponse.json({ message: '피드를 찾을 수 없습니다.' }, { status: 404 });
+      }
+
+      const newFeed = {
+        ...previousFeed,
+        updatedAt: '2024-11-25T03:11:24.851Z',
+        content,
+      };
+
+      const feedIndex = mockFeeds.findIndex((feed) => feed.id === feedId);
+      mockFeeds[feedIndex] = newFeed;
+
+      return HttpResponse.json(newFeed.id);
+    } catch (error) {
+      console.error('MSW 핸들러 에러:', error);
+
+      return HttpResponse.json({ message: '서버 에러가 발생했습니다.' }, { status: 500 });
+    }
+  }),
+
   http.post(`${API_URL}/feed/:id/like`, async ({ request }) => {
     const url = new URL(request.url);
     const feedId = Number(url.pathname.split('/').at(-2));
