@@ -1,6 +1,6 @@
 package com.christmas.recommend.controller;
 
-import com.christmas.infrastructure.image.ImageApiCrawler;
+import com.christmas.infrastructure.crawling.ImageApiCrawler;
 import com.christmas.recommend.dto.AttractionGetRequest;
 import com.christmas.recommend.dto.AttractionGetResponse;
 import com.christmas.recommend.dto.CourseGetRequest;

@@ -2,7 +2,7 @@ package com.christmas.recommend.service;
 
 import static com.christmas.recommend.domain.RecommendKeyword.getKeywords;
 
-import com.christmas.infrastructure.image.ImageApiCrawler;
+import com.christmas.infrastructure.crawling.ImageApiCrawler;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -139,7 +139,7 @@ public class RecommendService {
                 routeInfo.route()
         );
         ObjectNode result = (ObjectNode) location;
-        result.put("imageUrl", imageUrl);
+        result.put("image_url", imageUrl);
         JsonNode infoJson = mapper.valueToTree(route);
         result.set("pedestrian", infoJson);
         return result;
