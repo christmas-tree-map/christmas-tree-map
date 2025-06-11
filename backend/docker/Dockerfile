@@ -1,13 +1,13 @@
 FROM amazonlinux:2023
 
 # 크롬 및 유틸리티 설치
-RUN dnf install -y wget unzip curl gzip shadow-utils \
+RUN dnf install -y wget unzip gzip shadow-utils \
  && wget https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm \
  && dnf install -y ./google-chrome-stable_current_x86_64.rpm \
- && rm google-chrome-stable_current_x86_64.rpm
+ && rm -f google-chrome-stable_current_x86_64.rpm
 
 # 크롬드라이버 설치
-RUN LATEST=$(curl -sSL https://chromedriver.storage.googleapis.com/LATEST_RELEASE) \
+RUN LATEST=$(wget -qO- https://chromedriver.storage.googleapis.com/LATEST_RELEASE) \
  && wget https://chromedriver.storage.googleapis.com/${LATEST}/chromedriver_linux64.zip \
  && unzip chromedriver_linux64.zip \
  && mv chromedriver /usr/local/bin/ \
