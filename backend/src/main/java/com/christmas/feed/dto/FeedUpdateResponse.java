@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public record FeedUpdateResponse(
         @Schema(description = "피드 id")
         long id,
+        @Schema(description = "트리 id")
+        long treeId,
         @Schema(description = "피드에 삽입된 이미지", example = "크리스마스.jpg")
         String imageUrl,
         @Schema(description = "피드 내용")

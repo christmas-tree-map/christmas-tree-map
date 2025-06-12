@@ -81,4 +81,8 @@ public class FeedEntity extends TimestampEntity {
     public void updateContent(String content) {
         this.content = content;
     }
+
+    public void updateTreeEntity(final TreeEntity treeEntity) {
+        this.treeEntity = treeEntity;
+    }
 }
