@@ -5,6 +5,7 @@ import com.christmas.feed.dto.FeedCreateRequest;
 import com.christmas.feed.dto.FeedGetResponse;
 import com.christmas.feed.dto.FeedUpdateRequest;
 import com.christmas.feed.dto.FeedUpdateResponse;
+import com.christmas.feed.dto.FeedsGetResponse;
 import com.christmas.feed.exception.InvalidPasswordException;
 import com.christmas.feed.exception.code.FeedErrorCode;
 import com.christmas.feed.repository.FeedImageFileRepository;
@@ -66,18 +67,18 @@ public class FeedService {
         return feedEntity.addLike();
     }
 
-    public List<FeedGetResponse> getAllFeedByTree(long treeId) {
+    public List<FeedsGetResponse> getAllFeedByTree(long treeId) {
         TreeEntity treeEntity = treeRepository.findById(treeId)
                 .orElseThrow(() -> new NotFoundTreeException(
                         TreeErrorCode.TREE_NOT_FOUND,
                         Map.of("tree id", String.valueOf(treeId)))
                 );
         List<FeedEntity> feedEntities = feedRepository.findAllByTreeEntityOrderByCreatedAtDesc(treeEntity);
-        List<FeedGetResponse> response = new ArrayList<>();
+        List<FeedsGetResponse> response = new ArrayList<>();
         for (FeedEntity feedEntity : feedEntities) {
             ImageFileEntity imageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity)
                     .getImageFileEntity();
-            response.add(new FeedGetResponse(
+            response.add(new FeedsGetResponse(
                     feedEntity.getId(),
                     treeEntity.getImageCode(),
                     feedEntity.getNickname(),
@@ -157,5 +158,17 @@ public class FeedService {
                 );
         return feedEntity.getPassword()
                 .equals(password);
+    }
+
+    public FeedGetResponse getFeed(final long id) {
+        final FeedEntity feedEntity = feedRepository.findById(id)
+                .orElseThrow(() -> new NotFoundTreeException(
+                        FeedErrorCode.FEED_NOT_FOUND,
+                        Map.of("id", String.valueOf(id)))
+                );
+        final ImageFileEntity imageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity)
+                .getImageFileEntity();
+        return new FeedGetResponse(id, feedEntity.getNickname(), feedEntity.getUpdatedAt(),
+                imageFileEntity.getImageUrl(), feedEntity.getContent(), feedEntity.getLikeCount());
     }
 }
