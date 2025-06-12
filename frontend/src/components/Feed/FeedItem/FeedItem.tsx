@@ -34,6 +34,12 @@ const FeedItem = ({ feed, treeId }: FeedItemProps) => {
         navigate(`/map/${treeId}?modal=password`, { state: { feedId: id } });
       },
     },
+    {
+      name: '삭제',
+      onClick: () => {
+        navigate(`/map/${treeId}?modal=password`, { state: { feedId: id, type: 'delete' } });
+      },
+    },
   ];
 
   const likedFeedList = JSON.parse(localStorage.getItem('liked_feeds') ?? '{}');

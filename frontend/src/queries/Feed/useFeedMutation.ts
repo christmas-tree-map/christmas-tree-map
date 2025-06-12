@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { queryClient } from '@/main';
 import { useMutation } from '@tanstack/react-query';
-import { deleteLikeFeed, postFeed, postFeedPassword, postLikeFeed, updateFeed } from '@/apis/feed';
+import { deleteFeed, deleteLikeFeed, postFeed, postFeedPassword, postLikeFeed, updateFeed } from '@/apis/feed';
 import { FEED_KEYS } from '../queryKeys';
 
 const useFeedMutation = () => {
@@ -33,8 +33,8 @@ const useFeedMutation = () => {
 
   const { mutate: deleteLikeFeedMutation } = useMutation({
     mutationFn: deleteLikeFeed,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEEDS] });
+    onSuccess: (treeId) => {
+      queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEEDS, { treeId }] });
     },
   });
 
@@ -42,7 +42,21 @@ const useFeedMutation = () => {
     mutationFn: postFeedPassword,
   });
 
-  return { addFeedMutation, updateFeedMutation, addLikeFeedMutation, deleteLikeFeedMutation, postFeedPasswordMutation };
+  const { mutate: deleteFeedMutation } = useMutation({
+    mutationFn: deleteFeed,
+    onSuccess: (treeId) => {
+      queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEEDS, { treeId }] });
+    },
+  });
+
+  return {
+    addFeedMutation,
+    updateFeedMutation,
+    addLikeFeedMutation,
+    deleteLikeFeedMutation,
+    postFeedPasswordMutation,
+    deleteFeedMutation,
+  };
 };
 
 export default useFeedMutation;

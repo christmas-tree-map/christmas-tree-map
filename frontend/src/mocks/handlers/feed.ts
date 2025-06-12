@@ -2,9 +2,12 @@ import { HttpResponse, http } from 'msw';
 import { API_URL } from '@/apis/requestAPI';
 import mockFeeds from '../data/feeds.json';
 
+// eslint-disable-next-line prefer-const
+let feeds = [...mockFeeds];
+
 export const handlers = [
   http.get(`${API_URL}/feed`, () => {
-    return HttpResponse.json(mockFeeds);
+    return HttpResponse.json(feeds);
   }),
 
   http.post(`${API_URL}/feed`, async ({ request }) => {
@@ -133,5 +136,12 @@ export const handlers = [
 
   http.post(`${API_URL}/feed/:feedId/verify-password`, async () => {
     return HttpResponse.json(true);
+  }),
+
+  http.delete(`${API_URL}/feed/:feedId`, async ({ request }) => {
+    const url = new URL(request.url);
+    const feedId = Number(url.pathname.split('/').at(-1));
+    feeds = feeds.filter((feed) => feed.id !== feedId);
+    return HttpResponse.json({ status: 200, feedId });
   }),
 ];

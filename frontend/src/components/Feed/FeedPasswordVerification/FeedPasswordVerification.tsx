@@ -9,15 +9,17 @@ const FeedPasswordVerification = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { treeId } = useParams();
-  const { postFeedPasswordMutation } = useFeedMutation();
+  const { postFeedPasswordMutation, deleteFeedMutation } = useFeedMutation();
   const [isError, setIsError] = useState(false);
+  const isDeleteType = location.state.type === 'delete';
+  const feedId = location.state.feedId;
 
   const handleInputChange = () => {
     setIsError(false);
   };
 
   const handlePasswordVerification = (password: string) => {
-    if (!location.state?.feedId) return;
+    if (!feedId) return;
 
     postFeedPasswordMutation(
       { feedId: location.state.feedId, password },
@@ -27,7 +29,23 @@ const FeedPasswordVerification = () => {
             setIsError(true);
             return;
           }
-          navigate(`/map?modal=submit`, { state: { treeId } });
+
+          switch (true) {
+            case isDeleteType:
+              deleteFeedMutation(
+                { feedId, password },
+                {
+                  onSuccess: () => {
+                    navigate(`/map/${treeId}?modal=feeds`);
+                  },
+                },
+              );
+              break;
+
+            default:
+              navigate(`/map?modal=edit`, { state: { treeId } });
+              break;
+          }
         },
         onError: () => setIsError(true),
       },

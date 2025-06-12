@@ -48,6 +48,15 @@ export const updateFeed = async ({ feedId, data }: UpdateFeedRequest) => {
   await requestAPI.patch(`/feed/${feedId}`, formData);
 };
 
+interface DeleteFeedRequest {
+  feedId: number;
+  password: string;
+}
+
+export const deleteFeed = async ({ feedId, password }: DeleteFeedRequest) => {
+  return await requestAPI.delete<number>(`/feed/${feedId}`, { password });
+};
+
 interface PostLikeFeedRequest {
   feedId: number;
 }
