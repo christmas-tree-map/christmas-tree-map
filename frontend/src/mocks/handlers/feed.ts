@@ -130,4 +130,8 @@ export const handlers = [
     }
     return HttpResponse.json({ status: 200 });
   }),
+
+  http.post(`${API_URL}/feed/:feedId/verify-password`, async () => {
+    return HttpResponse.json(true);
+  }),
 ];
