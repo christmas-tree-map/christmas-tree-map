@@ -55,7 +55,7 @@ public class ImageApiCrawler {
             return basePath + "chromedriver-mac";
         }
         if (os.contains("linux")) {
-            return basePath + "chromedriver-linux";
+            return "/usr/local/bin/chromedriver";
         }
         return null;
     }

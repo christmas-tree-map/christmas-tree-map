@@ -3,7 +3,8 @@ name: 🎄Backend CI & CD With Test Profile
 on:
   push:
     branches: [ "BE/dev" ]
-
+  pull_request:
+    branches: [ "BE/dev" ]
 jobs:
   build:
     environment: test
