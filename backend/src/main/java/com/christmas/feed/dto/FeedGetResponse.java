@@ -8,6 +8,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public record FeedGetResponse(
         @Schema(description = "피드 id", example = "1")
         long id,
+        @Schema(description = "트리 경도", example = "127")
+        Double longitude,
+        @Schema(description = "트리 위도", example = "35")
+        Double latitude,
         @Schema(description = "피드 작성자 닉네임", example = "귀여운산타클로스")
         String nickname,
         @Schema(description = "피드 수정 시기", example = "2024-12-07T15:30:45.123")
