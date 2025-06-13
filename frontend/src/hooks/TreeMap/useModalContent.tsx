@@ -1,3 +1,4 @@
+import FeedEditGuard from '@/components/Feed/FeedEdit/FeedEditGuard';
 import FeedList from '@/components/Feed/FeedList/FeedList';
 import FeedPasswordVerification from '@/components/Feed/FeedPasswordVerification/FeedPasswordVerification';
 import FeedSubmit from '@/components/Feed/FeedSubmit/FeedSubmit';
@@ -10,6 +11,8 @@ const useModalContent = (modalType: string | null) => {
       return <FeedSubmit />;
     case 'password':
       return <FeedPasswordVerification />;
+    case 'edit':
+      return <FeedEditGuard />;
     default:
       return null;
   }
