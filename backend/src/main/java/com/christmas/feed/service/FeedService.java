@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.locationtech.jts.geom.Point;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -109,20 +110,10 @@ public class FeedService {
         if (image != null) {
             imageFileService.updateImage(imageFileEntity, image);
         }
-        if (request != null) {
-            if (request.content() != null) {
-                feedEntity.updateContent(request.content());
-            }
-            if (request.treeId() != null) {
-                TreeEntity treeEntity = treeRepository.findById(request.treeId())
-                        .orElseThrow(() -> new NotFoundTreeException(
-                                TreeErrorCode.TREE_NOT_FOUND,
-                                Map.of("tree id", String.valueOf(request.treeId())))
-                        );
-                feedEntity.updateTreeEntity(treeEntity);
-            }
+        if (request != null && request.content() != null) {
+            feedEntity.updateContent(request.content());
         }
-        return new FeedUpdateResponse(id, feedEntity.getTreeEntity().getId(), imageFileEntity.getImageUrl(), feedEntity.getContent());
+        return new FeedUpdateResponse(id, imageFileEntity.getImageUrl(), feedEntity.getContent());
     }
 
     private boolean invalidPassword(FeedEntity feedEntity, String password) {
@@ -177,7 +168,9 @@ public class FeedService {
                 );
         final ImageFileEntity imageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity)
                 .getImageFileEntity();
-        return new FeedGetResponse(id, feedEntity.getNickname(), feedEntity.getUpdatedAt(),
+        final Point location = feedEntity.getTreeEntity()
+                .getLocation();
+        return new FeedGetResponse(id, location.getX(), location.getY(), feedEntity.getNickname(), feedEntity.getUpdatedAt(),
                 imageFileEntity.getImageUrl(), feedEntity.getContent(), feedEntity.getLikeCount());
     }
 }
