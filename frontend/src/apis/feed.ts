@@ -1,14 +1,9 @@
+import { Feed } from '@/types/feed.type';
 import requestAPI from './requestAPI';
 
-interface Feed {
-  id: number;
-  treeImageCode: string;
-  nickname: string;
-  updatedAt: string;
-  imageUrl: string;
-  content: string;
-  likeCount: number;
-}
+export const getFeed = async (feedId: string) => {
+  return await requestAPI.get<Feed>(`/feed/${feedId}`);
+};
 
 export const getFeeds = async (treeId: number) => {
   return await requestAPI.get<Feed[]>('/feed', { treeId });
@@ -39,12 +34,28 @@ export const postFeed = async (data: FormDataRequest) => {
 };
 
 interface UpdateFeedRequest {
-  feedId: number;
-  data: FormDataRequest;
+  feedId: string;
+  imageFile: File | null;
+  content: string;
 }
 
-export const updateFeed = async ({ feedId, data }: UpdateFeedRequest) => {
-  const formData = createFormData(data);
+export const updateFeed = async ({ feedId, imageFile, content }: UpdateFeedRequest) => {
+  if (!imageFile && !content) {
+    console.error('imageFile과 content가 없습니다.');
+    return;
+  }
+
+  const formData = new FormData();
+
+  if (imageFile) {
+    formData.append('image', imageFile);
+  }
+
+  const value = { content };
+  const blob = new Blob([JSON.stringify(value)], { type: 'application/json' });
+
+  formData.append('request', blob);
+
   await requestAPI.patch(`/feed/${feedId}`, formData);
 };
 
