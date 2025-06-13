@@ -1,4 +1,5 @@
 export const FEED_KEYS = {
+  FEED: 'feed',
   FEEDS: 'feeds',
 };
 
