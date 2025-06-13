@@ -35,6 +35,7 @@ export const postFeed = async (data: FormDataRequest) => {
 
 interface UpdateFeedRequest {
   feedId: string;
+  treeId: string;
   imageFile: File | null;
   content: string;
 }

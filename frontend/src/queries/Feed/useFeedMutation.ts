@@ -17,9 +17,9 @@ const useFeedMutation = () => {
 
   const { mutateAsync: updateFeedMutation } = useMutation({
     mutationFn: updateFeed,
-    onSuccess: (treeId) => {
+    onSuccess: (_, { treeId }) => {
       queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEEDS, { treeId }] });
-      // navigate(`/map/${treeId}?modal=feeds`);
+      navigate(`/map/${treeId}?modal=feeds`);
     },
   });
 

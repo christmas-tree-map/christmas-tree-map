@@ -43,7 +43,7 @@ const FeedPasswordVerification = () => {
               break;
 
             default:
-              navigate(`/map?modal=edit`, { state: { treeId } });
+              navigate(`/map?modal=edit`, { state: { feedId, treeId } });
               break;
           }
         },

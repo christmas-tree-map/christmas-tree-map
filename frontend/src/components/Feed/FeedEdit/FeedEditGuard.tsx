@@ -5,10 +5,11 @@ import FeedEdit from './FeedEdit';
 const FeedEditGuard = () => {
   const location = useLocation();
   const feedId = location.state?.feedId;
+  const treeId = location.state?.treeId;
 
   return (
-    <RouteGuard condition={!feedId} redirectPath="/map">
-      <FeedEdit feedId={feedId} />
+    <RouteGuard condition={!feedId || !treeId} redirectPath="/map">
+      <FeedEdit feedId={feedId} treeId={treeId} />
     </RouteGuard>
   );
 };
