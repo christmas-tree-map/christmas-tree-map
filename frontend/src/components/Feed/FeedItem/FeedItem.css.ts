@@ -21,7 +21,7 @@ export const Header = style({
   width: '100%',
 });
 
-export const NicknameBox = style({
+export const HeaderLeft = style({
   display: 'flex',
   alignItems: 'center',
 });
@@ -40,6 +40,20 @@ export const BodyText = style({
 export const UpdatedAtText = style({
   font: vars.fonts.tiny,
   color: vars.colors.grey[500],
+});
+
+export const HeaderRight = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '1px',
+
+  position: 'relative',
+});
+
+export const TooltipBox = style({
+  position: 'absolute',
+  top: '30px',
+  right: '1px',
 });
 
 export const Image = style({

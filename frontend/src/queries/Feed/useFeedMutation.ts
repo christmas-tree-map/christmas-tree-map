@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { queryClient } from '@/main';
 import { useMutation } from '@tanstack/react-query';
-import { deleteLikeFeed, postFeed, postLikeFeed } from '@/apis/feed';
+import { deleteFeed, deleteLikeFeed, postFeed, postFeedPassword, postLikeFeed, updateFeed } from '@/apis/feed';
 import { FEED_KEYS } from '../queryKeys';
 
 const useFeedMutation = () => {
@@ -15,6 +15,15 @@ const useFeedMutation = () => {
     },
   });
 
+  const { mutateAsync: updateFeedMutation } = useMutation({
+    mutationFn: updateFeed,
+    onSuccess: (feedId, { treeId }) => {
+      queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEEDS, { treeId }] });
+      queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEED, { feedId }] });
+      navigate(`/map/${treeId}?modal=feeds`);
+    },
+  });
+
   const { mutate: addLikeFeedMutation } = useMutation({
     mutationFn: postLikeFeed,
     onSuccess: () => {
@@ -24,12 +33,30 @@ const useFeedMutation = () => {
 
   const { mutate: deleteLikeFeedMutation } = useMutation({
     mutationFn: deleteLikeFeed,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEEDS] });
+    onSuccess: (treeId) => {
+      queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEEDS, { treeId }] });
     },
   });
 
-  return { addFeedMutation, addLikeFeedMutation, deleteLikeFeedMutation };
+  const { mutate: postFeedPasswordMutation } = useMutation({
+    mutationFn: postFeedPassword,
+  });
+
+  const { mutate: deleteFeedMutation } = useMutation({
+    mutationFn: deleteFeed,
+    onSuccess: (treeId) => {
+      queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEEDS, { treeId }] });
+    },
+  });
+
+  return {
+    addFeedMutation,
+    updateFeedMutation,
+    addLikeFeedMutation,
+    deleteLikeFeedMutation,
+    postFeedPasswordMutation,
+    deleteFeedMutation,
+  };
 };
 
 export default useFeedMutation;
