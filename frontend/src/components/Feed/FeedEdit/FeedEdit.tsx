@@ -57,9 +57,9 @@ const FeedEdit = ({ feedId, treeId }: FeedEditProps) => {
 
       <div className={S.ImageUploadBox}>
         <p className={S.LabelText}>이미지 업로드</p>
-        {imageUrl ? (
+        {imageUrl || feed?.imageUrl ? (
           <img
-            src={feed?.imageUrl ?? imageUrl}
+            src={imageUrl || feed?.imageUrl}
             className={S.UploadedImage}
             alt="업로드된 이미지"
             onClick={handleImageUploadClick}
