@@ -1,8 +1,13 @@
 import { Feed } from '@/types/feed.type';
 import requestAPI from './requestAPI';
 
+interface GetFeedResponse extends Feed {
+  latitude: number;
+  longitude: number;
+}
+
 export const getFeed = async (feedId: string) => {
-  return await requestAPI.get<Feed>(`/feed/${feedId}`);
+  return await requestAPI.get<GetFeedResponse>(`/feed/${feedId}`);
 };
 
 export const getFeeds = async (treeId: number) => {

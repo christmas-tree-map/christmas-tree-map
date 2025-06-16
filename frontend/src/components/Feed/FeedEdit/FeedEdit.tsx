@@ -1,5 +1,4 @@
 import { useEffect, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
 import { RiImageAddLine } from '@react-icons/all-files/ri/RiImageAddLine';
 import Button from '@/components/_common/Button/Button';
 import TextArea from '@/components/_common/TextArea/TextArea';
@@ -18,16 +17,6 @@ interface FeedEditProps {
 }
 
 const FeedEdit = ({ feedId, treeId }: FeedEditProps) => {
-  const location = useLocation();
-  const center: { latitude: number; longitude: number } = useMemo(
-    () =>
-      location.state?.center ?? {
-        latitude: DEFAULT_LATITUDE,
-        longitude: DEFAULT_LONGITUDE,
-      },
-    [location.state.center],
-  );
-
   const { feed } = useFeedQuery(feedId);
   const { getAddress, currentAddress } = useTreeMap();
   const { imageUrl, fileInputRef, handleImageUploadClick, handleImageChange } = useImageUploader();
@@ -37,6 +26,12 @@ const FeedEdit = ({ feedId, treeId }: FeedEditProps) => {
     initialImageFile: fileInputRef.current?.files?.[0] ?? null,
     initialContent: feed?.content ?? '',
   });
+  const center: { latitude: number; longitude: number } = useMemo(() => {
+    return {
+      latitude: feed.latitude ?? DEFAULT_LATITUDE,
+      longitude: feed.longitude ?? DEFAULT_LONGITUDE,
+    };
+  }, [feed]);
 
   useEffect(() => {
     getAddress(center.latitude, center.longitude);
