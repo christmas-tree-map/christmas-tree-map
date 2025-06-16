@@ -67,8 +67,12 @@ const requestAPI = {
     return this.apiMethods<T>({ method: 'PATCH', endpoint, body, queryParams });
   },
 
-  delete<T>(endpoint: string, queryParams?: Record<string, string | number | boolean>): Promise<T> {
-    return this.apiMethods({ method: 'DELETE', endpoint, queryParams });
+  delete<T>(
+    endpoint: string,
+    body?: Record<string, any>,
+    queryParams?: Record<string, string | number | boolean>,
+  ): Promise<T> {
+    return this.apiMethods({ method: 'DELETE', endpoint, body, queryParams });
   },
 };
 
