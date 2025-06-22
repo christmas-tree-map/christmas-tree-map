@@ -6,10 +6,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.christmas.feed.dto.FeedCreateRequest;
+import com.christmas.feed.dto.FeedUpdateResponse;
 import com.christmas.feed.repository.FeedImageFileRepository;
 import com.christmas.feed.repository.FeedRepository;
 import com.christmas.feed.repository.ImageFileRepository;
 import com.christmas.feed.repository.entity.FeedEntity;
+import com.christmas.feed.repository.entity.FeedImageFileEntity;
 import com.christmas.feed.repository.entity.ImageFileEntity;
 import com.christmas.tree.domain.PointGenerator;
 import com.christmas.tree.repository.TreeEntity;
@@ -19,7 +21,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,13 +33,13 @@ class FeedServiceTest {
     private FeedService feedService;
 
     @Autowired
+    private ImageFileService imageFileService;
+
+    @Autowired
     private TreeRepository treeRepository;
 
     @Autowired
     private FeedRepository feedRepository;
-
-    @MockBean
-    private ImageFileService imageFileService;
 
     @Autowired
     private FeedImageFileRepository feedImageFileRepository;
@@ -51,10 +52,7 @@ class FeedServiceTest {
     void create_feed() {
         // given
         TreeEntity treeEntity = treeRepository.save(new TreeEntity(PointGenerator.generate(127.2, 30.5), "IMAGE_CODE"));
-        ImageFileEntity imageFileEntity = imageFileRepository.save(new ImageFileEntity("test", "test", "test"));
-        when(imageFileService.createImage(any()))
-                .thenReturn(imageFileEntity);
-        MultipartFile image = new MockMultipartFile("testImage", "content".getBytes());
+        MultipartFile image = new MockMultipartFile("Image", "newContent".getBytes());
         FeedCreateRequest request = new FeedCreateRequest(treeEntity.getId(), "피드 내용", "abc234!!");
 
         // when
@@ -107,5 +105,24 @@ class FeedServiceTest {
 
         // then
         assertThat(isVerify).isFalse();
+    }
+
+    @Test
+    @DisplayName("피드 수정 - 이미지 파일만 수정한다.")
+    void update_feed_image_only() {
+        // given
+        TreeEntity treeEntity = treeRepository.save(new TreeEntity(PointGenerator.generate(127.2, 30.5), "IMAGE_CODE"));
+        MultipartFile oldImage = new MockMultipartFile("oldImage", "oldContent".getBytes());
+        long id = feedService.createFeed(new FeedCreateRequest(treeEntity.getId(), "content", "password123"), oldImage);
+        MultipartFile newImage = new MockMultipartFile("newImage", "newContent".getBytes());
+
+        // when
+        FeedUpdateResponse response = feedService.updateFeed(id, newImage, null);
+
+        // then
+        FeedEntity feedEntity = feedRepository.findById(response.id())
+                .orElseThrow();
+        FeedImageFileEntity feedImageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity);
+        assertThat(response.imageUrl()).isEqualTo(feedImageFileEntity.getImageFileEntity().getImageUrl());
     }
 }

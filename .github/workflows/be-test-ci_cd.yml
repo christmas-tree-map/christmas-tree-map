@@ -85,6 +85,9 @@ jobs:
           TEST_DB_URL=${{ secrets.TEST_DB_URL }}
           TEST_DB_USERNAME=${{ secrets.TEST_DB_USERNAME }}
           TEST_DB_PASSWORD=${{ secrets.TEST_DB_PASSWORD }}
+          S3_ACCESS_KEY=${{ secrets.S3_ACCESS_KEY }}
+          S3_SECRET_KEY=${{ secrets.S3_SECRET_KEY }}
+          TEST_S3_BUCKET_NAME=${{ secrets.TEST_S3_BUCKET_NAME }}
           TEST_SERVER_URL=${{ secrets.TEST_SERVER_URL }}
           KAKAO_MAP_REST_API_KEY=${{ secrets.KAKAO_MAP_REST_API_KEY }}
           TMAP_APP_KEY=${{ secrets.TMAP_APP_KEY }}
