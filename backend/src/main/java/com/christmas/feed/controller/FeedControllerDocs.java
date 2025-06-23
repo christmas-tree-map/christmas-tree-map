@@ -1,5 +1,6 @@
 package com.christmas.feed.controller;
 
+import com.christmas.feed.dto.FeedsGetResponse;
 import java.util.List;
 
 import org.springframework.http.MediaType;
@@ -54,7 +55,7 @@ public interface FeedControllerDocs {
     @ApiResponse(responseCode = "4XX", description = "피드 조회 실패 시 예외를 반환한다.",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponse.class))
     )
-    ResponseEntity<List<FeedGetResponse>> getAllFeed(@Parameter(description = "treeId", required = true) long treeId);
+    ResponseEntity<List<FeedsGetResponse>> getAllFeed(@Parameter(description = "treeId", required = true) long treeId);
 
     @Operation(summary = "피드를 수정한다.")
     @ApiResponse(responseCode = "200", description = "피드 수정에 성공 시 id, 이미지 url, 피드 내용을 반환한다.",
