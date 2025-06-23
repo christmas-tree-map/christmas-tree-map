@@ -3,8 +3,9 @@ FROM zenika/alpine-chrome
 # 루트 권한 획득
 USER root
 
-# Java 17 설치
-RUN apk add --no-cache openjdk17
+# Java 17 + chromedriver 설치
+RUN apk add --no-cache openjdk17 chromium-chromedriver \
+ && ln -sf /usr/lib/chromium/chromedriver /usr/bin/chromedriver
 
 ARG JAR_FILE=build/libs/christmas-0.0.1-SNAPSHOT.jar
 COPY ${JAR_FILE} /treesmas-app.jar
