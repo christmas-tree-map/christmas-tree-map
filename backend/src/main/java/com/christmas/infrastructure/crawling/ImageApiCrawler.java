@@ -26,8 +26,14 @@ public class ImageApiCrawler {
         System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 
         final ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless=new");
-        options.addArguments("--window-size=1920,1080");
+        options.addArguments(
+                "--headless=new",
+                "--no-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--disable-software-rasterizer",
+                "--window-size=1920,1080"
+        );
         final WebDriver driver = new ChromeDriver(options);
 
         try {
