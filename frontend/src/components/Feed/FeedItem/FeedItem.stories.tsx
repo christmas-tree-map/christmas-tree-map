@@ -24,5 +24,5 @@ const data = {
 };
 
 export const Default: Story = {
-  args: { feed: data },
+  args: { feed: data, treeId: 1 },
 };
