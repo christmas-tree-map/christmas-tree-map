@@ -16,7 +16,7 @@ const FeedSubmit = () => {
   const location = useLocation();
 
   const { getAddress, currentAddress } = useTreeMap();
-  const { imageUrl, fileInputRef, handleImageUploadClick, handleImageChange } = useImageUploader();
+  const { imageUrl, imageFile, fileInputRef, handleImageUploadClick, handleImageChange } = useImageUploader();
   const {
     content,
     password,
@@ -28,7 +28,7 @@ const FeedSubmit = () => {
     handleSubmit,
     handleSelectMarkerClick,
   } = useFeedSubmit({
-    imageFile: fileInputRef.current?.files?.[0] ?? null,
+    imageFile,
     location,
     navigate,
   });
