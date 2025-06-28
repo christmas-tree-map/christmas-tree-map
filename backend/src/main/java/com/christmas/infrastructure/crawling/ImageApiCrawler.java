@@ -45,7 +45,7 @@ public class ImageApiCrawler {
             submitPlaceSearch(placeName, driver);
         } catch (Exception e) {
             driver.quit();
-            log.info("[이미지 크롤링 실패] - 이미지 태그 못찾아 타임아웃");
+            log.warn("[이미지 크롤링 실패] - 이미지 태그 못찾아 타임아웃", e);
             return null;
         }
 
@@ -76,8 +76,10 @@ public class ImageApiCrawler {
     }
 
     private void submitPlaceSearch(final String placeName, final WebDriver driver) {
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        log.info("구글맵 접속 시도");
         driver.get(GOOGLE_MAP_URL);
+        log.info("구글맵 접속 성공");
 
         WebElement searchBox = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("searchboxinput")));
         log.info("searchboxinput 찾음");
