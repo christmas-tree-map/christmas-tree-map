@@ -80,11 +80,11 @@ public class ImageApiCrawler {
         driver.get(GOOGLE_MAP_URL);
 
         WebElement searchBox = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("searchboxinput")));
-        log.debug("searchboxinput 찾음");
+        log.info("searchboxinput 찾음");
         searchBox.sendKeys(placeName);
 
         WebElement searchButton = driver.findElement(By.id("searchbox-searchbutton"));
-        log.debug("searchbox-searchbutton 찾음");
+        log.info("searchbox-searchbutton 찾음");
         searchButton.click();
 
         wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[src*='googleusercontent']")));
