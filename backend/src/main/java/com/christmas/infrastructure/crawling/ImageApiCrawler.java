@@ -27,7 +27,7 @@ public class ImageApiCrawler {
 
         final ChromeOptions options = new ChromeOptions();
         options.addArguments(
-                "--headless=new",
+                "--headless=chrome",
                 "--no-sandbox",
                 "--disable-dev-shm-usage",
                 "--disable-gpu",
@@ -41,6 +41,7 @@ public class ImageApiCrawler {
         try {
             submitPlaceSearch(placeName, driver);
         } catch (TimeoutException e) {
+            driver.quit();
             return null;
         }
 
