@@ -6,4 +6,5 @@ services:
       - .treesmas-env
     ports:
       - 8080:8080
+    shm_size: 1g
     restart: on-failure
