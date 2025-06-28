@@ -3,6 +3,7 @@ package com.christmas.infrastructure.crawling;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
@@ -13,6 +14,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 public class ImageApiCrawler {
 
@@ -42,6 +44,7 @@ public class ImageApiCrawler {
             submitPlaceSearch(placeName, driver);
         } catch (TimeoutException e) {
             driver.quit();
+            log.info("[이미지 크롤링 실패] - 이미지 태그 못찾아 타임아웃");
             return null;
         }
 
@@ -50,10 +53,12 @@ public class ImageApiCrawler {
             final String src = img.getAttribute("src");
             if (src != null && src.contains("googleusercontent")) {
                 driver.quit();
+                log.info("[이미지 크롤링 성공] - {}", src);
                 return src;
             }
         }
         driver.quit();
+        log.info("[이미지 크롤링 실패] - 미리보기 이미지 못찾음");
         return null;
     }
 
