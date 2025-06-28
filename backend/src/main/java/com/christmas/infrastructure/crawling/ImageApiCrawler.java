@@ -34,6 +34,8 @@ public class ImageApiCrawler {
                 "--disable-software-rasterizer",
                 "--window-size=1920,1080"
         );
+        options.setPageLoadTimeout(Duration.ofSeconds(30));
+        options.setScriptTimeout(Duration.ofSeconds(30));
         final WebDriver driver = new ChromeDriver(options);
 
         try {
@@ -69,10 +71,13 @@ public class ImageApiCrawler {
     private void submitPlaceSearch(final String placeName, final WebDriver driver) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.get(GOOGLE_MAP_URL);
-        WebElement searchBox = driver.findElement(By.id("searchboxinput"));
+
+        WebElement searchBox = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("searchboxinput")));
         searchBox.sendKeys(placeName);
+
         WebElement searchButton = driver.findElement(By.id("searchbox-searchbutton"));
         searchButton.click();
+
         wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[src*='googleusercontent']")));
     }
 }
