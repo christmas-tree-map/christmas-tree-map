@@ -87,6 +87,8 @@ public class ImageApiCrawler {
         log.info("구글맵 접속 시도");
         driver.get(GOOGLE_MAP_URL);
         log.info("구글맵 접속 성공");
+        log.info("페이지 title: {}", driver.getTitle());
+        log.info("page source 앞 1000자: \n{}", driver.getPageSource().substring(0, 1000));
 
         WebElement searchBox = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("searchboxinput")));
         log.info("searchboxinput 찾음");
