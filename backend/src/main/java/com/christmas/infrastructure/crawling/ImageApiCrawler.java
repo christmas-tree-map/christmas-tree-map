@@ -13,6 +13,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
+import scala.compat.java8.PrimitiveIteratorConverters.SpecializerOfIterators;
 
 @Slf4j
 @Component
@@ -42,7 +43,7 @@ public class ImageApiCrawler {
 
         try {
             submitPlaceSearch(placeName, driver);
-        } catch (TimeoutException e) {
+        } catch (Exception e) {
             driver.quit();
             log.info("[이미지 크롤링 실패] - 이미지 태그 못찾아 타임아웃");
             return null;
@@ -79,9 +80,11 @@ public class ImageApiCrawler {
         driver.get(GOOGLE_MAP_URL);
 
         WebElement searchBox = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("searchboxinput")));
+        log.debug("searchboxinput 찾음");
         searchBox.sendKeys(placeName);
 
         WebElement searchButton = driver.findElement(By.id("searchbox-searchbutton"));
+        log.debug("searchbox-searchbutton 찾음");
         searchButton.click();
 
         wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("img[src*='googleusercontent']")));
