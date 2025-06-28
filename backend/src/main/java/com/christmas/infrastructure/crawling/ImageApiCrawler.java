@@ -28,17 +28,7 @@ public class ImageApiCrawler {
         }
         System.setProperty("webdriver.chrome.driver", chromeDriverPath);
 
-        final ChromeOptions options = new ChromeOptions();
-        options.addArguments(
-                "--headless=chrome",
-                "--no-sandbox",
-                "--disable-dev-shm-usage",
-                "--disable-gpu",
-                "--disable-software-rasterizer",
-                "--window-size=1920,1080"
-        );
-        options.setPageLoadTimeout(Duration.ofSeconds(30));
-        options.setScriptTimeout(Duration.ofSeconds(30));
+        final ChromeOptions options = getChromeOptions();
         final WebDriver driver = new ChromeDriver(options);
 
         try {
@@ -61,6 +51,23 @@ public class ImageApiCrawler {
         driver.quit();
         log.info("[이미지 크롤링 실패] - 미리보기 이미지 못찾음");
         return null;
+    }
+
+    private ChromeOptions getChromeOptions() {
+        final ChromeOptions options = new ChromeOptions();
+        options.addArguments(
+                "--headless",
+                "--no-sandbox",
+                "--disable-dev-shm-usage",
+                "--disable-gpu",
+                "--disable-software-rasterizer",
+                "--disable-blink-features=AutomationControlled",
+                "--window-size=1920,1080",
+                "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124.0.6367.78 Safari/537.36"
+        );
+        options.setPageLoadTimeout(Duration.ofSeconds(30));
+        options.setScriptTimeout(Duration.ofSeconds(30));
+        return options;
     }
 
     private String getChromeDriverPath() {
