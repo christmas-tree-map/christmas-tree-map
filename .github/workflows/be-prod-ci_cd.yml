@@ -90,6 +90,7 @@ jobs:
           SERVER_URL=${{ secrets.SERVER_URL }}
           KAKAO_MAP_REST_API_KEY=${{ secrets.KAKAO_MAP_REST_API_KEY }}
           TMAP_APP_KEY=${{ secrets.TMAP_APP_KEY }}
+          GOOGLE_MAP_API_KEY=${{ secrets.GOOGLE_MAP_API_KEY }}
           
           # Docker Compose yml environments
           DOCKER_REPO_NAME=${{ secrets.DOCKER_REPO_NAME }}

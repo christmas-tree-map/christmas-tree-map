@@ -55,3 +55,6 @@ map:
   tmap:
     app-key: ${TMAP_APP_KEY}
     default-url: https://apis.openapi.sk.com/tmap/routes
+  google:
+    api-key: ${GOOGLE_MAP_API_KEY}
+    default-url: https://places.googleapis.com/v1

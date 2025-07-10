@@ -1,6 +1,5 @@
 package com.christmas.recommend.controller;
 
-import com.christmas.infrastructure.crawling.ImageApiCrawler;
 import com.christmas.recommend.dto.AttractionGetRequest;
 import com.christmas.recommend.dto.AttractionGetResponse;
 import com.christmas.recommend.dto.CourseGetRequest;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class RecommendController implements RecommendControllerDocs {
 
     private final RecommendService recommendService;
-    private final ImageApiCrawler imageApiCrawler;
 
     @GetMapping("/course")
     public ResponseEntity<CourseGetResponse> getCourse(@Valid @ModelAttribute CourseGetRequest request) {

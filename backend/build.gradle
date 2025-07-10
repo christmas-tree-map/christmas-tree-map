@@ -45,9 +45,6 @@ dependencies {
 	// Swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
-	// Selenium
-	implementation 'org.seleniumhq.selenium:selenium-java'
-
 	// Hibernate-Spatial(geometry 지원)
 	implementation group: 'org.hibernate', name: 'hibernate-spatial', version: '6.6.2.Final'
 
