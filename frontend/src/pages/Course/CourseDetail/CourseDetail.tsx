@@ -15,7 +15,7 @@ const CourseDetail = () => {
   const latitude = searchParams.get('latitude');
   const longitude = searchParams.get('longitude');
 
-  const { courseDetails, refetch } = useCourseDetailsQuery(latitude || '', longitude || '');
+  const { courseDetails, refetch, isLoading } = useCourseDetailsQuery(latitude || '', longitude || '');
 
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [isButtonOpen, setIsButtonOpen] = useState(false);
@@ -36,7 +36,7 @@ const CourseDetail = () => {
           <CourseMap courseList={courseDetails} mapLevel={7} isStaticMap={true} />
         </div>
       </div>
-      <CourseList courseList={courseDetails} />
+      {!isLoading && <CourseList courseList={courseDetails} />}
       {isButtonOpen && (
         <button className={S.RefreshButton} onClick={() => refetch()}>
           <IoRefresh size="18px" color={vars.colors.secondary[700]} />
