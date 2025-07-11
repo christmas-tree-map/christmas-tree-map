@@ -15,43 +15,63 @@ interface UseCourseMapProps {
   isStaticMap?: boolean;
 }
 
+const MARKER_CONFIG = {
+  SIZE: new kakao.maps.Size(36, 36),
+  OPTIONS: { offset: new kakao.maps.Point(18, 36) },
+} as const;
+
 const useCourseMap = ({ courseList, mapLevel = 5, isStaticMap = false }: UseCourseMapProps) => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const currentTooltipRef = useRef<TooltipState | null>(null);
-
   const [map, setMap] = useState(null);
 
-  const initializeMap = () => {
-    const courses = Object.values(courseList);
+  const calculateCenterCoordinates = (courses: Course[]) => {
+    if (courses.length === 0) {
+      return null;
+    }
 
-    if (courses.every((course) => course === null)) {
+    const totalLatitude = courses.reduce((sum, course) => sum + Number(course.y), 0);
+    const totalLongitude = courses.reduce((sum, course) => sum + Number(course.x), 0);
+
+    return {
+      latitude: totalLatitude / courses.length,
+      longitude: totalLongitude / courses.length,
+    };
+  };
+
+  const initializeMap = () => {
+    if (!mapRef.current || !kakao?.maps) {
       return;
     }
 
-    const latitude = courses.reduce((acc: number, cur: Course) => (acc += Number(cur.y)), 0) / courses.length;
-    const longitude = courses.reduce((acc: number, cur: Course) => (acc += Number(cur.x)), 0) / courses.length;
-    if (mapRef.current && kakao && kakao.maps) {
-      const options = {
-        center: new kakao.maps.LatLng(latitude, longitude),
-        level: mapLevel,
-        draggable: !isStaticMap,
-        disableDoubleClick: isStaticMap,
-      };
-      const map = new kakao.maps.Map(mapRef.current, options);
-      setMap(map);
-    }
-  };
+    const validCourses = Object.values(courseList).filter((course): course is Course => course !== null);
+    const centerCoordinates = calculateCenterCoordinates(validCourses);
 
-  const MARKER_SIZE = new kakao.maps.Size(36, 36);
-  const MARKER_OPTIONS = { offset: new kakao.maps.Point(18, 36) };
+    if (!centerCoordinates) {
+      return;
+    }
+
+    const mapOptions = {
+      center: new kakao.maps.LatLng(centerCoordinates.latitude, centerCoordinates.longitude),
+      level: mapLevel,
+      draggable: !isStaticMap,
+      disableDoubleClick: isStaticMap,
+    };
+    const newMap = new kakao.maps.Map(mapRef.current, mapOptions);
+
+    setMap(newMap);
+  };
 
   const addMarker = (map: any, type: CourseType, latitude: string, longitude: string, clickable: boolean) => {
     const markerPosition = new kakao.maps.LatLng(latitude, longitude);
-    const markerImage = new kakao.maps.MarkerImage(COURSE_MARKER[type], MARKER_SIZE, MARKER_OPTIONS);
-    const marker = new kakao.maps.Marker({ position: markerPosition, image: markerImage, clickable });
+    const markerImage = new kakao.maps.MarkerImage(COURSE_MARKER[type], MARKER_CONFIG.SIZE, MARKER_CONFIG.OPTIONS);
+    const marker = new kakao.maps.Marker({
+      position: markerPosition,
+      image: markerImage,
+      clickable,
+    });
 
     marker.setMap(map);
-
     return marker;
   };
 
