@@ -15,7 +15,9 @@ export default {
   },
 } as Meta;
 
-const Template: StoryFn<{ statusCode: number }> = (args) => <GlobalErrorFallback {...args} />;
+const Template: StoryFn<{ statusCode: number; resetErrorBoundary: () => void }> = (args) => (
+  <GlobalErrorFallback {...args} />
+);
 
 export const Default = Template.bind({});
 Default.args = {

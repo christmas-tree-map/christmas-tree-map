@@ -4,10 +4,11 @@ import * as S from './ModalErrorFallback.css';
 
 interface ModalErrorFallbackProps {
   statusCode: number;
+  resetErrorBoundary: () => void;
 }
 
-const ModalErrorFallback = ({ statusCode }: ModalErrorFallbackProps) => {
-  const { errorMessage, handleErrorButton } = useDisplayedError(statusCode);
+const ModalErrorFallback = ({ statusCode, resetErrorBoundary }: ModalErrorFallbackProps) => {
+  const { errorMessage, handleErrorButton } = useDisplayedError(statusCode, resetErrorBoundary);
 
   return (
     <div className={S.Layout}>
