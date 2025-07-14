@@ -8,7 +8,9 @@ const GlobalErrorBoundary = ({ children }: React.PropsWithChildren) => {
   return (
     <ErrorBoundary
       onReset={reset}
-      fallbackRender={({ error }) => <GlobalErrorFallback statusCode={error.statusCode} />}
+      fallbackRender={({ error, resetErrorBoundary }) => (
+        <GlobalErrorFallback statusCode={error.statusCode} resetErrorBoundary={resetErrorBoundary} />
+      )}
     >
       {children}
     </ErrorBoundary>
