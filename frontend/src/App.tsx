@@ -1,7 +1,7 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import CourseDetail from '@/pages/Course/CourseDetail/CourseDetail';
 import CourseMain from '@/pages/Course/CourseMain/CourseMain';
-import GlobalErrorFallback from '@/pages/Error/GlobalErrorFallback/GlobalErrorFallback';
+import NotFoundPage from '@/pages/Error/NotFoundPage/NotFoundPage';
 import Landing from '@/pages/Landing/Landing';
 import Layout from '@/pages/Layout/Layout';
 import MapMarkerSelector from '@/pages/MapMarkerSelector/MapMarkerSelector';
@@ -67,7 +67,10 @@ const App = () => {
           },
         ],
       },
-      { path: '*', element: <GlobalErrorFallback statusCode={404} /> },
+      {
+        path: '*',
+        element: <NotFoundPage />,
+      },
     ],
     {
       future: {
