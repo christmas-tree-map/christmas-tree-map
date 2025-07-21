@@ -30,7 +30,7 @@ export const Image = style({
   border: 'none',
   borderRadius: '15px',
 
-  background: vars.colors.grey[400],
+  background: vars.colors.grey[200],
 
   objectFit: 'cover',
 });

@@ -22,6 +22,7 @@ const CourseList = ({ courseList }: CourseListProps) => {
                 address={value.road_address_name}
                 phone={value.phone}
                 backgroundColor="grey"
+                imgSrc={value.image_url}
               />
               {key !== 'dinner' && (
                 <div className={S.TimeContainer}>
