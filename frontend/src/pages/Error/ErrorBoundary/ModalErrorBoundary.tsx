@@ -6,7 +6,12 @@ const ModalErrorBoundary = ({ children }: React.PropsWithChildren) => {
   const { reset } = useQueryErrorResetBoundary();
 
   return (
-    <ErrorBoundary onReset={reset} fallbackRender={({ error }) => <ModalErrorFallback statusCode={error.statusCode} />}>
+    <ErrorBoundary
+      onReset={reset}
+      fallbackRender={({ error, resetErrorBoundary }) => (
+        <ModalErrorFallback statusCode={error.statusCode} resetErrorBoundary={resetErrorBoundary} />
+      )}
+    >
       {children}
     </ErrorBoundary>
   );

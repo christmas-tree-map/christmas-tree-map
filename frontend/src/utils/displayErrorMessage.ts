@@ -1,6 +1,6 @@
 import { ERROR_MESSAGE } from '@/constants/error';
 
-export const displayErrorMessage = (statusCode: number) => {
+export const displayErrorMessage = (statusCode?: number) => {
   switch (statusCode) {
     case 400:
       return { ...ERROR_MESSAGE.client, action: 'retry' };

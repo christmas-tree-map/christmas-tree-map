@@ -14,7 +14,7 @@ const CourseItem = ({ id, title, address, phone, imgSrc, backgroundColor = 'whit
   return (
     <Link to={`https://map.kakao.com/link/map/${id}`} target="_blank">
       <div className={S.Layout[backgroundColor]}>
-        {imgSrc && <img src="" className={S.Image} alt="장소 썸네일" />}
+        {imgSrc ? <img src={imgSrc} className={S.Image} alt="장소 썸네일" /> : <div className={S.Image} />}
         <div className={S.Container}>
           <p className={S.Title}>{title}</p>
           <div className={S.InfoContainer}>

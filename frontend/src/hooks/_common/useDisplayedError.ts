@@ -1,11 +1,9 @@
 import { useNavigate } from 'react-router-dom';
-import { useQueryErrorResetBoundary } from '@tanstack/react-query';
 import { displayErrorMessage } from '@/utils/displayErrorMessage';
 
-const useDisplayedError = (statusCode: number) => {
+const useDisplayedError = (statusCode: number, resetErrorBoundary: () => void) => {
   const errorMessage = displayErrorMessage(statusCode);
   const navigate = useNavigate();
-  const { reset } = useQueryErrorResetBoundary();
 
   const handleErrorButton = () => {
     switch (errorMessage.action) {
@@ -13,7 +11,7 @@ const useDisplayedError = (statusCode: number) => {
         navigate(-1);
         break;
       case 'retry':
-        reset();
+        resetErrorBoundary();
         break;
       case 'navigateHome':
         navigate('/');

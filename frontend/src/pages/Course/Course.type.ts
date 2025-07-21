@@ -18,6 +18,7 @@ export interface Course {
     duration_minutes: number;
     route: number[][];
   };
+  image_url: string;
 }
 
 export interface CourseWithPosition extends Course {
