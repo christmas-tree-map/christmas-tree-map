@@ -87,6 +87,7 @@ const CourseMain = () => {
                   title={place.place_name}
                   address={place.road_address_name}
                   phone={place.phone}
+                  imgSrc={place.image_url}
                 />
               ))}
           </div>
