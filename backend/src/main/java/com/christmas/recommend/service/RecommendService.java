@@ -80,7 +80,7 @@ public class RecommendService {
             return new CourseGetResponse(null, null, null, null);
         }
         RouteConditionDto condition = makeRouteCondition(locationsNotNull);
-        JsonNode routesDistance = routeApiManager.getPedestrianRoute(condition).block();
+        JsonNode routesDistance = routeApiManager.getPedestrianRoute(condition);
 
         // 경로 계산 로직
         ObjectMapper mapper = new ObjectMapper();
@@ -187,15 +187,13 @@ public class RecommendService {
         }
         SearchConditionDto condition = setConditionByKeyword(request, category);
         for (RecommendKeyword keyword : getKeywords(category)) {
-            List<JsonNode> locations = searchApiManager.findLocationsByKeyword(keyword, condition)
-                    .block();
+            List<JsonNode> locations = searchApiManager.findLocationsByKeyword(keyword, condition);
             if (locations.size() >= minLength) {
                 return locations;
             }
         }
         SearchConditionDto categoryCondition = setConditionByCategory(request, category);
-        return searchApiManager.findLocationsByCategory(categoryCondition)
-                .block();
+        return searchApiManager.findLocationsByCategory(categoryCondition);
     }
 
     private Map<String, Integer> makeFacilityInfo(Map<FacilityType, Integer> facilityTypeInfo) {
@@ -225,8 +223,7 @@ public class RecommendService {
                 RECOMMEND_RADIUS,
                 LocationCategory.CULTURE
         );
-        List<JsonNode> attractions = searchApiManager.findLocationsByCategory(condition)
-                .block();
+        List<JsonNode> attractions = searchApiManager.findLocationsByCategory(condition);
         List<JsonNode> randomAttractions = getRandomLocations(attractions, RECOMMEND_ATTRACTION_COUNT);
         for (JsonNode attraction : randomAttractions) {
             String placeName = searchApiParser.extractNameFromLocation(attraction);

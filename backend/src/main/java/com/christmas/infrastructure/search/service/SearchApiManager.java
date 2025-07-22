@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestClient;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import com.christmas.infrastructure.search.dto.SearchConditionDto;
@@ -35,14 +36,13 @@ public class SearchApiManager {
     @Value("${map.kakao.default-url}")
     private String defaultUrl;
 
-    private final WebClient webClient;
     private final SearchApiQuery searchApiQuery;
     private final SearchApiParser searchApiParser;
 
-    public Mono<List<JsonNode>> findLocationsByKeyword(RecommendKeyword keyword, SearchConditionDto condition) {
+    public List<JsonNode> findLocationsByKeyword(RecommendKeyword keyword, SearchConditionDto condition) {
         String query = searchApiQuery.makeQuery(setParametersByKeyword(keyword, condition));
         String url = defaultUrl + KEYWORD_SEARCH_URL + query;
-        Mono<JsonNode> result = callKakaoMapApi(url);
+        JsonNode result = callKakaoMapApi(url);
         log.info("키워드 [{}]로 카카오맵 장소 찾기 api 요청 성공", keyword);
         return searchApiParser.parseLocations(result);
     }
@@ -70,22 +70,23 @@ public class SearchApiManager {
         return parameters;
     }
 
-    public Mono<List<JsonNode>> findLocationsByCategory(SearchConditionDto condition) {
+    public List<JsonNode> findLocationsByCategory(SearchConditionDto condition) {
         if (condition.category() == null) {
             throw new IllegalKakaoMapRequest(SearchErrorCode.CATEGORY_PARAMETER_NULL, Map.of("category", "null"));
         }
         String query = searchApiQuery.makeQuery(setDefaultParameters(condition));
         String url = defaultUrl + CATEGORY_SEARCH_URL + query;
-        Mono<JsonNode> result = callKakaoMapApi(url);
+        JsonNode result = callKakaoMapApi(url);
         log.info("카테고리 [{}]로 카카오맵 장소 찾기 api 요청 성공", condition.category().name());
         return searchApiParser.parseLocations(result);
     }
 
-    private Mono<JsonNode> callKakaoMapApi(String url) {
-        return webClient.get()
+    private JsonNode callKakaoMapApi(String url) {
+        return RestClient.create()
+                .get()
                 .uri(url)
                 .header("Authorization", String.format(AUTH_VALUE_FORMAT, apiKey))
                 .retrieve()
-                .bodyToMono(JsonNode.class);
+                .body(JsonNode.class);
     }
 }
