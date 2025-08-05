@@ -21,14 +21,14 @@ public class RecommendController implements RecommendControllerDocs {
 
     @GetMapping("/course")
     public ResponseEntity<CourseGetResponse> getCourse(@Valid @ModelAttribute CourseGetRequest request) {
-        CourseGetResponse response = recommendService.getCourse(request);
+        CourseGetResponse response = recommendService.generateCourse(request);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(response);
     }
 
     @GetMapping("/attraction")
     public ResponseEntity<AttractionGetResponse> getAttractions(@Valid @ModelAttribute AttractionGetRequest request) {
-        AttractionGetResponse response = recommendService.getAttributes(request);
+        AttractionGetResponse response = recommendService.generateAttractions(request);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(response);
     }

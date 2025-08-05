@@ -3,12 +3,15 @@ package com.christmas.infrastructure.route.service;
 import com.christmas.infrastructure.route.dto.RouteConditionDto;
 import com.christmas.infrastructure.route.exception.JsonParseException;
 import com.christmas.infrastructure.route.exception.code.DistanceErrorCode;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -26,7 +29,7 @@ public class RouteApiManager {
     @Value("${map.tmap.default-url}")
     private String defaultUrl;
 
-    private static final String PEDESTRIAN_ROUTE_URL = "/pedestrian?version=1&callback=function";
+    private static final String PEDESTRIAN_ROUTE_URL = "/pedestrian?version=1";
     private static final int MAX_PASS_LIST = 5;
 
     private final RouteApiBody routeApiBody;
@@ -46,7 +49,7 @@ public class RouteApiManager {
                 .header("accept", "application/json")
                 .header("content-type", "application/json")
                 .header("appKey", appKey)
-                .body(BodyInserters.fromValue(body))
+                .body(body)
                 .retrieve()
                 .body(String.class);
         return removeControlCode(rawJson);

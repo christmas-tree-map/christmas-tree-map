@@ -1,25 +1,19 @@
 package com.christmas.recommend.service;
 
-import static com.christmas.recommend.domain.RecommendKeyword.getKeywords;
-
 import com.christmas.infrastructure.image.ImageApiManager;
-import com.christmas.infrastructure.route.domain.FacilityType;
-import com.christmas.infrastructure.route.domain.PointType;
 import com.christmas.infrastructure.route.dto.RouteConditionDto;
 import com.christmas.infrastructure.route.dto.RouteInfo;
 import com.christmas.infrastructure.route.dto.XY;
 import com.christmas.infrastructure.route.service.RouteApiManager;
-import com.christmas.infrastructure.route.service.RouteApiParser;
 import com.christmas.infrastructure.search.domain.LocationCategory;
-import com.christmas.infrastructure.search.dto.SearchConditionDto;
 import com.christmas.infrastructure.search.service.SearchApiManager;
 import com.christmas.infrastructure.search.service.SearchApiParser;
-import com.christmas.recommend.domain.RecommendKeyword;
+import com.christmas.recommend.domain.Course;
+import com.christmas.recommend.domain.Location;
 import com.christmas.recommend.dto.AttractionGetRequest;
 import com.christmas.recommend.dto.AttractionGetResponse;
 import com.christmas.recommend.dto.CourseGetRequest;
 import com.christmas.recommend.dto.CourseGetResponse;
-import com.christmas.recommend.dto.PedestrianRoute;
 import com.christmas.util.RandomIntPicker;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,9 +21,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,7 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class RecommendService {
 
-    private static final int RECOMMEND_RADIUS = 1000;
     public static final int RECOMMEND_ATTRACTION_COUNT = 3;
 
     private final SearchApiManager searchApiManager;
@@ -47,103 +37,58 @@ public class RecommendService {
     private final SearchApiParser searchApiParser;
     private final RandomIntPicker randomPicker;
     private final ImageApiManager imageApiManager;
+    private final LocationService locationService;
 
-    public CourseGetResponse getCourse(CourseGetRequest request) {
-        List<JsonNode> foods = findLocationsByKeyword(request, LocationCategory.FOOD);
-        List<JsonNode> cafes = findLocationsByKeyword(request, LocationCategory.CAFE);
-        List<JsonNode> attractions = findLocationsByKeyword(request, LocationCategory.CULTURE);
+    public CourseGetResponse generateCourse(CourseGetRequest request) {
+        List<JsonNode> foods = locationService.findLocationsByKeyword(request, LocationCategory.FOOD);
+        List<JsonNode> cafes = locationService.findLocationsByKeyword(request, LocationCategory.CAFE);
+        List<JsonNode> attractions = locationService.findLocationsByKeyword(request, LocationCategory.CULTURE);
 
-        List<JsonNode> lunchAndDinner = getRandomLocations(foods, 2);
-        JsonNode lunch = lunchAndDinner.stream()
-                .findFirst()
-                .orElse(null);
-        JsonNode dinner = lunchAndDinner.size() == 2 ? lunchAndDinner.get(1) : null;
-        JsonNode cafe = getRandomLocation(cafes);
-        JsonNode attraction = getRandomLocation(attractions);
+        CourseFactory courseFactory = new CourseFactory(new RandomIntPicker());
+        Course course = courseFactory.create(foods, cafes, attractions);
+        XY current = new XY(request.longitude(), request.latitude());
+        List<XY> courseRoute = course.buildRoute(current);
 
-        List<XY> locationsNotNull = new ArrayList<>();
-        locationsNotNull.add(new XY(request.longitude(), request.latitude())); // 무조건 존재
-        if (lunch != null) {
-            locationsNotNull.add(searchApiParser.extractXYFromLocation(lunch));
-        }
-        if (cafe != null) {
-            locationsNotNull.add(searchApiParser.extractXYFromLocation(cafe));
-        }
-        if (attraction != null) {
-            locationsNotNull.add(searchApiParser.extractXYFromLocation(attraction));
-        }
-        if (dinner != null) {
-            locationsNotNull.add(searchApiParser.extractXYFromLocation(dinner));
-        }
-
-        if (locationsNotNull.size() == 1) {
+        if (!course.isExist()) {
             return new CourseGetResponse(null, null, null, null);
         }
-        RouteConditionDto condition = makeRouteCondition(locationsNotNull);
-        JsonNode routesDistance = routeApiManager.getPedestrianRoute(condition);
-
-        // 경로 계산 로직
+        RouteConditionDto condition = makeRouteCondition(courseRoute);
+        JsonNode routesRaw = routeApiManager.getPedestrianRoute(condition);
         ObjectMapper mapper = new ObjectMapper();
         mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
-        List<RouteInfo> routes = getRoutes(locationsNotNull, routesDistance);
-        int count = 0;
+        List<RouteInfo> routes = locationService.getRoutes(courseRoute, routesRaw);
 
-        RouteInfo lunchRoute = null;
-        ObjectNode lunchResult = null;
-        if (lunch != null) {
-            lunchRoute = routes.get(count++);
-            String placeName = searchApiParser.extractNameFromLocation(lunch);
-            XY xy = searchApiParser.extractXYFromLocation(lunch);
-            String imageUrl = imageApiManager.findPlaceImage(placeName, xy.x(), xy.y());
-            lunchResult = makeRoute(lunch, lunchRoute, imageUrl, mapper);
-        }
+        course.addRouteInfo(routes);
 
-        RouteInfo cafeRoute = null;
-        ObjectNode cafeResult = null;
-        if (cafe != null) {
-            cafeRoute = routes.get(count++);
-            String placeName = searchApiParser.extractNameFromLocation(cafe);
-            XY xy = searchApiParser.extractXYFromLocation(cafe);
-            String imageUrl = imageApiManager.findPlaceImage(placeName, xy.x(), xy.y());
-            cafeResult = makeRoute(cafe, cafeRoute, imageUrl, mapper);
-        }
+        Location lunch = course.getLunch();
+        String lunchImage = findPlaceImage(lunch);
+        putPlaceImage(lunch, lunchImage);
 
-        RouteInfo attractionRoute = null;
-        ObjectNode attractionResult = null;
-        if (attraction != null) {
-            attractionRoute = routes.get(count++);
-            String placeName = searchApiParser.extractNameFromLocation(attraction);
-            XY xy = searchApiParser.extractXYFromLocation(attraction);
-            String imageUrl = imageApiManager.findPlaceImage(placeName, xy.x(), xy.y());
-            attractionResult = makeRoute(attraction, attractionRoute, imageUrl, mapper);
-        }
+        Location cafe = course.getCafe();
+        String cafeImage = findPlaceImage(cafe);
+        putPlaceImage(cafe, cafeImage);
 
-        RouteInfo dinnerRoute = null;
-        ObjectNode dinnerResult = null;
-        if (dinner != null) {
-            dinnerRoute = routes.get(count);
-            String placeName = searchApiParser.extractNameFromLocation(dinner);
-            XY xy = searchApiParser.extractXYFromLocation(dinner);
-            String imageUrl = imageApiManager.findPlaceImage(placeName, xy.x(), xy.y());
-            dinnerResult = makeRoute(dinner, dinnerRoute, imageUrl, mapper);
-        }
-        return new CourseGetResponse(lunchResult, cafeResult, attractionResult, dinnerResult);
+        Location attraction = course.getAttraction();
+        String attractionImage = findPlaceImage(attraction);
+        putPlaceImage(attraction, attractionImage);
+
+        Location dinner = course.getDinner();
+        String dinnerImage = findPlaceImage(dinner);
+        putPlaceImage(dinner, dinnerImage);
+        return CourseGetResponse.from(course);
     }
 
-    private ObjectNode makeRoute(JsonNode location, RouteInfo routeInfo, String imageUrl, ObjectMapper mapper) {
-        if (location == null) {
-            return null;
+    private String findPlaceImage(Location location) {
+        if (location.isExist()) {
+            String placeName = searchApiParser.extractNameFromLocation(location.getRaw());
+            XY xy = searchApiParser.extractXYFromLocation(location.getRaw());
+            return imageApiManager.findPlaceImage(placeName, xy.x(), xy.y());
         }
-        PedestrianRoute route = new PedestrianRoute(
-                routeInfo.totalSeconds() / 60,
-                makeFacilityInfo(routeInfo.facilityInfo()),
-                routeInfo.route()
-        );
-        ObjectNode result = (ObjectNode) location;
-        result.put("image_url", imageUrl);
-        JsonNode infoJson = mapper.valueToTree(route);
-        result.set("pedestrian", infoJson);
-        return result;
+        return null;
+    }
+
+    private void putPlaceImage(Location location, String imageUrl) {
+        location.putField("image_url", imageUrl);
     }
 
     private RouteConditionDto makeRouteCondition(List<XY> locationsNotNull) {
@@ -158,72 +103,8 @@ public class RecommendService {
                 locationsNotNull.get(locationsNotNull.size() - 1), "종료 장소", passPlace);
     }
 
-    private List<RouteInfo> getRoutes(List<XY> locationsNotNull, JsonNode routesDistance) {
-        RouteApiParser parser = RouteApiParser.from(routesDistance);
-        if (locationsNotNull.size() == 2) {
-            return List.of(parser.getDistanceInfo(PointType.SP, PointType.EP));
-        }
-
-        List<RouteInfo> routeInfos = new ArrayList<>();
-        for (int i = 0; i < locationsNotNull.size() - 1; i++) {
-            if (i == 0) {
-                routeInfos.add(parser.getDistanceInfo(PointType.SP, PointType.PP1));
-            } else if (i == locationsNotNull.size() - 2) {
-                PointType start = PointType.findByName("PP" + i);
-                routeInfos.add(parser.getDistanceInfo(start, PointType.EP));
-            } else {
-                PointType start = PointType.findByName("PP" + i);
-                PointType end = PointType.findByName("PP" + (i + 1));
-                routeInfos.add(parser.getDistanceInfo(start, end));
-            }
-        }
-        return routeInfos;
-    }
-
-    private List<JsonNode> findLocationsByKeyword(CourseGetRequest request, LocationCategory category) {
-        int minLength = 1;
-        if (category.equals(LocationCategory.FOOD)) {
-            minLength = 2;
-        }
-        SearchConditionDto condition = setConditionByKeyword(request, category);
-        for (RecommendKeyword keyword : getKeywords(category)) {
-            List<JsonNode> locations = searchApiManager.findLocationsByKeyword(keyword, condition);
-            if (locations.size() >= minLength) {
-                return locations;
-            }
-        }
-        SearchConditionDto categoryCondition = setConditionByCategory(request, category);
-        return searchApiManager.findLocationsByCategory(categoryCondition);
-    }
-
-    private Map<String, Integer> makeFacilityInfo(Map<FacilityType, Integer> facilityTypeInfo) {
-        return facilityTypeInfo.entrySet()
-                .stream()
-                .filter(entry -> !entry.getKey().equals(FacilityType.일반보행자도로))
-                .collect(Collectors.toMap(
-                        entry -> entry.getKey().name(), Entry::getValue
-                ));
-    }
-
-    private SearchConditionDto setConditionByKeyword(CourseGetRequest request, LocationCategory category) {
-        if (category.equals(LocationCategory.CULTURE)) {
-            return new SearchConditionDto(request.longitude(), request.latitude(), RECOMMEND_RADIUS, null);
-        }
-        return setConditionByCategory(request, category);
-    }
-
-    private SearchConditionDto setConditionByCategory(CourseGetRequest request, LocationCategory category) {
-        return new SearchConditionDto(request.longitude(), request.latitude(), RECOMMEND_RADIUS, category);
-    }
-
-    public AttractionGetResponse getAttributes(AttractionGetRequest request) {
-        SearchConditionDto condition = new SearchConditionDto(
-                request.longitude(),
-                request.latitude(),
-                RECOMMEND_RADIUS,
-                LocationCategory.CULTURE
-        );
-        List<JsonNode> attractions = searchApiManager.findLocationsByCategory(condition);
+    public AttractionGetResponse generateAttractions(AttractionGetRequest request) {
+        List<JsonNode> attractions = locationService.findLocationsByCategory(request, LocationCategory.CULTURE);
         List<JsonNode> randomAttractions = getRandomLocations(attractions, RECOMMEND_ATTRACTION_COUNT);
         for (JsonNode attraction : randomAttractions) {
             String placeName = searchApiParser.extractNameFromLocation(attraction);
@@ -242,13 +123,5 @@ public class RecommendService {
         return indexes.stream()
                 .map(locations::get)
                 .toList();
-    }
-
-    private JsonNode getRandomLocation(List<JsonNode> locations) {
-        if (locations.isEmpty()) {
-            return null;
-        }
-        int randomIndex = randomPicker.pickValue(locations.size());
-        return locations.get(randomIndex);
     }
 }
