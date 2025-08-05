@@ -5,7 +5,8 @@ import { IoIosSearch } from '@react-icons/all-files/io/IoIosSearch';
 import InputComboBox from '@/components/_common/InputComboBox/InputComboBox';
 import CourseItem from '@/components/Course/CourseItem/CourseItem';
 import { useDebounce } from '@/hooks/_common/useDebounce';
-import useTreeMap from '@/hooks/TreeMap/useTreeMap';
+import useMapAddress from '@/hooks/TreeMap/useMapAddress';
+import usePlaceSearch from '@/hooks/TreeMap/usePlaceSearch';
 import useAttractionsQuery from '@/queries/Course/useAttractionsQuery';
 import { extractAddressPart } from '@/utils/extractAddressPart';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
@@ -26,14 +27,15 @@ const CourseMain = () => {
 
   const navigate = useNavigate();
 
-  const { getAddress, currentAddress, searchPlaces, searchedPlaceList } = useTreeMap();
+  const { results, searchPlaces } = usePlaceSearch();
+  const { getAddress, address } = useMapAddress();
   const { attractionList } = useAttractionsQuery(currentPosition.latitude, currentPosition.longitude);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
     const data = formData.get('searchedComboBox');
-    const selectedPlace = searchedPlaceList.find((place) => place.place_name === data);
+    const selectedPlace = results.find((place) => place.place_name === data);
     if (!selectedPlace) return;
 
     navigate(`/course/detail?keyword=${data}&latitude=${selectedPlace.y}&longitude=${selectedPlace.x}`);
@@ -55,7 +57,7 @@ const CourseMain = () => {
     searchPlaces(`${debouncedInputValue}`);
   }, [debouncedInputValue]);
 
-  const currentCity = extractAddressPart(currentAddress, '시');
+  const currentCity = extractAddressPart(address, '시');
 
   return (
     <div className={S.Layout}>
@@ -64,7 +66,7 @@ const CourseMain = () => {
         <form className={S.FormSection} onSubmit={handleSubmit}>
           <InputComboBox
             label="어디로 떠나시나요?<br/>직접 선별한 코스를 알려드려요!"
-            comboBoxList={searchedPlaceList}
+            comboBoxList={results}
             value={inputValue}
             canSubmitByInput={false}
             buttonType="submit"

@@ -4,7 +4,7 @@ import Button from '@/components/_common/Button/Button';
 import TextArea from '@/components/_common/TextArea/TextArea';
 import useFeedEdit from '@/hooks/Feed/useFeedEdit';
 import useImageUploader from '@/hooks/Feed/useImageUploader';
-import useTreeMap from '@/hooks/TreeMap/useTreeMap';
+import useMapAddress from '@/hooks/TreeMap/useMapAddress';
 import useFeedQuery from '@/queries/Feed/useFeedQuery';
 import { FEED } from '@/constants/feed';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
@@ -18,7 +18,7 @@ interface FeedEditProps {
 
 const FeedEdit = ({ feedId, treeId }: FeedEditProps) => {
   const { feed } = useFeedQuery(feedId);
-  const { getAddress, currentAddress } = useTreeMap();
+  const { getAddress, address } = useMapAddress();
   const { imageUrl, fileInputRef, handleImageUploadClick, handleImageChange } = useImageUploader();
   const { content, isContentError, handleContentChange, handleSubmit } = useFeedEdit({
     feedId,
@@ -46,7 +46,7 @@ const FeedEdit = ({ feedId, treeId }: FeedEditProps) => {
         <p className={S.SelectMarkerText}>
           현재 트리 주소
           <br />
-          {currentAddress}
+          {address}
         </p>
       </div>
 
