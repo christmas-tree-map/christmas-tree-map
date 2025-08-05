@@ -1,7 +1,7 @@
 package com.christmas.recommend.dto;
 
+import com.christmas.recommend.domain.Course;
 import com.fasterxml.jackson.databind.JsonNode;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "코스 추천 응답 바디")
@@ -19,4 +19,16 @@ public record CourseGetResponse(
                 + "null일 경우 현재 위치의 2km 이내에 저녁 장소가 없다는 뜻이다.")
         JsonNode dinner
 ) {
+
+    public static CourseGetResponse from(final Course course) {
+        final JsonNode lunch = course.getLunch()
+                .getRaw();
+        final JsonNode cafe = course.getCafe()
+                .getRaw();
+        final JsonNode attraction = course.getAttraction()
+                .getRaw();
+        final JsonNode dinner = course.getDinner()
+                .getRaw();
+        return new CourseGetResponse(lunch, cafe, attraction, dinner);
+    }
 }
