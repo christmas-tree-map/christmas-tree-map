@@ -3,6 +3,7 @@ package com.christmas.recommend.domain;
 import com.christmas.infrastructure.route.dto.XY;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 
@@ -16,8 +17,9 @@ public class Location {
     }
 
     public void putObjectField(String fieldName, Object value) {
-        JsonNode json = new ObjectMapper()
-                .valueToTree(value);
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+        JsonNode json = mapper.valueToTree(value);
         raw.set(fieldName, json);
     }
 
