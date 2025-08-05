@@ -16,8 +16,6 @@ import com.christmas.recommend.dto.CourseGetRequest;
 import com.christmas.recommend.dto.CourseGetResponse;
 import com.christmas.util.RandomIntPicker;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.ArrayList;
 import java.util.List;
@@ -54,8 +52,6 @@ public class RecommendService {
         }
         RouteConditionDto condition = makeRouteCondition(courseRoute);
         JsonNode routesRaw = routeApiManager.getPedestrianRoute(condition);
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
         List<RouteInfo> routes = locationService.getRoutes(courseRoute, routesRaw);
 
         course.addRouteInfo(routes);
