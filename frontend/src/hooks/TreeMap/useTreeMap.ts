@@ -85,13 +85,26 @@ const useTreeMap = () => {
   }, [map]);
 
   useEffect(() => {
+    const savedLocation = sessionStorage.getItem('userLocation');
+
+    if (savedLocation) {
+      const { latitude, longitude } = JSON.parse(savedLocation);
+      initializeMap(latitude, longitude);
+      return;
+    }
+
     if (!navigator.geolocation) {
       initializeMap(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
       return;
     }
 
-    navigator.geolocation.getCurrentPosition((position) =>
-      initializeMap(position.coords.latitude, position.coords.longitude),
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        sessionStorage.setItem('userLocation', JSON.stringify({ latitude, longitude }));
+        initializeMap(latitude, longitude);
+      },
+      () => initializeMap(DEFAULT_LATITUDE, DEFAULT_LONGITUDE),
     );
   }, []);
 
