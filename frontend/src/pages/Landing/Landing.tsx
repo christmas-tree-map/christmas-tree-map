@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import Button from '@/components/_common/Button/Button';
@@ -8,36 +8,47 @@ import Garland from '@/assets/garland.svg';
 import Snowman from '@/assets/snowman.svg';
 import * as S from './Landing.css';
 
+const FALLBACK_LOCATION = {
+  latitude: DEFAULT_LATITUDE,
+  longitude: DEFAULT_LONGITUDE,
+};
+
 const Landing = () => {
   const queryClient = useQueryClient();
+  const [isLocationReady, setIsLocationReady] = useState(false);
 
   useEffect(() => {
+    const setLocation = (location: typeof FALLBACK_LOCATION) => {
+      sessionStorage.setItem('userLocation', JSON.stringify(location));
+      setIsLocationReady(true);
+    };
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          sessionStorage.setItem(
-            'userLocation',
-            JSON.stringify({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude,
-            }),
-          );
+          setLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
         },
         () => {
-          sessionStorage.setItem(
-            'userLocation',
-            JSON.stringify({
-              latitude: DEFAULT_LATITUDE,
-              longitude: DEFAULT_LONGITUDE,
-            }),
-          );
+          setLocation(FALLBACK_LOCATION);
         },
       );
     }
+  }, []);
 
+  const handleButtonPrefetch = () => {
     import('@/pages/TreeMap/TreeMap');
     import('@/hooks/TreeMap/useTreeMap');
-  }, []);
+
+    const savedLocation = sessionStorage.getItem('userLocation');
+    const location = savedLocation ? JSON.parse(savedLocation) : FALLBACK_LOCATION;
+
+    queryClient.prefetchQuery({
+      queryKey: ['trees', location],
+    });
+  };
 
   return (
     <div className={S.Layout}>
@@ -62,7 +73,14 @@ const Landing = () => {
         </p>
         <div className={S.ButtonContainer}>
           <Link to="/map">
-            <Button color="secondary">시작하기</Button>
+            <Button
+              color="secondary"
+              onTouchStart={handleButtonPrefetch}
+              onMouseEnter={handleButtonPrefetch}
+              disabled={!isLocationReady}
+            >
+              {isLocationReady ? '시작하기' : '위치 불러오는 중...'}
+            </Button>
           </Link>
         </div>
       </div>
