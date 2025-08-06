@@ -72,7 +72,6 @@ const useTreeMap = () => {
     map,
     mapRef,
     centerPosition,
-    initialCenter,
     addMarker,
   };
 };

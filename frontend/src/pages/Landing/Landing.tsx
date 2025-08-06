@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import Button from '@/components/_common/Button/Button';
 import SnowAnimation from '@/components/Landing/SnowAnimation/SnowAnimation';
+import { getTrees } from '@/apis/tree';
+import { TREE_KEYS } from '@/queries/queryKeys';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
 import Garland from '@/assets/garland.svg';
 import Snowman from '@/assets/snowman.svg';
@@ -46,7 +48,8 @@ const Landing = () => {
     const location = savedLocation ? JSON.parse(savedLocation) : FALLBACK_LOCATION;
 
     queryClient.prefetchQuery({
-      queryKey: ['trees', location],
+      queryKey: [TREE_KEYS.TREES, location.latitude, location.longitude],
+      queryFn: () => getTrees({ latitude: location.latitude, longitude: location.longitude }),
     });
   };
 
