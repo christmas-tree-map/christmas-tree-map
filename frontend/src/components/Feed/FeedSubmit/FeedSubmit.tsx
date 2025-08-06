@@ -6,7 +6,7 @@ import Input from '@/components/_common/Input/Input';
 import TextArea from '@/components/_common/TextArea/TextArea';
 import useFeedSubmit from '@/hooks/Feed/useFeedSubmit';
 import useImageUploader from '@/hooks/Feed/useImageUploader';
-import useTreeMap from '@/hooks/TreeMap/useTreeMap';
+import useMapAddress from '@/hooks/TreeMap/useMapAddress';
 import { FEED } from '@/constants/feed';
 import mapIcon from '@/assets/map.png';
 import * as S from './FeedSubmit.css';
@@ -15,7 +15,7 @@ const FeedSubmit = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { getAddress, currentAddress } = useTreeMap();
+  const { getAddress, address } = useMapAddress();
   const { imageUrl, imageFile, fileInputRef, handleImageUploadClick, handleImageChange } = useImageUploader();
   const {
     content,
@@ -47,7 +47,7 @@ const FeedSubmit = () => {
           <p className={S.SelectMarkerText}>
             현재 선택된 주소
             <br />
-            {currentAddress}
+            {address}
           </p>
         </div>
         <div className={S.AddressSelectButtonBox}>
