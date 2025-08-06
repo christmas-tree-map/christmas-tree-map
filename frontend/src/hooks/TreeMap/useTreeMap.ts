@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
 import treeImage from '@/assets/TREE_01.png';
 
@@ -12,12 +12,14 @@ const MARKER_IMAGE: Record<string, string> = {
 const useTreeMap = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<typeof kakao.maps.Map | null>(null);
-  const [centerPosition, setCenterPosition] = useState({
-    latitude: DEFAULT_LATITUDE,
-    longitude: DEFAULT_LONGITUDE,
-  });
 
-  const initializeMap = (latitude: number, longitude: number) => {
+  const initialCenter = useMemo(() => {
+    const saved = sessionStorage.getItem('userLocation');
+    return saved ? JSON.parse(saved) : { latitude: DEFAULT_LATITUDE, longitude: DEFAULT_LONGITUDE };
+  }, []);
+  const [centerPosition, setCenterPosition] = useState(initialCenter);
+
+  const initializeMap = useCallback((latitude: number, longitude: number) => {
     if (mapRef.current && kakao && kakao.maps) {
       const options = {
         center: new kakao.maps.LatLng(latitude, longitude),
@@ -26,7 +28,7 @@ const useTreeMap = () => {
       const mapInstance = new kakao.maps.Map(mapRef.current, options);
       setMap(mapInstance);
     }
-  };
+  }, []);
 
   const addMarker = (
     map: typeof kakao.maps.Map,
@@ -55,22 +57,7 @@ const useTreeMap = () => {
   }, [map]);
 
   useEffect(() => {
-    const saved = sessionStorage.getItem('userLocation');
-    if (saved) {
-      const { latitude, longitude } = JSON.parse(saved);
-      initializeMap(latitude, longitude);
-    } else if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const { latitude, longitude } = pos.coords;
-          sessionStorage.setItem('userLocation', JSON.stringify({ latitude, longitude }));
-          initializeMap(latitude, longitude);
-        },
-        () => initializeMap(DEFAULT_LATITUDE, DEFAULT_LONGITUDE),
-      );
-    } else {
-      initializeMap(DEFAULT_LATITUDE, DEFAULT_LONGITUDE);
-    }
+    initializeMap(initialCenter.latitude, initialCenter.longitude);
   }, []);
 
   useEffect(() => {
@@ -85,6 +72,7 @@ const useTreeMap = () => {
     map,
     mapRef,
     centerPosition,
+    initialCenter,
     addMarker,
   };
 };

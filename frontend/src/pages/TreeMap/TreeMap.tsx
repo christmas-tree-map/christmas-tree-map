@@ -13,8 +13,8 @@ const TreeMap = () => {
   const navigate = useNavigate();
 
   const { isModalOpen, openModal, closeModal } = useModal();
-  const { map, mapRef, addMarker, centerPosition } = useTreeMap();
-  const { trees, isSuccess } = useTreesQuery(centerPosition);
+  const { map, mapRef, addMarker, centerPosition, initialCenter } = useTreeMap();
+  const { trees, isSuccess } = useTreesQuery(initialCenter);
   const handleMarkerClick = (treeId: number) => {
     openModal();
     navigate(`/map/${treeId}?modal=feeds`);
