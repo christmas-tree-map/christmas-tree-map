@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import Button from '@/components/_common/Button/Button';
 import SnowAnimation from '@/components/Landing/SnowAnimation/SnowAnimation';
@@ -16,13 +16,12 @@ const FALLBACK_LOCATION = {
 };
 
 const Landing = () => {
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [isLocationReady, setIsLocationReady] = useState(false);
 
   useEffect(() => {
     const setLocation = (location: typeof FALLBACK_LOCATION) => {
       sessionStorage.setItem('userLocation', JSON.stringify(location));
-      setIsLocationReady(true);
     };
 
     if (navigator.geolocation) {
@@ -53,6 +52,10 @@ const Landing = () => {
     });
   };
 
+  const handleButtonClick = () => {
+    navigate('/map');
+  };
+
   return (
     <div className={S.Layout}>
       <div className={S.CircleContainer}>
@@ -75,16 +78,14 @@ const Landing = () => {
           낭만적인 크리스마스를 만들어 보세요!
         </p>
         <div className={S.ButtonContainer}>
-          <Link to="/map">
-            <Button
-              color="secondary"
-              onTouchStart={handleButtonPrefetch}
-              onMouseEnter={handleButtonPrefetch}
-              disabled={!isLocationReady}
-            >
-              {isLocationReady ? '시작하기' : '위치 불러오는 중...'}
-            </Button>
-          </Link>
+          <Button
+            color="secondary"
+            onTouchStart={handleButtonPrefetch}
+            onMouseEnter={handleButtonPrefetch}
+            onClick={handleButtonClick}
+          >
+            시작하기
+          </Button>
         </div>
       </div>
     </div>
