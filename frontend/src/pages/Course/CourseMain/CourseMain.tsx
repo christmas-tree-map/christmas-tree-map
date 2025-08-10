@@ -82,7 +82,7 @@ const CourseMain = () => {
             <p className={S.SubTitle}>장소를 누르면 카카오맵으로 연결됩니다.</p>
           </div>
           <div>
-            {isLoading && <Loading variant="secondary" />}
+            {isLoading && <Loading variant="secondary" fullScreen />}
             {attractionList &&
               attractionList.map((place) => (
                 <CourseItem

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { IoRefresh } from '@react-icons/all-files/io5/IoRefresh';
+import Loading from '@/components/_common/Loading/Loading';
 import ScreenOverlay from '@/components/_common/ScreenOverlay/ScreenOverlay';
 import CourseList from '@/components/Course/CourseList/CourseList';
 import CourseMap from '@/components/Course/CourseMap/CourseMap';
@@ -25,6 +26,8 @@ const CourseDetail = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  if (isLoading) return <Loading variant="secondary" fullScreen />;
+
   return (
     <div className={S.Layout}>
       <h1 className={S.Title}>{keyword} 맞춤 코스 ✨</h1>
@@ -36,7 +39,7 @@ const CourseDetail = () => {
           <CourseMap courseList={courseDetails} mapLevel={7} isStaticMap={true} />
         </div>
       </div>
-      {!isLoading && <CourseList courseList={courseDetails} />}
+      <CourseList courseList={courseDetails} />
       {isButtonOpen && (
         <button className={S.RefreshButton} onClick={() => refetch()}>
           <IoRefresh size="18px" color={vars.colors.secondary[700]} />
