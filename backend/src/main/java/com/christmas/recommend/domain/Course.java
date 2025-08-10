@@ -40,6 +40,9 @@ public class Course {
     }
 
     public void addRouteInfo(List<RouteInfo> routes) {
+        if (routes == null) {
+            return;
+        }
         int count = 0;
         RouteInfo lunchRouteInfo = null;
         if (lunch.isExist()) {
