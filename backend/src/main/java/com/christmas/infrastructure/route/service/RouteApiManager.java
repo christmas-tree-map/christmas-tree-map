@@ -3,20 +3,14 @@ package com.christmas.infrastructure.route.service;
 import com.christmas.infrastructure.route.dto.RouteConditionDto;
 import com.christmas.infrastructure.route.exception.JsonParseException;
 import com.christmas.infrastructure.route.exception.code.DistanceErrorCode;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.Map;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -32,6 +26,7 @@ public class RouteApiManager {
     private static final String PEDESTRIAN_ROUTE_URL = "/pedestrian?version=1";
     private static final int MAX_PASS_LIST = 5;
 
+    private final RestClient restClient;
     private final RouteApiBody routeApiBody;
 
     public JsonNode getPedestrianRoute(RouteConditionDto condition) {
@@ -43,7 +38,7 @@ public class RouteApiManager {
     }
 
     private JsonNode callTMapApi(String url, Map<String, Object> body) {
-        final String rawJson = RestClient.create()
+        final String rawJson = restClient
                 .post()
                 .uri(url)
                 .header("accept", "application/json")
@@ -60,7 +55,8 @@ public class RouteApiManager {
         try {
             return new ObjectMapper().readTree(cleaned);
         } catch (Exception e) {
-            throw new JsonParseException(DistanceErrorCode.TMAP_JSON_PARSE_ERROR, Map.of("컨트롤 코드 제거한 tmap api 응답", cleaned), e);
+            throw new JsonParseException(DistanceErrorCode.TMAP_JSON_PARSE_ERROR,
+                    Map.of("컨트롤 코드 제거한 tmap api 응답", cleaned), e);
         }
     }
 }

@@ -38,6 +38,7 @@ public class SearchApiManager {
 
     private final SearchApiQuery searchApiQuery;
     private final SearchApiParser searchApiParser;
+    private final RestClient restClient;
 
     public List<JsonNode> findLocationsByKeyword(RecommendKeyword keyword, SearchConditionDto condition) {
         String query = searchApiQuery.makeQuery(setParametersByKeyword(keyword, condition));
@@ -82,7 +83,7 @@ public class SearchApiManager {
     }
 
     private JsonNode callKakaoMapApi(String url) {
-        return RestClient.create()
+        return restClient
                 .get()
                 .uri(url)
                 .header("Authorization", String.format(AUTH_VALUE_FORMAT, apiKey))
