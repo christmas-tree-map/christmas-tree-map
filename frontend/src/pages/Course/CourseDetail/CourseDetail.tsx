@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { IoRefresh } from '@react-icons/all-files/io5/IoRefresh';
+import EmptyCourseList from '@/pages/Course/CourseDetail/EmptyCourseDetail';
 import Loading from '@/components/_common/Loading/Loading';
 import ScreenOverlay from '@/components/_common/ScreenOverlay/ScreenOverlay';
 import CourseList from '@/components/Course/CourseList/CourseList';
@@ -27,6 +28,7 @@ const CourseDetail = () => {
   }, []);
 
   if (isLoading) return <Loading variant="secondary" fullScreen />;
+  if (Object.keys(courseDetails).length === 0) return <EmptyCourseList />;
 
   return (
     <div className={S.Layout}>
