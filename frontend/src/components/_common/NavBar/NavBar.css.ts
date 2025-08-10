@@ -76,7 +76,3 @@ export const Spacing = styleVariants({
   sticky: [SpacingBase, { backgroundColor: vars.colors.white }],
   default: [SpacingBase],
 });
-
-export const Blank = style({
-  height: '92px',
-});
