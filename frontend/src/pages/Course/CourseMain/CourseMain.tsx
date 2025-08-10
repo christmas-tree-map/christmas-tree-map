@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoIosSearch } from '@react-icons/all-files/io/IoIosSearch';
 import InputComboBox from '@/components/_common/InputComboBox/InputComboBox';
+import Loading from '@/components/_common/Loading/Loading';
 import CourseItem from '@/components/Course/CourseItem/CourseItem';
 import { useDebounce } from '@/hooks/_common/useDebounce';
 import useMapAddress from '@/hooks/TreeMap/useMapAddress';
@@ -29,7 +30,7 @@ const CourseMain = () => {
 
   const { results, searchPlaces } = usePlaceSearch();
   const { getAddress, address } = useMapAddress();
-  const { attractionList } = useAttractionsQuery(currentPosition.latitude, currentPosition.longitude);
+  const { attractionList, isLoading } = useAttractionsQuery(currentPosition.latitude, currentPosition.longitude);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -81,6 +82,7 @@ const CourseMain = () => {
             <p className={S.SubTitle}>장소를 누르면 카카오맵으로 연결됩니다.</p>
           </div>
           <div>
+            {isLoading && <Loading variant="secondary" fullScreen />}
             {attractionList &&
               attractionList.map((place) => (
                 <CourseItem
