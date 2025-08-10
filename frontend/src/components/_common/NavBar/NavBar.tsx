@@ -33,7 +33,6 @@ const NavBar = ({ isSticky }: NavBarProps) => {
         </nav>
         <div className={S.Spacing[isSticky ? 'sticky' : 'default']} />
       </div>
-      {isSticky && <div className={S.Blank}></div>}
     </>
   );
 };
