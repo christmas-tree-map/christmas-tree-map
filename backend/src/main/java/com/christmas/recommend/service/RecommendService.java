@@ -43,6 +43,9 @@ public class RecommendService {
             return new CourseGetResponse(null, null, null, null);
         }
         List<RouteInfo> routes = locationService.findPedestrianRoute(courseRoute);
+        if (routes.isEmpty()) {
+            return new CourseGetResponse(null, null, null, null);
+        }
         course.addRouteInfo(routes);
 
         Location lunch = course.getLunch();

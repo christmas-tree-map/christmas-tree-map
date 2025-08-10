@@ -19,6 +19,7 @@ import com.christmas.recommend.dto.CourseGetRequest;
 import com.christmas.util.RandomIntPicker;
 import com.fasterxml.jackson.databind.JsonNode;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -63,8 +64,12 @@ public class LocationService {
 
     public List<RouteInfo> findPedestrianRoute(List<XY> courseRoute) {
         RouteConditionDto condition = makeRouteCondition(courseRoute);
-        JsonNode routesRaw = routeApiManager.getPedestrianRoute(condition);
-        return getRoutes(courseRoute, routesRaw);
+        try {
+            JsonNode routesRaw = routeApiManager.getPedestrianRoute(condition);
+            return getRoutes(courseRoute, routesRaw);
+        } catch (Exception e) {
+            return Collections.emptyList();
+        }
     }
 
     private RouteConditionDto makeRouteCondition(List<XY> locationsNotNull) {

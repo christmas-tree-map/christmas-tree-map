@@ -4,6 +4,7 @@ import com.christmas.recommend.domain.Course;
 import com.christmas.recommend.domain.Location;
 import com.christmas.util.RandomIntPicker;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,13 +16,13 @@ public class CourseFactory {
 
     public Course create(List<JsonNode> foods, List<JsonNode> cafes, List<JsonNode> attractions) {
         List<JsonNode> lunchAndDinner = getRandomLocations(foods, 2);
-        // todo: null 대신 빈 ObjectNode로 대체
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode lunch = (ObjectNode) lunchAndDinner.stream()
                 .findFirst()
-                .orElse(null);
-        ObjectNode cafe = (ObjectNode) getRandomLocation(cafes);
-        ObjectNode dinner = lunchAndDinner.size() == 2 ? (ObjectNode) lunchAndDinner.get(1) : null;
-        ObjectNode attraction = (ObjectNode) getRandomLocation(attractions);
+                .orElse(mapper.createObjectNode());
+        ObjectNode cafe = getRandomLocation(cafes, mapper);
+        ObjectNode dinner = lunchAndDinner.size() == 2 ? (ObjectNode) lunchAndDinner.get(1) : mapper.createObjectNode();
+        ObjectNode attraction = getRandomLocation(attractions, mapper);
         return new Course(new Location(lunch), new Location(cafe), new Location(dinner), new Location(attraction));
     }
 
@@ -35,11 +36,11 @@ public class CourseFactory {
                 .toList();
     }
 
-    private JsonNode getRandomLocation(List<JsonNode> locations) {
+    private ObjectNode getRandomLocation(List<JsonNode> locations, ObjectMapper mapper) {
         if (locations.isEmpty()) {
-            return null;
+            return mapper.createObjectNode();
         }
         int randomIndex = randomPicker.pickValue(locations.size());
-        return locations.get(randomIndex);
+        return (ObjectNode) locations.get(randomIndex);
     }
 }
