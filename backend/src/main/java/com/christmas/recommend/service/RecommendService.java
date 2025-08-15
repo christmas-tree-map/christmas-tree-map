@@ -3,7 +3,6 @@ package com.christmas.recommend.service;
 import com.christmas.infrastructure.route.dto.RouteInfo;
 import com.christmas.infrastructure.route.dto.XY;
 import com.christmas.infrastructure.search.domain.LocationCategory;
-import com.christmas.infrastructure.search.service.SearchApiParser;
 import com.christmas.recommend.domain.Course;
 import com.christmas.recommend.domain.Location;
 import com.christmas.recommend.dto.AttractionGetRequest;
@@ -25,7 +24,6 @@ public class RecommendService {
 
     public static final int RECOMMEND_ATTRACTION_COUNT = 3;
 
-    private final SearchApiParser searchApiParser;
     private final RandomIntPicker randomPicker;
     private final LocationService locationService;
 
@@ -68,36 +66,42 @@ public class RecommendService {
 
     private String findPlaceImage(Location location) {
         if (location.isExist()) {
-            String placeName = searchApiParser.extractNameFromLocation(location.getRaw());
-            XY xy = searchApiParser.extractXYFromLocation(location.getRaw());
+            String placeName = location.extractName();
+            XY xy = location.extractXY();
             return locationService.findPlaceImage(placeName, xy);
         }
         return null;
     }
 
     private void putPlaceImage(Location location, String imageUrl) {
-        location.putField("image_url", imageUrl);
+        location.putImageUrl(imageUrl);
     }
 
     public AttractionGetResponse generateAttractions(AttractionGetRequest request) {
         List<JsonNode> attractions = locationService.findLocationsByCategory(request, LocationCategory.CULTURE);
-        List<JsonNode> randomAttractions = getRandomLocations(attractions, RECOMMEND_ATTRACTION_COUNT);
-        for (JsonNode attraction : randomAttractions) {
-            String placeName = searchApiParser.extractNameFromLocation(attraction);
-            XY xy = searchApiParser.extractXYFromLocation(attraction);
+        List<Location> randomAttractions = getRandomLocations(attractions, RECOMMEND_ATTRACTION_COUNT);
+        for (Location attraction : randomAttractions) {
+            String placeName = attraction.extractName();
+            XY xy = attraction.extractXY();
             String imageUrl = locationService.findPlaceImage(placeName, xy);
-            ((ObjectNode) attraction).put("image_url", imageUrl);
+            attraction.putImageUrl(imageUrl);
+
+            List<XY> route = List.of(new XY(request.longitude(), request.latitude()), xy);
+            List<RouteInfo> pedestrianRoute = locationService.findPedestrianRoute(route);
+            attraction.putPedestrian(pedestrianRoute.get(0));
         }
-        return new AttractionGetResponse(randomAttractions);
+        return AttractionGetResponse.from(randomAttractions);
     }
 
-    private List<JsonNode> getRandomLocations(List<JsonNode> locations, int count) {
+    private List<Location> getRandomLocations(List<JsonNode> locations, int count) {
         if (locations.size() < count) {
-            return locations;
+            return locations.stream()
+                    .map(locationRaw -> new Location((ObjectNode) locationRaw))
+                    .toList();
         }
         List<Integer> indexes = randomPicker.pickUniqueValues(locations.size(), count);
         return indexes.stream()
-                .map(locations::get)
+                .map(index -> new Location((ObjectNode) locations.get(index)))
                 .toList();
     }
 }
