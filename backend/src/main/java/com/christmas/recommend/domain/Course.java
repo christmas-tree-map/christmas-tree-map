@@ -47,40 +47,23 @@ public class Course {
         RouteInfo lunchRouteInfo = null;
         if (lunch.isExist()) {
             lunchRouteInfo = routes.get(count++);
-            lunch.putObjectField("pedestrian", makePedestrianRoute(lunchRouteInfo));
+            lunch.putPedestrian(lunchRouteInfo);
         }
         RouteInfo cafeRouteInfo = null;
         if (cafe.isExist()) {
             cafeRouteInfo = routes.get(count++);
-            cafe.putObjectField("pedestrian", makePedestrianRoute(cafeRouteInfo));
+            cafe.putPedestrian(cafeRouteInfo);
         }
         RouteInfo attractionRouteInfo = null;
         if (attraction.isExist()) {
             attractionRouteInfo = routes.get(count++);
-            cafe.putObjectField("pedestrian", makePedestrianRoute(attractionRouteInfo));
+            attraction.putPedestrian(attractionRouteInfo);
         }
         RouteInfo dinnerRouteInfo = null;
         if (dinner.isExist()) {
             dinnerRouteInfo = routes.get(count);
-            dinner.putObjectField("pedestrian", makePedestrianRoute(dinnerRouteInfo));
+            dinner.putPedestrian(dinnerRouteInfo);
         }
-    }
-
-    private PedestrianRoute makePedestrianRoute(RouteInfo routeInfo) {
-        return new PedestrianRoute(
-                routeInfo.totalSeconds() / 60,
-                makeFacilityInfo(routeInfo.facilityInfo()),
-                routeInfo.route()
-        );
-    }
-
-    private Map<String, Integer> makeFacilityInfo(Map<FacilityType, Integer> facilityTypeInfo) {
-        return facilityTypeInfo.entrySet()
-                .stream()
-                .filter(entry -> !entry.getKey().equals(FacilityType.일반보행자도로))
-                .collect(Collectors.toMap(
-                        entry -> entry.getKey().name(), Entry::getValue
-                ));
     }
 
     public boolean isExist() {

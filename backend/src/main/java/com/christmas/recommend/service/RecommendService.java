@@ -1,6 +1,5 @@
 package com.christmas.recommend.service;
 
-import com.christmas.infrastructure.route.domain.FacilityType;
 import com.christmas.infrastructure.route.dto.RouteInfo;
 import com.christmas.infrastructure.route.dto.XY;
 import com.christmas.infrastructure.search.domain.LocationCategory;
@@ -11,14 +10,10 @@ import com.christmas.recommend.dto.AttractionGetRequest;
 import com.christmas.recommend.dto.AttractionGetResponse;
 import com.christmas.recommend.dto.CourseGetRequest;
 import com.christmas.recommend.dto.CourseGetResponse;
-import com.christmas.recommend.dto.PedestrianRoute;
 import com.christmas.util.RandomIntPicker;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,35 +66,17 @@ public class RecommendService {
         return CourseGetResponse.from(course);
     }
 
-    private PedestrianRoute makePedestrianRoute(RouteInfo routeInfo) {
-        return new PedestrianRoute(
-                routeInfo.totalSeconds() / 60,
-                makeFacilityInfo(routeInfo.facilityInfo()),
-                routeInfo.route()
-        );
-    }
-
-    private Map<String, Integer> makeFacilityInfo(Map<FacilityType, Integer> facilityTypeInfo) {
-        return facilityTypeInfo.entrySet()
-                .stream()
-                .filter(entry -> !entry.getKey().equals(FacilityType.일반보행자도로))
-                .collect(Collectors.toMap(
-                        entry -> entry.getKey().name(), Entry::getValue
-                ));
-    }
-
-    // todo: 리팩토링 (이름)
     private String findPlaceImage(Location location) {
         if (location.isExist()) {
-            String placeName = searchApiParser.extractNameFromLocation(location.getRaw());
-            XY xy = searchApiParser.extractXYFromLocation(location.getRaw());
+            String placeName = location.extractName();
+            XY xy = location.extractXY();
             return locationService.findPlaceImage(placeName, xy);
         }
         return null;
     }
 
     private void putPlaceImage(Location location, String imageUrl) {
-        location.putField("image_url", imageUrl);
+        location.putImageUrl(imageUrl);
     }
 
     public AttractionGetResponse generateAttractions(AttractionGetRequest request) {
@@ -109,11 +86,11 @@ public class RecommendService {
             String placeName = attraction.extractName();
             XY xy = attraction.extractXY();
             String imageUrl = locationService.findPlaceImage(placeName, xy);
-            attraction.putField("image_url", imageUrl);
+            attraction.putImageUrl(imageUrl);
 
             List<XY> route = List.of(new XY(request.longitude(), request.latitude()), xy);
             List<RouteInfo> pedestrianRoute = locationService.findPedestrianRoute(route);
-            attraction.putObjectField("pedestrian", makePedestrianRoute(pedestrianRoute.get(0)));
+            attraction.putPedestrian(pedestrianRoute.get(0));
         }
         return AttractionGetResponse.from(randomAttractions);
     }
