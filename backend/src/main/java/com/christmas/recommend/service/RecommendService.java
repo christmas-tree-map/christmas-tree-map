@@ -3,7 +3,6 @@ package com.christmas.recommend.service;
 import com.christmas.infrastructure.route.dto.RouteInfo;
 import com.christmas.infrastructure.route.dto.XY;
 import com.christmas.infrastructure.search.domain.LocationCategory;
-import com.christmas.infrastructure.search.service.SearchApiParser;
 import com.christmas.recommend.domain.Course;
 import com.christmas.recommend.domain.Location;
 import com.christmas.recommend.dto.AttractionGetRequest;
@@ -25,7 +24,6 @@ public class RecommendService {
 
     public static final int RECOMMEND_ATTRACTION_COUNT = 3;
 
-    private final SearchApiParser searchApiParser;
     private final RandomIntPicker randomPicker;
     private final LocationService locationService;
 

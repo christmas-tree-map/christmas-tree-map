@@ -1,14 +1,9 @@
 package com.christmas.recommend.domain;
 
-import com.christmas.infrastructure.route.domain.FacilityType;
 import com.christmas.infrastructure.route.dto.RouteInfo;
 import com.christmas.infrastructure.route.dto.XY;
-import com.christmas.recommend.dto.PedestrianRoute;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
