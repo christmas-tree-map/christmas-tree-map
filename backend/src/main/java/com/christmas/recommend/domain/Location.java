@@ -36,8 +36,8 @@ public class Location {
         return new XY(x, y);
     }
 
-    public String extractName(JsonNode location) {
-        return location.get("place_name").asText();
+    public String extractName() {
+        return raw.get("place_name").asText();
     }
 
     public ObjectNode getRaw() {
