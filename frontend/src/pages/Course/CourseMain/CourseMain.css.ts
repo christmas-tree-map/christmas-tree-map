@@ -37,6 +37,7 @@ export const SubTitle = style({
 });
 
 export const FormSection = style({
+  position: 'relative',
   marginBottom: '114px',
 });
 
@@ -50,4 +51,23 @@ export const PlaceSection = style({
 
 export const PlaceHeader = style({
   textAlign: 'center',
+});
+
+export const CourseBox = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '7px',
+  position: 'absolute',
+  right: 0,
+  top: 0,
+  padding: '4px 10px',
+  borderRadius: '10px',
+  backgroundColor: 'transparent',
+  font: vars.fonts.small,
+  color: vars.colors.black,
+
+  ':active': {
+    backgroundColor: vars.colors.grey[50],
+    opacity: 0.5,
+  },
 });
