@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { IoIosArrowForward } from '@react-icons/all-files/io/IoIosArrowForward';
 import { IoIosSearch } from '@react-icons/all-files/io/IoIosSearch';
 import InputComboBox from '@/components/_common/InputComboBox/InputComboBox';
 import Loading from '@/components/_common/Loading/Loading';
@@ -42,6 +43,10 @@ const CourseMain = () => {
     navigate(`/course/detail?keyword=${data}&latitude=${selectedPlace.y}&longitude=${selectedPlace.x}`);
   };
 
+  const handleNavigateSavedCourse = () => {
+    navigate('/course/saved');
+  };
+
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
       setCurrentPosition({ latitude: position.coords.latitude, longitude: position.coords.longitude });
@@ -75,6 +80,9 @@ const CourseMain = () => {
             onChangeValue={setInputValue}
             name={'searchedComboBox'}
           />
+          <div className={S.CourseBox} onClick={handleNavigateSavedCourse}>
+            저장된 코스 <IoIosArrowForward />
+          </div>
         </form>
         <section className={S.PlaceSection}>
           <div className={S.PlaceHeader}>

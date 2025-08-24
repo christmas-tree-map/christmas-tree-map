@@ -8,6 +8,7 @@ import MapMarkerSelector from '@/pages/MapMarkerSelector/MapMarkerSelector';
 import TreeMap from '@/pages/TreeMap/TreeMap';
 import FeedList from '@/components/Feed/FeedList/FeedList';
 import GlobalErrorBoundary from './pages/Error/ErrorBoundary/GlobalErrorBoundary';
+import SavedCourse from './pages/Course/SavedCourse/SavedCourse';
 
 const App = () => {
   const router = createBrowserRouter(
@@ -64,6 +65,10 @@ const App = () => {
           {
             path: '/course/detail',
             element: <CourseDetail />,
+          },
+          {
+            path: 'saved',
+            element: <SavedCourse />,
           },
         ],
       },

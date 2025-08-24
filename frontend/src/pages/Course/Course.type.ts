@@ -20,8 +20,3 @@ export interface Course {
   };
   image_url: string;
 }
-
-export interface CourseWithPosition extends Course {
-  x: string;
-  y: string;
-}

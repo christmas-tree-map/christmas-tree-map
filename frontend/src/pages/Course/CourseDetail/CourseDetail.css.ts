@@ -33,6 +33,12 @@ export const CourseMapContainer = style({
   overflow: 'hidden',
 });
 
+export const TitleContainer = style({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+});
+
 export const RefreshButton = style({
   display: 'flex',
   justifyContent: 'center',
@@ -60,4 +66,10 @@ export const RefreshText = style({
 
 export const DetailButton = style({
   color: vars.colors.grey[500],
+});
+
+export const SaveButton = style({
+  display: 'flex',
+  alignItems: 'center',
+  borderRadius: '10px',
 });
