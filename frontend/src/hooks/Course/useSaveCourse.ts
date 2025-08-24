@@ -1,60 +1,81 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { CourseDetails, CourseType } from '@/pages/Course/Course.type';
 
-interface SavedCourse {
-  [key: string]: CourseDetails[];
-}
+type SavedCourseMap = Map<string, CourseDetails[]>;
 
-const useSaveCourse = (keyword: string | null, courseDetails: CourseDetails) => {
+const useSaveCourse = () => {
   const [isSaved, setIsSaved] = useState(false);
 
-  const checkIsSaved = (keyword: string, courseDetails: CourseDetails): boolean => {
-    const savedCourse = JSON.parse(localStorage.getItem('savedCourse') || '{}') as SavedCourse;
+  const getSavedCourseMap = (): SavedCourseMap => {
+    const savedData = localStorage.getItem('savedCourse');
+    if (!savedData) return new Map();
 
-    return savedCourse[keyword]
-      ? savedCourse[keyword].some((savedCourseDetails: CourseDetails) =>
-          Object.entries(savedCourseDetails).every(
-            ([key, value]) => value?.id === courseDetails[key as CourseType]?.id,
-          ),
-        )
-      : false;
+    try {
+      const parsedData = JSON.parse(savedData);
+      return new Map(Object.entries(parsedData));
+    } catch {
+      return new Map();
+    }
   };
 
-  const handleSaveCourse = () => {
+  const saveCourseMap = (map: SavedCourseMap): void => {
+    localStorage.setItem('savedCourse', JSON.stringify(Object.fromEntries(map)));
+  };
+
+  const checkIsSaved = (keyword: string, courseDetails: CourseDetails): boolean => {
+    const savedCourseMap = getSavedCourseMap();
+    const courseList = savedCourseMap.get(keyword);
+
+    if (!courseList) return false;
+
+    return courseList.some((savedCourseDetails: CourseDetails) =>
+      Object.entries(savedCourseDetails).every(([key, value]) => value?.id === courseDetails[key as CourseType]?.id),
+    );
+  };
+
+  const handleSaveCourse = (keyword: string | null, courseDetails: CourseDetails) => {
     if (!keyword) return;
 
-    const savedCourse = JSON.parse(localStorage.getItem('savedCourse') || '{}') as SavedCourse;
+    const savedCourseMap = getSavedCourseMap();
     const currentIsSaved = checkIsSaved(keyword, courseDetails);
 
     if (currentIsSaved) {
-      const updatedCourseList = savedCourse[keyword].filter(
+      const courseList = savedCourseMap.get(keyword) || [];
+      const updatedCourseList = courseList.filter(
         (course: CourseDetails) =>
           !Object.entries(course).every(([key, value]) => value?.id === courseDetails[key as CourseType]?.id),
       );
 
       if (updatedCourseList.length === 0) {
-        delete savedCourse[keyword];
+        savedCourseMap.delete(keyword);
       } else {
-        savedCourse[keyword] = updatedCourseList;
+        savedCourseMap.set(keyword, updatedCourseList);
       }
 
-      localStorage.setItem('savedCourse', JSON.stringify(savedCourse));
+      saveCourseMap(savedCourseMap);
       setIsSaved(false);
     } else {
-      savedCourse[keyword] = [...(savedCourse[keyword] || []), courseDetails];
+      const existingCourses = savedCourseMap.get(keyword) || [];
+      savedCourseMap.set(keyword, [...existingCourses, courseDetails]);
 
-      localStorage.setItem('savedCourse', JSON.stringify(savedCourse));
+      saveCourseMap(savedCourseMap);
       setIsSaved(true);
     }
   };
 
-  useEffect(() => {
-    if (keyword && courseDetails) {
-      setIsSaved(checkIsSaved(keyword, courseDetails));
-    }
-  }, [keyword, courseDetails]);
+  const updateSavedStatus = (keyword: string | null, courseDetails: CourseDetails) => {
+    if (!keyword) return;
 
-  return { isSaved, handleSaveCourse };
+    const currentIsSaved = checkIsSaved(keyword, courseDetails);
+    setIsSaved(currentIsSaved);
+  };
+
+  return {
+    isSaved,
+    savedCourseMap: getSavedCourseMap(),
+    handleSaveCourse,
+    updateSavedStatus,
+  };
 };
 
 export default useSaveCourse;
