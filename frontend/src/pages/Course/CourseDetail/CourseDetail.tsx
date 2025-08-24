@@ -19,12 +19,21 @@ const CourseDetail = () => {
   const keyword = searchParams.get('keyword');
   const latitude = searchParams.get('latitude');
   const longitude = searchParams.get('longitude');
+  const savedNum = Number(searchParams.get('savedNum')) || 0;
 
-  const { courseDetails, refetch, isLoading } = useCourseDetailsQuery(latitude || '', longitude || '');
+  const { courseDetails, refetch, isLoading } = useCourseDetailsQuery(latitude || '', longitude || '', savedNum);
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [isButtonOpen, setIsButtonOpen] = useState(false);
 
-  const { isSaved, toggleSave } = useSaveCourse(keyword, courseDetails, { x: latitude || '', y: longitude || '' });
+  const { isSaved, toggleSave, displayCourseDetails } = useSaveCourse(
+    keyword,
+    courseDetails,
+    {
+      x: latitude || '',
+      y: longitude || '',
+    },
+    savedNum,
+  );
 
   useEffect(() => {
     const timer = setTimeout(() => setIsButtonOpen(true), 5000);
@@ -32,6 +41,7 @@ const CourseDetail = () => {
   }, []);
 
   if (isLoading) return <Loading variant="secondary" fullScreen />;
+  if (!keyword) throw new Error('keyword가 없습니다.');
   if (Object.keys(courseDetails).length === 0) return <EmptyCourseList />;
 
   return (
@@ -47,10 +57,10 @@ const CourseDetail = () => {
           자세히 보기
         </button>
         <div className={S.CourseMapContainer}>
-          <CourseMap courseList={courseDetails} mapLevel={7} isStaticMap={true} />
+          <CourseMap courseList={displayCourseDetails} mapLevel={7} isStaticMap={true} />
         </div>
       </div>
-      <CourseList courseList={courseDetails} />
+      <CourseList courseList={displayCourseDetails} />
       {isButtonOpen && (
         <button className={S.RefreshButton} onClick={() => refetch()}>
           <IoRefresh size="18px" color={vars.colors.secondary[700]} />
@@ -59,7 +69,7 @@ const CourseDetail = () => {
       )}
       {isMapOpen && (
         <ScreenOverlay title="맞춤 코스 추천" isOpen={isMapOpen} closeOverlay={() => setIsMapOpen(false)}>
-          <CourseMap courseList={courseDetails} />
+          <CourseMap courseList={displayCourseDetails} />
         </ScreenOverlay>
       )}
     </div>

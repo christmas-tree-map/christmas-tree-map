@@ -87,6 +87,12 @@ export const useSavedCourseMap = () => {
     return savedCourseMap.get(keyword)?.courseDetails || [];
   };
 
+  const getSavedCourse = (keyword: string, index: number): CourseDetails => {
+    return (
+      savedCourseMap.get(keyword)?.courseDetails[index] || { lunch: null, cafe: null, attraction: null, dinner: null }
+    );
+  };
+
   const getSavedKeywords = () => {
     return Array.from(savedCourseMap.keys());
   };
@@ -98,5 +104,6 @@ export const useSavedCourseMap = () => {
     isSaved,
     getSavedCourses,
     getSavedKeywords,
+    getSavedCourse,
   };
 };
