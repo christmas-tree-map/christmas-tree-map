@@ -1,80 +1,36 @@
-import { useState } from 'react';
-import { CourseDetails, CourseType } from '@/pages/Course/Course.type';
+import { CourseDetails } from '@/pages/Course/Course.type';
+import { useSavedCourseMap } from '@/hooks/Course/useSavedCourseMap';
 
-type SavedCourseMap = Map<string, CourseDetails[]>;
+const useSaveCourse = (keyword: string | null, courseDetails: CourseDetails, coordinates: { x: string; y: string }) => {
+  const { saveCourse, removeCourse, isSaved: checkIsSaved } = useSavedCourseMap();
 
-const useSaveCourse = () => {
-  const [isSaved, setIsSaved] = useState(false);
+  const isSaved = keyword ? checkIsSaved(keyword, courseDetails) : false;
 
-  const getSavedCourseMap = (): SavedCourseMap => {
-    const savedData = localStorage.getItem('savedCourse');
-    if (!savedData) return new Map();
-
-    try {
-      const parsedData = JSON.parse(savedData);
-      return new Map(Object.entries(parsedData));
-    } catch {
-      return new Map();
-    }
-  };
-
-  const saveCourseMap = (map: SavedCourseMap): void => {
-    localStorage.setItem('savedCourse', JSON.stringify(Object.fromEntries(map)));
-  };
-
-  const checkIsSaved = (keyword: string, courseDetails: CourseDetails): boolean => {
-    const savedCourseMap = getSavedCourseMap();
-    const courseList = savedCourseMap.get(keyword);
-
-    if (!courseList) return false;
-
-    return courseList.some((savedCourseDetails: CourseDetails) =>
-      Object.entries(savedCourseDetails).every(([key, value]) => value?.id === courseDetails[key as CourseType]?.id),
-    );
-  };
-
-  const handleSaveCourse = (keyword: string | null, courseDetails: CourseDetails) => {
+  const toggleSave = () => {
     if (!keyword) return;
 
-    const savedCourseMap = getSavedCourseMap();
-    const currentIsSaved = checkIsSaved(keyword, courseDetails);
-
-    if (currentIsSaved) {
-      const courseList = savedCourseMap.get(keyword) || [];
-      const updatedCourseList = courseList.filter(
-        (course: CourseDetails) =>
-          !Object.entries(course).every(([key, value]) => value?.id === courseDetails[key as CourseType]?.id),
-      );
-
-      if (updatedCourseList.length === 0) {
-        savedCourseMap.delete(keyword);
-      } else {
-        savedCourseMap.set(keyword, updatedCourseList);
-      }
-
-      saveCourseMap(savedCourseMap);
-      setIsSaved(false);
+    if (isSaved) {
+      removeCourse(keyword, courseDetails);
     } else {
-      const existingCourses = savedCourseMap.get(keyword) || [];
-      savedCourseMap.set(keyword, [...existingCourses, courseDetails]);
-
-      saveCourseMap(savedCourseMap);
-      setIsSaved(true);
+      saveCourse(keyword, courseDetails, coordinates.x, coordinates.y);
     }
   };
 
-  const updateSavedStatus = (keyword: string | null, courseDetails: CourseDetails) => {
-    if (!keyword) return;
+  const saveCurrentCourse = () => {
+    if (!keyword || isSaved) return;
+    saveCourse(keyword, courseDetails, coordinates.x, coordinates.y);
+  };
 
-    const currentIsSaved = checkIsSaved(keyword, courseDetails);
-    setIsSaved(currentIsSaved);
+  const removeCurrentCourse = () => {
+    if (!keyword || !isSaved) return;
+    removeCourse(keyword, courseDetails);
   };
 
   return {
     isSaved,
-    savedCourseMap: getSavedCourseMap(),
-    handleSaveCourse,
-    updateSavedStatus,
+    toggleSave,
+    saveCurrentCourse,
+    removeCurrentCourse,
   };
 };
 

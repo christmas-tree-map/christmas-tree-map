@@ -21,9 +21,10 @@ const CourseDetail = () => {
   const longitude = searchParams.get('longitude');
 
   const { courseDetails, refetch, isLoading } = useCourseDetailsQuery(latitude || '', longitude || '');
-  const { isSaved, handleSaveCourse } = useSaveCourse();
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [isButtonOpen, setIsButtonOpen] = useState(false);
+
+  const { isSaved, toggleSave } = useSaveCourse(keyword, courseDetails, { x: latitude || '', y: longitude || '' });
 
   useEffect(() => {
     const timer = setTimeout(() => setIsButtonOpen(true), 5000);
@@ -37,7 +38,7 @@ const CourseDetail = () => {
     <div className={S.Layout}>
       <div className={S.TitleContainer}>
         <h1 className={S.Title}>{keyword} 맞춤 코스 ✨</h1>
-        <button className={S.SaveButton} onClick={() => handleSaveCourse(keyword, courseDetails)}>
+        <button className={S.SaveButton} onClick={toggleSave}>
           {isSaved ? <FaStar size={20} color="#E8DE4C" /> : <FaRegStar size={20} color={vars.colors.grey[500]} />}
         </button>
       </div>
