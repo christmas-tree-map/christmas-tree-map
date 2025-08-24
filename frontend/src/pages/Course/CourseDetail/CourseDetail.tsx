@@ -19,7 +19,7 @@ const CourseDetail = () => {
   const keyword = searchParams.get('keyword');
   const latitude = searchParams.get('latitude');
   const longitude = searchParams.get('longitude');
-  const savedNum = Number(searchParams.get('savedNum')) || 0;
+  const savedNum = searchParams.get('savedNum');
 
   const { courseDetails, refetch, isLoading } = useCourseDetailsQuery(latitude || '', longitude || '', savedNum);
   const [isMapOpen, setIsMapOpen] = useState(false);
@@ -32,7 +32,7 @@ const CourseDetail = () => {
       x: latitude || '',
       y: longitude || '',
     },
-    savedNum,
+    savedNum ? Number(savedNum) : undefined,
   );
 
   useEffect(() => {
@@ -57,10 +57,10 @@ const CourseDetail = () => {
           자세히 보기
         </button>
         <div className={S.CourseMapContainer}>
-          <CourseMap courseList={displayCourseDetails} mapLevel={7} isStaticMap={true} />
+          <CourseMap courseList={savedNum ? displayCourseDetails : courseDetails} mapLevel={7} isStaticMap={true} />
         </div>
       </div>
-      <CourseList courseList={displayCourseDetails} />
+      <CourseList courseList={savedNum ? displayCourseDetails : courseDetails} />
       {isButtonOpen && (
         <button className={S.RefreshButton} onClick={() => refetch()}>
           <IoRefresh size="18px" color={vars.colors.secondary[700]} />

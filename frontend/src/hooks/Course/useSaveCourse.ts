@@ -27,7 +27,7 @@ const useSaveCourse = (
     } else if (Object.keys(courseDetails).length > 0) {
       setDisplayCourseDetails(courseDetails);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keyword, savedCourseIndex, courseDetails]);
 
   const toggleSave = () => {

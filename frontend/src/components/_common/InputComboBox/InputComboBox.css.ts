@@ -11,7 +11,7 @@ export const Layout = style({
 });
 
 export const Label = style({
-  color: vars.colors.grey[700],
+  color: vars.colors.grey[50],
   font: vars.fonts.label,
 });
 

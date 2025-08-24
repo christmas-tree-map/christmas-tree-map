@@ -3,10 +3,11 @@ import { getCourseDetails } from '@/apis/course';
 import { COURSE_KEYS } from '@/queries/queryKeys';
 import { DEFAULT_COURSE_DETAILS } from '@/constants/course';
 
-const useCourseDetailsQuery = (latitude: string, longitude: string) => {
+const useCourseDetailsQuery = (latitude: string, longitude: string, savedNum: string | null) => {
   const { data, refetch, isLoading } = useQuery({
     queryKey: [COURSE_KEYS.DETAIL, { latitude, longitude }],
     queryFn: () => getCourseDetails(latitude, longitude),
+    enabled: savedNum === null,
   });
 
   return { courseDetails: data ?? DEFAULT_COURSE_DETAILS, refetch, isLoading };
