@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { FaRegStar } from '@react-icons/all-files/fa/FaRegStar';
+import { FaStar } from '@react-icons/all-files/fa/FaStar';
 import { IoRefresh } from '@react-icons/all-files/io5/IoRefresh';
 import EmptyCourseList from '@/pages/Course/CourseDetail/EmptyCourseDetail';
 import Loading from '@/components/_common/Loading/Loading';
 import ScreenOverlay from '@/components/_common/ScreenOverlay/ScreenOverlay';
 import CourseList from '@/components/Course/CourseList/CourseList';
 import CourseMap from '@/components/Course/CourseMap/CourseMap';
+import useSaveCourse from '@/hooks/Course/useSaveCourse';
 import useCourseDetailsQuery from '@/queries/Course/useCourseDetailsQuery';
 import { vars } from '@/styles/theme.css';
 import * as S from './CourseDetail.css';
@@ -18,7 +21,7 @@ const CourseDetail = () => {
   const longitude = searchParams.get('longitude');
 
   const { courseDetails, refetch, isLoading } = useCourseDetailsQuery(latitude || '', longitude || '');
-
+  const { isSaved, handleSaveCourse } = useSaveCourse(keyword, courseDetails);
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [isButtonOpen, setIsButtonOpen] = useState(false);
 
@@ -32,7 +35,12 @@ const CourseDetail = () => {
 
   return (
     <div className={S.Layout}>
-      <h1 className={S.Title}>{keyword} 맞춤 코스 ✨</h1>
+      <div className={S.TitleContainer}>
+        <h1 className={S.Title}>{keyword} 맞춤 코스 ✨</h1>
+        <button className={S.SaveButton} onClick={handleSaveCourse}>
+          {isSaved ? <FaStar size={20} color="#E8DE4C" /> : <FaRegStar size={20} color={vars.colors.grey[500]} />}
+        </button>
+      </div>
       <div className={S.MapContainer}>
         <button className={S.DetailButton} type="button" onClick={() => setIsMapOpen(true)}>
           자세히 보기
