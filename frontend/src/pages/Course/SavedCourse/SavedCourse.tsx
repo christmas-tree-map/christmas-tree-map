@@ -12,8 +12,14 @@ const SavedCourse = () => {
 
   const savedKeywords = getSavedKeywords();
 
-  const handleClickCourse = (key: string, latitude: string, longitude: string, savedNum: number) => {
-    navigate(`/course/detail?keyword=${key}&latitude=${latitude}&longitude=${longitude}&savedNum=${savedNum}`);
+  const navigateToSavedCourse = (key: string, latitude: string, longitude: string, savedNum: number) => {
+    const params = new URLSearchParams({
+      keyword: key,
+      latitude,
+      longitude,
+      savedNum: savedNum.toString(),
+    });
+    navigate(`/course/detail?${params.toString()}`);
   };
 
   if (savedKeywords.length === 0) return <EmptySavedCourse />;
@@ -31,7 +37,7 @@ const SavedCourse = () => {
               {savedCourse.courseDetails.map((course: CourseDetails, index) => (
                 <div
                   key={index}
-                  onClick={() => handleClickCourse(key, savedCourse.y, savedCourse.x, index)}
+                  onClick={() => navigateToSavedCourse(key, savedCourse.y, savedCourse.x, index)}
                   className={S.CourseDetailContainer}
                 >
                   <div>

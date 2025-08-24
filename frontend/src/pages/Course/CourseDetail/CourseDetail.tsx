@@ -17,11 +17,11 @@ const CourseDetail = () => {
   const [searchParams] = useSearchParams();
 
   const keyword = searchParams.get('keyword');
-  const latitude = searchParams.get('latitude');
-  const longitude = searchParams.get('longitude');
-  const savedNum = searchParams.get('savedNum');
+  const latitude = searchParams.get('latitude') || '';
+  const longitude = searchParams.get('longitude') || '';
+  const savedNum = searchParams.get('savedNum') ? Number(searchParams.get('savedNum')) : undefined;
 
-  const { courseDetails, refetch, isLoading } = useCourseDetailsQuery(latitude || '', longitude || '', savedNum);
+  const { courseDetails, refetch, isLoading } = useCourseDetailsQuery(latitude, longitude, savedNum);
   const [isMapOpen, setIsMapOpen] = useState(false);
   const [isButtonOpen, setIsButtonOpen] = useState(false);
 
@@ -32,7 +32,7 @@ const CourseDetail = () => {
       x: latitude || '',
       y: longitude || '',
     },
-    savedNum ? Number(savedNum) : undefined,
+    savedNum,
   );
 
   useEffect(() => {
@@ -41,8 +41,7 @@ const CourseDetail = () => {
   }, []);
 
   if (isLoading) return <Loading variant="secondary" fullScreen />;
-  if (!keyword) throw new Error('keyword가 없습니다.');
-  if (Object.keys(courseDetails).length === 0) return <EmptyCourseList />;
+  if (!keyword || Object.keys(courseDetails).length === 0) return <EmptyCourseList />;
 
   return (
     <div className={S.Layout}>
@@ -57,10 +56,14 @@ const CourseDetail = () => {
           자세히 보기
         </button>
         <div className={S.CourseMapContainer}>
-          <CourseMap courseList={savedNum ? displayCourseDetails : courseDetails} mapLevel={7} isStaticMap={true} />
+          <CourseMap
+            courseList={savedNum !== undefined ? displayCourseDetails : courseDetails}
+            mapLevel={7}
+            isStaticMap={true}
+          />
         </div>
       </div>
-      <CourseList courseList={savedNum ? displayCourseDetails : courseDetails} />
+      <CourseList courseList={savedNum !== undefined ? displayCourseDetails : courseDetails} />
       {isButtonOpen && (
         <button className={S.RefreshButton} onClick={() => refetch()}>
           <IoRefresh size="18px" color={vars.colors.secondary[700]} />
