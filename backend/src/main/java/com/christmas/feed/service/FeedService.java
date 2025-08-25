@@ -130,6 +130,7 @@ public class FeedService {
             throw new InvalidPasswordException(FeedErrorCode.INVALID_PASSWORD, Map.of("password", password));
         }
         deleteFeedCascade(id, feedEntity);
+        deleteTreeIfNoFeeds(feedEntity.getTreeEntity());
         return id;
     }
 
@@ -138,6 +139,13 @@ public class FeedService {
         feedImageFileRepository.deleteByFeedEntity(feedEntity);
         imageFileService.deleteImage(feedImageFileEntity.getImageFileEntity());
         feedRepository.deleteById(id);
+    }
+
+    private void deleteTreeIfNoFeeds(TreeEntity treeEntity) {
+        long feedCount = feedRepository.countByTreeEntity(treeEntity);
+        if (feedCount == 0) {
+            treeRepository.deleteById(treeEntity.getId());
+        }
     }
 
     public long deleteLike(long id) {
