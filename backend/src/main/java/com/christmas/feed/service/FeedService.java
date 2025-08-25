@@ -142,8 +142,8 @@ public class FeedService {
     }
 
     private void deleteTreeIfNoFeeds(TreeEntity treeEntity) {
-        long feedCount = feedRepository.countByTreeEntity(treeEntity);
-        if (feedCount == 0) {
+        boolean isExistFeed = feedRepository.existsByTreeEntity(treeEntity);
+        if (!isExistFeed) {
             treeRepository.deleteById(treeEntity.getId());
         }
     }
