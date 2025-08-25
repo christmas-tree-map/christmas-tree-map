@@ -15,5 +15,7 @@ public interface FeedRepository extends JpaRepository<FeedEntity, Long> {
     @Query("SELECT COUNT(f) FROM FeedEntity AS f WHERE f.nickname LIKE :nickname%")
     int countAllByNickname(String nickname);
 
+    boolean existsByTreeEntity(TreeEntity treeEntity);
+
     List<FeedEntity> findAllByTreeEntityOrderByCreatedAtDesc(TreeEntity treeEntity);
 }
