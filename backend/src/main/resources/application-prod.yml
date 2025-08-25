@@ -23,6 +23,8 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.MySQLDialect
+        jdbc:
+          time_zone: Asia/Seoul
 
 springdoc:
   default-consumes-media-type: application/json;charset=UTF-8
