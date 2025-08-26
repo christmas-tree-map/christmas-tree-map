@@ -1,5 +1,6 @@
 package com.christmas.feed.controller;
 
+import com.christmas.feed.dto.FeedDeleteResponse;
 import com.christmas.feed.dto.FeedVerifyRequest;
 import com.christmas.feed.dto.FeedsGetResponse;
 import java.net.URI;
@@ -89,10 +90,10 @@ public class FeedController implements FeedControllerDocs {
     }
 
     @DeleteMapping("/feed/{id}")
-    public ResponseEntity<Long> deleteFeed(@PathVariable("id") long id, @Valid @RequestBody FeedDeleteRequest request) {
-        long deletedId = feedService.deleteFeed(id, request.password());
+    public ResponseEntity<FeedDeleteResponse> deleteFeed(@PathVariable("id") long id, @Valid @RequestBody FeedDeleteRequest request) {
+        FeedDeleteResponse response = feedService.deleteFeed(id, request.password());
         return ResponseEntity.status(HttpStatus.OK)
-                .body(deletedId);
+                .body(response);
     }
 
     @DeleteMapping("/feed/{id}/like")

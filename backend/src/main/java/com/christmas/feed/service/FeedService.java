@@ -2,6 +2,7 @@ package com.christmas.feed.service;
 
 import com.christmas.feed.domain.NicknameGenerator;
 import com.christmas.feed.dto.FeedCreateRequest;
+import com.christmas.feed.dto.FeedDeleteResponse;
 import com.christmas.feed.dto.FeedGetResponse;
 import com.christmas.feed.dto.FeedUpdateRequest;
 import com.christmas.feed.dto.FeedUpdateResponse;
@@ -120,7 +121,7 @@ public class FeedService {
         return !feedEntity.getPassword().equals(password);
     }
 
-    public long deleteFeed(long id, String password) {
+    public FeedDeleteResponse deleteFeed(long id, String password) {
         FeedEntity feedEntity = feedRepository.findById(id)
                 .orElseThrow(() -> new NotFoundTreeException(
                         FeedErrorCode.FEED_NOT_FOUND,
@@ -130,8 +131,12 @@ public class FeedService {
             throw new InvalidPasswordException(FeedErrorCode.INVALID_PASSWORD, Map.of("password", password));
         }
         deleteFeedCascade(id, feedEntity);
-        deleteTreeIfNoFeeds(feedEntity.getTreeEntity());
-        return id;
+        TreeEntity treeEntity = feedEntity.getTreeEntity();
+        boolean hasFeed = feedRepository.existsByTreeEntity(treeEntity);
+        if (!hasFeed) {
+            treeRepository.deleteById(treeEntity.getId());
+        }
+        return new FeedDeleteResponse(hasFeed);
     }
 
     private void deleteFeedCascade(long id, FeedEntity feedEntity) {
@@ -139,13 +144,6 @@ public class FeedService {
         feedImageFileRepository.deleteByFeedEntity(feedEntity);
         imageFileService.deleteImage(feedImageFileEntity.getImageFileEntity());
         feedRepository.deleteById(id);
-    }
-
-    private void deleteTreeIfNoFeeds(TreeEntity treeEntity) {
-        boolean isExistFeed = feedRepository.existsByTreeEntity(treeEntity);
-        if (!isExistFeed) {
-            treeRepository.deleteById(treeEntity.getId());
-        }
     }
 
     public long deleteLike(long id) {
