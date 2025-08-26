@@ -18,7 +18,7 @@ import com.christmas.tree.exception.NotFoundTreeException;
 import com.christmas.tree.exception.code.TreeErrorCode;
 import com.christmas.tree.repository.TreeEntity;
 import com.christmas.tree.repository.TreeRepository;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -93,11 +93,11 @@ public class FeedService {
         return response;
     }
 
-    private LocalDateTime latestUpdatedAt(FeedEntity feedEntity, ImageFileEntity imageFileEntity) {
-        if (feedEntity.getUpdatedAt().isAfter(imageFileEntity.getUpdatedAt())) {
-            return feedEntity.getUpdatedAt();
+    private ZonedDateTime latestUpdatedAt(FeedEntity feedEntity, ImageFileEntity imageFileEntity) {
+        if (feedEntity.getUpdatedAtSeoul().isAfter(imageFileEntity.getUpdatedAtSeoul())) {
+            return feedEntity.getUpdatedAtSeoul();
         }
-        return imageFileEntity.getUpdatedAt();
+        return imageFileEntity.getUpdatedAtSeoul();
     }
 
     public FeedUpdateResponse updateFeed(final long id, final MultipartFile image, final FeedUpdateRequest request) {
@@ -176,7 +176,7 @@ public class FeedService {
                 .getImageFileEntity();
         final Point location = feedEntity.getTreeEntity()
                 .getLocation();
-        return new FeedGetResponse(id, location.getX(), location.getY(), feedEntity.getNickname(), feedEntity.getUpdatedAt(),
+        return new FeedGetResponse(id, location.getX(), location.getY(), feedEntity.getNickname(), feedEntity.getUpdatedAtSeoul(),
                 imageFileEntity.getImageUrl(), feedEntity.getContent(), feedEntity.getLikeCount());
     }
 }
