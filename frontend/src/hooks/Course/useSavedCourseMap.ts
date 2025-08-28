@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { CourseDetails } from '@/pages/Course/Course.type';
 
 export interface SavedCourse {
-  x: string;
-  y: string;
+  latitude: string;
+  longitude: string;
   courseDetails: CourseDetails[];
 }
 
@@ -30,9 +30,10 @@ export const useSavedCourseMap = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
   };
 
-  const saveCourse = (keyword: string, courseDetails: CourseDetails, x: string, y: string) => {
-    if (x === '' || y === '') return;
+  const saveCourse = (keyword: string, courseDetails: CourseDetails, latitude: string, longitude: string) => {
+    if (latitude === '' || longitude === '') return;
 
+    // const decodedKey = decodeURIComponent(keyword).replace(/\+/g, ' ');
     const newMap = new Map(savedCourseMap);
     const existingCourse = newMap.get(keyword);
 
@@ -43,8 +44,8 @@ export const useSavedCourseMap = () => {
       });
     } else {
       newMap.set(keyword, {
-        x,
-        y,
+        latitude,
+        longitude,
         courseDetails: [courseDetails],
       });
     }
