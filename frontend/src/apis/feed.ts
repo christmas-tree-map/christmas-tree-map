@@ -70,8 +70,13 @@ interface DeleteFeedRequest {
   password: string;
 }
 
+interface DeleteFeedResponse {
+  treeId: number;
+  hasTree: boolean;
+}
+
 export const deleteFeed = async ({ feedId, password }: DeleteFeedRequest) => {
-  return await requestAPI.delete<number>(`/feed/${feedId}`, { password });
+  return await requestAPI.delete<DeleteFeedResponse>(`/feed/${feedId}`, { password });
 };
 
 interface PostLikeFeedRequest {
