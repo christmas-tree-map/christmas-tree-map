@@ -5,7 +5,7 @@ import { useSavedCourseMap } from '@/hooks/Course/useSavedCourseMap';
 const useSaveCourse = (
   keyword: string | null,
   courseDetails: CourseDetails,
-  coordinates: { x: string; y: string },
+  coordinates: { latitude: string; longitude: string },
   savedCourseIndex?: number,
 ) => {
   const { saveCourse, removeCourse, isSaved: checkIsSaved, getSavedCourse } = useSavedCourseMap();
@@ -36,13 +36,13 @@ const useSaveCourse = (
     if (isSaved) {
       removeCourse(keyword, displayCourseDetails);
     } else {
-      saveCourse(keyword, displayCourseDetails, coordinates.x, coordinates.y);
+      saveCourse(keyword, displayCourseDetails, coordinates.latitude, coordinates.longitude);
     }
   };
 
   const saveCurrentCourse = () => {
     if (!keyword || isSaved) return;
-    saveCourse(keyword, displayCourseDetails, coordinates.x, coordinates.y);
+    saveCourse(keyword, displayCourseDetails, coordinates.latitude, coordinates.longitude);
   };
 
   const removeCurrentCourse = () => {
@@ -50,16 +50,11 @@ const useSaveCourse = (
     removeCourse(keyword, displayCourseDetails);
   };
 
-  const getSavedCourseByIndex = (keywordParam: string, index: number) => {
-    return getSavedCourse(keywordParam, index);
-  };
-
   return {
     isSaved,
     toggleSave,
     saveCurrentCourse,
     removeCurrentCourse,
-    getSavedCourse: getSavedCourseByIndex,
     displayCourseDetails,
   };
 };
