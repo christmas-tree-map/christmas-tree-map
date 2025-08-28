@@ -14,22 +14,24 @@ export const handlers = [
     try {
       const formData = await request.formData();
       const imageFile = formData.get('image') as File;
-      const requestData = formData.get('request');
+      let requestData = formData.get('request');
 
       if (!imageFile || !requestData) {
         return HttpResponse.json({ message: '이미지와 요청 데이터가 필요합니다.' }, { status: 400 });
       }
 
-      const parsedRequest = JSON.parse(requestData as string);
-      const { content, likeCount } = parsedRequest;
-
+      if (requestData instanceof File) {
+        requestData = await requestData.text();
+      }
+      const parsedRequest = JSON.parse(requestData);
+      const { content } = parsedRequest;
       const newFeed = {
         id: mockFeeds.length + 1,
         treeImageCode: 'TREE_01',
         nickname: '토끼',
         updatedAt: new Date().toISOString(),
         imageUrl: 'https://picsum.photos/id/30/500',
-        likeCount,
+        likeCount: 0,
         content,
       };
       mockFeeds.push(newFeed);
@@ -138,10 +140,19 @@ export const handlers = [
     return HttpResponse.json(true);
   }),
 
-  http.delete(`${API_URL}/feed/:feedId`, async ({ request }) => {
-    const url = new URL(request.url);
-    const feedId = Number(url.pathname.split('/').at(-1));
-    feeds = feeds.filter((feed) => feed.id !== feedId);
-    return HttpResponse.json({ status: 200, feedId });
+  http.delete(`${API_URL}/feed/:treeId`, async ({ params }) => {
+    const { treeId } = params;
+    if (!treeId) {
+      return HttpResponse.json({ message: '트리 ID를 찾을 수 없습니다.' }, { status: 404 });
+    }
+
+    feeds = feeds.filter((feed) => feed.id !== Number(treeId));
+
+    const response = {
+      treeId: Number(treeId),
+      hasTree: feeds.length > 0,
+    };
+
+    return HttpResponse.json(response);
   }),
 ];
