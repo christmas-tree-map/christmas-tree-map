@@ -29,8 +29,8 @@ const CourseDetail = () => {
     keyword,
     courseDetails,
     {
-      x: latitude || '',
-      y: longitude || '',
+      latitude,
+      longitude,
     },
     savedNum,
   );

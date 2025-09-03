@@ -37,7 +37,7 @@ const SavedCourse = () => {
               {savedCourse.courseDetails.map((course: CourseDetails, index) => (
                 <div
                   key={index}
-                  onClick={() => navigateToSavedCourse(key, savedCourse.y, savedCourse.x, index)}
+                  onClick={() => navigateToSavedCourse(key, savedCourse.latitude, savedCourse.longitude, index)}
                   className={S.CourseDetailContainer}
                 >
                   <div>

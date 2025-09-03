@@ -35,7 +35,11 @@ const FeedPasswordVerification = () => {
               deleteFeedMutation(
                 { feedId, password },
                 {
-                  onSuccess: () => {
+                  onSuccess: ({ treeId, hasFeed }) => {
+                    if (!hasFeed) {
+                      navigate(`/map`, { replace: true });
+                      return;
+                    }
                     navigate(`/map/${treeId}?modal=feeds`);
                   },
                 },
