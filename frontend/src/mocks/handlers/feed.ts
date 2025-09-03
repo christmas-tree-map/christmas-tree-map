@@ -150,7 +150,7 @@ export const handlers = [
 
     const response = {
       treeId: Number(treeId),
-      hasTree: feeds.length > 0,
+      hasFeed: feeds.length > 0,
     };
 
     return HttpResponse.json(response);

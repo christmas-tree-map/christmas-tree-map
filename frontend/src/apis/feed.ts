@@ -72,7 +72,7 @@ interface DeleteFeedRequest {
 
 interface DeleteFeedResponse {
   treeId: number;
-  hasTree: boolean;
+  hasFeed: boolean;
 }
 
 export const deleteFeed = async ({ feedId, password }: DeleteFeedRequest) => {
