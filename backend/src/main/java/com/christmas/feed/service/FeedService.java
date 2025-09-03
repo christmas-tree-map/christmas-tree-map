@@ -136,7 +136,7 @@ public class FeedService {
         if (!hasFeed) {
             treeRepository.deleteById(treeEntity.getId());
         }
-        return new FeedDeleteResponse(hasFeed);
+        return new FeedDeleteResponse(treeEntity.getId(), hasFeed);
     }
 
     private void deleteFeedCascade(long id, FeedEntity feedEntity) {

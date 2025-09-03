@@ -1,4 +1,4 @@
 package com.christmas.feed.dto;
 
-public record FeedDeleteResponse(boolean hasFeed) {
+public record FeedDeleteResponse(long treeId, boolean hasFeed) {
 }
