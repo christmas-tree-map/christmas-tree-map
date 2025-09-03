@@ -44,7 +44,7 @@ const useFeedMutation = () => {
 
   const { mutate: deleteFeedMutation } = useMutation({
     mutationFn: deleteFeed,
-    onSuccess: (treeId) => {
+    onSuccess: ({ treeId }) => {
       queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEEDS, { treeId }] });
     },
   });
