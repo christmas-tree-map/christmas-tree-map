@@ -1,5 +1,6 @@
 package com.christmas.feed.controller;
 
+import com.christmas.feed.dto.FeedDeleteResponse;
 import com.christmas.feed.dto.FeedsGetResponse;
 import java.util.List;
 
@@ -74,13 +75,13 @@ public interface FeedControllerDocs {
     );
 
     @Operation(summary = "피드를 삭제한다.")
-    @ApiResponse(responseCode = "200", description = "피드 삭제에 성공한다. 성공하면 삭제한 피드 id를 반환한다.",
-            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Long.class))
+    @ApiResponse(responseCode = "200", description = "피드 삭제에 성공한다. 성공하면 삭제한 피드의 트리에 피드 존재 여부를 반환한다.",
+            content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = FeedDeleteResponse.class))
     )
     @ApiResponse(responseCode = "4XX", description = "피드 삭제 실패 시 예외를 반환한다.",
             content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExceptionResponse.class))
     )
-    ResponseEntity<Long> deleteFeed(
+    ResponseEntity<FeedDeleteResponse> deleteFeed(
             @Parameter(description = "피드 id", required = true)
             long id,
             @Parameter(description = "비밀번호", example = "abs123", required = true)

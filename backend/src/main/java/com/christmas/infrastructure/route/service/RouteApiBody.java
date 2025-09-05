@@ -29,7 +29,6 @@ public class RouteApiBody {
                     .collect(Collectors.joining(PASS_LIST_DELIMITER));
             body.put("passList", passList);
         }
-        body.put("searchOption", 4);
         return body;
     }
 }

@@ -2,6 +2,7 @@ package com.christmas.feed.service;
 
 import com.christmas.feed.domain.NicknameGenerator;
 import com.christmas.feed.dto.FeedCreateRequest;
+import com.christmas.feed.dto.FeedDeleteResponse;
 import com.christmas.feed.dto.FeedGetResponse;
 import com.christmas.feed.dto.FeedUpdateRequest;
 import com.christmas.feed.dto.FeedUpdateResponse;
@@ -17,7 +18,7 @@ import com.christmas.tree.exception.NotFoundTreeException;
 import com.christmas.tree.exception.code.TreeErrorCode;
 import com.christmas.tree.repository.TreeEntity;
 import com.christmas.tree.repository.TreeRepository;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -92,11 +93,11 @@ public class FeedService {
         return response;
     }
 
-    private LocalDateTime latestUpdatedAt(FeedEntity feedEntity, ImageFileEntity imageFileEntity) {
-        if (feedEntity.getUpdatedAt().isAfter(imageFileEntity.getUpdatedAt())) {
-            return feedEntity.getUpdatedAt();
+    private ZonedDateTime latestUpdatedAt(FeedEntity feedEntity, ImageFileEntity imageFileEntity) {
+        if (feedEntity.getUpdatedAtSeoul().isAfter(imageFileEntity.getUpdatedAtSeoul())) {
+            return feedEntity.getUpdatedAtSeoul();
         }
-        return imageFileEntity.getUpdatedAt();
+        return imageFileEntity.getUpdatedAtSeoul();
     }
 
     public FeedUpdateResponse updateFeed(final long id, final MultipartFile image, final FeedUpdateRequest request) {
@@ -120,7 +121,7 @@ public class FeedService {
         return !feedEntity.getPassword().equals(password);
     }
 
-    public long deleteFeed(long id, String password) {
+    public FeedDeleteResponse deleteFeed(long id, String password) {
         FeedEntity feedEntity = feedRepository.findById(id)
                 .orElseThrow(() -> new NotFoundTreeException(
                         FeedErrorCode.FEED_NOT_FOUND,
@@ -130,7 +131,12 @@ public class FeedService {
             throw new InvalidPasswordException(FeedErrorCode.INVALID_PASSWORD, Map.of("password", password));
         }
         deleteFeedCascade(id, feedEntity);
-        return id;
+        TreeEntity treeEntity = feedEntity.getTreeEntity();
+        boolean hasFeed = feedRepository.existsByTreeEntity(treeEntity);
+        if (!hasFeed) {
+            treeRepository.deleteById(treeEntity.getId());
+        }
+        return new FeedDeleteResponse(treeEntity.getId(), hasFeed);
     }
 
     private void deleteFeedCascade(long id, FeedEntity feedEntity) {
@@ -170,7 +176,7 @@ public class FeedService {
                 .getImageFileEntity();
         final Point location = feedEntity.getTreeEntity()
                 .getLocation();
-        return new FeedGetResponse(id, location.getX(), location.getY(), feedEntity.getNickname(), feedEntity.getUpdatedAt(),
+        return new FeedGetResponse(id, location.getX(), location.getY(), feedEntity.getNickname(), feedEntity.getUpdatedAtSeoul(),
                 imageFileEntity.getImageUrl(), feedEntity.getContent(), feedEntity.getLikeCount());
     }
 }

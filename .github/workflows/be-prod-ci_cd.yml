@@ -101,6 +101,7 @@ jobs:
         run: |
           sudo docker-compose -f ${{ secrets.DOCKER_COMPOSE_PATH }}/docker-compose.yml down
           sudo docker image prune -f
+          sudo docker system prune -a --volumes -f
 
       - name: Start new container
         run: |

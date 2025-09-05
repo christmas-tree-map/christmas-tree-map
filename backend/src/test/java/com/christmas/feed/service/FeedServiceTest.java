@@ -6,6 +6,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 import com.christmas.feed.dto.FeedCreateRequest;
+import com.christmas.feed.dto.FeedDeleteResponse;
 import com.christmas.feed.dto.FeedUpdateResponse;
 import com.christmas.feed.repository.FeedImageFileRepository;
 import com.christmas.feed.repository.FeedRepository;
@@ -124,5 +125,23 @@ class FeedServiceTest {
                 .orElseThrow();
         FeedImageFileEntity feedImageFileEntity = feedImageFileRepository.findByFeedEntity(feedEntity);
         assertThat(response.imageUrl()).isEqualTo(feedImageFileEntity.getImageFileEntity().getImageUrl());
+    }
+
+    @Test
+    @DisplayName("피드 삭제 - 피드 삭제 시 트리에 피드가 하나도 없으면 트리도 삭제한다. 피드가 하나도 없기 때문에 false를 반환한다.")
+    void delete_feed_with_tree() {
+        // given
+        TreeEntity treeEntity = treeRepository.save(new TreeEntity(PointGenerator.generate(127.2, 30.5), "IMAGE_CODE"));
+        MultipartFile oldImage = new MockMultipartFile("oldImage", "oldContent".getBytes());
+        FeedCreateRequest feedCreateRequest = new FeedCreateRequest(treeEntity.getId(), "content", "password123");
+        long id = feedService.createFeed(feedCreateRequest, oldImage);
+
+        // when
+        FeedDeleteResponse actual = feedService.deleteFeed(id, feedCreateRequest.password());
+
+        // then
+        assertThat(actual.hasFeed()).isFalse();
+        assertThat(feedRepository.existsById(id)).isFalse();
+        assertThat(treeRepository.existsById(treeEntity.getId())).isFalse();
     }
 }

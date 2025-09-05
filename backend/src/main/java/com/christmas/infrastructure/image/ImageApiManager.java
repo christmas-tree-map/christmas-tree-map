@@ -8,7 +8,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
-import org.springframework.web.reactive.function.client.WebClient;
 
 @RequiredArgsConstructor
 @Component
@@ -23,7 +22,7 @@ public class ImageApiManager {
     @Value("${map.google.default-url}")
     private String defaultUrl;
 
-    private final WebClient webClient;
+    private final RestClient restClient;
 
     public String findPlaceImage(final String placeName, final double longitude, final double latitude) {
         String name = extractFirstPhotoName(callTextSearch(placeName, longitude, latitude));
@@ -40,7 +39,7 @@ public class ImageApiManager {
     private JsonNode callTextSearch(final String textQuery, final double longitude, final double latitude) {
         final String url = defaultUrl + TEXT_SEARCH_URL;
 
-        return RestClient.create()
+        return restClient
                 .post()
                 .uri(url)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -65,7 +64,7 @@ public class ImageApiManager {
         final String urlFormat = defaultUrl + PLACE_PHOTOS_URL_FORMAT;
         final String url = String.format(urlFormat, placeId, apiKey);
 
-        return RestClient.create()
+        return restClient
                 .get()
                 .uri(url)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
