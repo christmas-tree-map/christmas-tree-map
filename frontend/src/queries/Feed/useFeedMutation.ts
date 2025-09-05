@@ -3,7 +3,7 @@ import { queryClient } from '@/main';
 import { Feed } from '@/types/feed.type';
 import { useMutation } from '@tanstack/react-query';
 import { deleteFeed, deleteLikeFeed, postFeed, postFeedPassword, postLikeFeed, updateFeed } from '@/apis/feed';
-import { FEED_KEYS } from '../queryKeys';
+import { FEED_KEYS, TREE_KEYS } from '../queryKeys';
 
 const useFeedMutation = () => {
   const navigate = useNavigate();
@@ -94,6 +94,7 @@ const useFeedMutation = () => {
   const { mutate: deleteFeedMutation } = useMutation({
     mutationFn: deleteFeed,
     onSuccess: ({ treeId }) => {
+      queryClient.invalidateQueries({ queryKey: [TREE_KEYS.TREES] });
       queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEEDS, { treeId }] });
     },
   });
