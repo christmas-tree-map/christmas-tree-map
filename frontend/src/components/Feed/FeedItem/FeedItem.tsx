@@ -47,7 +47,10 @@ const FeedItem = ({ feed, treeId }: FeedItemProps) => {
 
   const handleLiked = () => {
     if (isSelected) {
-      deleteLikeFeedMutation({ feedId: id, treeId });
+      deleteLikeFeedMutation({
+        feedId: id,
+        treeId,
+      });
     } else {
       addLikeFeedMutation({ feedId: id, treeId });
     }
