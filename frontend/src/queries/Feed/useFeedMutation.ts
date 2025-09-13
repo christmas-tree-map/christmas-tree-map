@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { queryClient } from '@/main';
+import { Feed } from '@/types/feed.type';
 import { useMutation } from '@tanstack/react-query';
 import { deleteFeed, deleteLikeFeed, postFeed, postFeedPassword, postLikeFeed, updateFeed } from '@/apis/feed';
 import { FEED_KEYS } from '../queryKeys';
@@ -26,6 +27,15 @@ const useFeedMutation = () => {
 
   const { mutate: addLikeFeedMutation } = useMutation({
     mutationFn: postLikeFeed,
+    onMutate: ({ feedId, treeId }) => {
+      const previousFeeds = queryClient.getQueryData<Feed[]>([FEED_KEYS.FEEDS, { treeId }]);
+      queryClient.setQueryData<Feed[]>(
+        [FEED_KEYS.FEEDS, { treeId }],
+        (oldFeeds?: Feed[]) =>
+          oldFeeds?.map((feed) => (feed.id === feedId ? { ...feed, likeCount: feed.likeCount + 1 } : feed)) ?? oldFeeds,
+      );
+      return { ...previousFeeds };
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEEDS] });
     },
@@ -33,6 +43,17 @@ const useFeedMutation = () => {
 
   const { mutate: deleteLikeFeedMutation } = useMutation({
     mutationFn: deleteLikeFeed,
+    onMutate: ({ feedId, treeId }) => {
+      const previousFeeds = queryClient.getQueryData<Feed[]>([FEED_KEYS.FEEDS, { treeId }]);
+      queryClient.setQueryData<Feed[]>(
+        [FEED_KEYS.FEEDS, { treeId }],
+        (oldFeeds?: Feed[]) =>
+          oldFeeds?.map((feed) =>
+            feed.id === feedId ? { ...feed, likeCount: Math.max(0, feed.likeCount - 1) } : feed,
+          ) ?? oldFeeds,
+      );
+      return { ...previousFeeds };
+    },
     onSuccess: (treeId) => {
       queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEEDS, { treeId }] });
     },

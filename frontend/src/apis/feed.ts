@@ -81,18 +81,20 @@ export const deleteFeed = async ({ feedId, password }: DeleteFeedRequest) => {
 
 interface PostLikeFeedRequest {
   feedId: number;
+  treeId: number;
 }
 
-export const postLikeFeed = async ({ feedId }: PostLikeFeedRequest) => {
-  await requestAPI.post<number>(`/feed/${feedId}/like`);
+export const postLikeFeed = async ({ feedId }: PostLikeFeedRequest): Promise<number> => {
+  return await requestAPI.post<number>(`/feed/${feedId}/like`);
 };
 
 interface DeleteLikeFeedRequest {
   feedId: number;
+  treeId: number;
 }
 
-export const deleteLikeFeed = async ({ feedId }: DeleteLikeFeedRequest) => {
-  await requestAPI.delete(`/feed/${feedId}/like`);
+export const deleteLikeFeed = async ({ feedId }: DeleteLikeFeedRequest): Promise<number> => {
+  return await requestAPI.delete<number>(`/feed/${feedId}/like`);
 };
 
 interface PostFeedPasswordRequest {
