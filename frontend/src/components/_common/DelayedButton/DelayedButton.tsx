@@ -3,10 +3,18 @@ import * as S from './DelayedButton.css';
 
 interface DelayedButtonProps {
   delay?: number;
+  position?: 'top' | 'bottom';
+  layerLevel?: 'base' | 'modal';
   onClick: () => void;
   children: React.ReactNode;
 }
-const DelayedButton = ({ delay = 500, onClick, children }: DelayedButtonProps) => {
+const DelayedButton = ({
+  delay = 500,
+  onClick,
+  children,
+  position = 'top',
+  layerLevel = 'base',
+}: DelayedButtonProps) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -17,7 +25,7 @@ const DelayedButton = ({ delay = 500, onClick, children }: DelayedButtonProps) =
   if (!isVisible) return null;
 
   return (
-    <button className={S.DelayedButtonStyle} onClick={onClick}>
+    <button className={`${S.DelayedButtonStyle[position]} ${S.layerLevel[layerLevel]}`} onClick={onClick}>
       {children}
     </button>
   );

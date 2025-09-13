@@ -1,4 +1,5 @@
 import { keyframes, style, styleVariants } from '@vanilla-extract/css';
+import { MODAL_LAYER } from '@/constants/layerLevel';
 import { vars } from '@/styles/theme.css';
 
 const slideIn = keyframes({
@@ -26,7 +27,7 @@ const slideOut = keyframes({
 export const LayoutBase = style({
   position: 'fixed',
   top: 0,
-  zIndex: 100,
+  zIndex: MODAL_LAYER.base,
 
   width: '100%',
   minWidth: '320px',
@@ -71,7 +72,7 @@ export const Backdrop = style({
   position: 'absolute',
   top: '0',
   left: '0',
-  zIndex: 100,
+  zIndex: MODAL_LAYER.base,
 
   width: '100%',
   height: '100vh',
@@ -84,7 +85,7 @@ const ContainerBase = style({
 
   position: 'absolute',
   top: '48px',
-  zIndex: 200,
+  zIndex: MODAL_LAYER.container,
 
   width: '100%',
   height: 'calc(100vh - 48px)',
@@ -106,7 +107,7 @@ export const ContentWrapper = style({
   scrollbarWidth: 'none' /* 파이어폭스 */,
   WebkitOverflowScrolling: 'touch',
 
-  zIndex: 300,
+  zIndex: MODAL_LAYER.content,
 
   width: '100%',
   height: '100%',

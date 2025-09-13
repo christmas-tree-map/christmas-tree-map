@@ -24,7 +24,6 @@ const CourseDetail = () => {
 
   const { courseDetails, refetch, isLoading } = useCourseDetailsQuery(latitude, longitude, savedNum);
   const [isMapOpen, setIsMapOpen] = useState(false);
-  // const [isButtonOpen, setIsButtonOpen] = useState(false);
 
   const { isSaved, toggleSave, displayCourseDetails } = useSaveCourse(
     keyword,
@@ -60,7 +59,7 @@ const CourseDetail = () => {
         </div>
       </div>
       <CourseList courseList={savedNum !== undefined ? displayCourseDetails : courseDetails} />
-      <DelayedButton onClick={refetch} delay={5000}>
+      <DelayedButton onClick={refetch} delay={5000} position="bottom">
         <IoRefresh size="18px" color={vars.colors.secondary[700]} />
         <p className={S.RefreshText}>다시 추천 받기</p>
       </DelayedButton>
