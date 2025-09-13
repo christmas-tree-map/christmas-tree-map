@@ -36,8 +36,10 @@ const useFeedMutation = () => {
       );
       return { ...previousFeeds };
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEEDS] });
+    onSuccess: (newLikeCount, { feedId, treeId }) => {
+      queryClient.setQueryData<Feed[]>([FEED_KEYS.FEEDS, { treeId }], (oldFeeds?: Feed[]) =>
+        oldFeeds?.map((feed: Feed) => (feed.id === feedId ? { ...feed, likeCount: newLikeCount } : feed) ?? oldFeeds),
+      );
     },
   });
 
@@ -54,8 +56,10 @@ const useFeedMutation = () => {
       );
       return { ...previousFeeds };
     },
-    onSuccess: (treeId) => {
-      queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEEDS, { treeId }] });
+    onSuccess: (newLikeCount, { feedId, treeId }) => {
+      queryClient.setQueryData<Feed[]>([FEED_KEYS.FEEDS, { treeId }], (oldFeeds?: Feed[]) =>
+        oldFeeds?.map((feed: Feed) => (feed.id === feedId ? { ...feed, likeCount: newLikeCount } : feed) ?? oldFeeds),
+      );
     },
   });
 
