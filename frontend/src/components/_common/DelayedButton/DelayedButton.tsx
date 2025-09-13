@@ -5,15 +5,28 @@ interface DelayedButtonProps {
   delay?: number;
   position?: 'top' | 'bottom';
   layerLevel?: 'base' | 'modal';
+  isLoading?: boolean;
   onClick: () => void;
   children: React.ReactNode;
 }
+
+const LoadingDots = () => {
+  return (
+    <div className={S.loadingWrapper}>
+      <span className={S.dot} />
+      <span className={S.dot} />
+      <span className={S.dot} />
+    </div>
+  );
+};
+
 const DelayedButton = ({
   delay = 500,
-  onClick,
   children,
   position = 'top',
   layerLevel = 'base',
+  isLoading = true,
+  onClick,
 }: DelayedButtonProps) => {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -26,7 +39,7 @@ const DelayedButton = ({
 
   return (
     <button className={`${S.DelayedButtonStyle[position]} ${S.layerLevel[layerLevel]}`} onClick={onClick}>
-      {children}
+      {isLoading ? <LoadingDots /> : children}
     </button>
   );
 };
