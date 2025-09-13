@@ -85,6 +85,7 @@ export const handlers = [
     }
   }),
 
+  // 피드 좋아요
   http.post(`${API_URL}/feed/:id/like`, async ({ request }) => {
     const url = new URL(request.url);
     const feedId = Number(url.pathname.split('/').at(-2));
@@ -99,26 +100,10 @@ export const handlers = [
         }
       });
     }
-    return HttpResponse.json({ status: 200 });
+    return HttpResponse.json(mockFeeds.find((feed) => feed.id === feedId)?.likeCount ?? 0);
   }),
 
-  http.post(`${API_URL}/feed/:id/like`, async ({ request }) => {
-    const url = new URL(request.url);
-    const feedId = Number(url.pathname.split('/').at(-2));
-
-    if (mockFeeds.some((feed) => feed.id === feedId)) {
-      mockFeeds.forEach((feed, index) => {
-        if (feed.id === feedId) {
-          mockFeeds[index] = {
-            ...feed,
-            likeCount: feed.likeCount + 1,
-          };
-        }
-      });
-    }
-    return HttpResponse.json({ status: 200 });
-  }),
-
+  // 피드 좋아요 취소
   http.delete(`${API_URL}/feed/:id/like`, async ({ request }) => {
     const url = new URL(request.url);
     const feedId = Number(url.pathname.split('/').at(-2));
@@ -133,7 +118,7 @@ export const handlers = [
         }
       });
     }
-    return HttpResponse.json({ status: 200 });
+    return HttpResponse.json(mockFeeds.find((feed) => feed.id === feedId)?.likeCount ?? 0);
   }),
 
   http.post(`${API_URL}/feed/:feedId/verify-password`, async () => {
