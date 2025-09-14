@@ -50,29 +50,25 @@ const useTreeMap = () => {
     marker.setMap(map);
   };
 
-  const handleCenterChanged = useCallback(() => {
-    if (!map) return;
-    const center = map.getCenter();
-    setCenterPosition({ latitude: center.getLat(), longitude: center.getLng() });
-  }, [map]);
+  const updateCenterPosition = () => {
+    const center = map?.getCenter();
+    if (!center) return;
+    const latitude = center.getLat();
+    const longitude = center.getLng();
+    sessionStorage.setItem('userLocation', JSON.stringify({ latitude, longitude }));
+    setCenterPosition({ latitude, longitude });
+  };
 
   useEffect(() => {
     initializeMap(initialCenter.latitude, initialCenter.longitude);
   }, []);
-
-  useEffect(() => {
-    if (!map) return;
-    kakao.maps.event.addListener(map, 'dragend', handleCenterChanged);
-    return () => {
-      kakao.maps.event.removeListener(map, 'dragend', handleCenterChanged);
-    };
-  }, [map]);
 
   return {
     map,
     mapRef,
     centerPosition,
     addMarker,
+    updateCenterPosition,
   };
 };
 

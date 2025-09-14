@@ -1,11 +1,14 @@
 import { useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { IoRefresh } from '@react-icons/all-files/io5/IoRefresh';
+import DelayedButton from '@/components/_common/DelayedButton/DelayedButton';
 import FloatingButton from '@/components/_common/FloatingButton/FloatingButton';
 import Modal from '@/components/_common/Modal/Modal';
 import useModal from '@/hooks/_common/useModal';
 import useModalContent from '@/hooks/TreeMap/useModalContent';
 import useTreeMap from '@/hooks/TreeMap/useTreeMap';
 import useTreesQuery from '@/queries/Tree/useTreesQuery';
+import { vars } from '@/styles/theme.css';
 import * as S from './TreeMap.css';
 
 const TreeMap = () => {
@@ -13,8 +16,9 @@ const TreeMap = () => {
   const navigate = useNavigate();
 
   const { isModalOpen, openModal, closeModal } = useModal();
-  const { map, mapRef, addMarker, centerPosition } = useTreeMap();
-  const { trees, isSuccess } = useTreesQuery(centerPosition);
+  const { map, mapRef, addMarker, centerPosition, updateCenterPosition } = useTreeMap();
+  const { trees, isSuccess, isLoading } = useTreesQuery(centerPosition);
+
   const handleMarkerClick = (treeId: number) => {
     openModal();
     navigate(`/map/${treeId}?modal=feeds`);
@@ -26,7 +30,7 @@ const TreeMap = () => {
     trees.forEach((tree) =>
       addMarker(map, tree.latitude, tree.longitude, tree.imageCode, () => handleMarkerClick(tree.id)),
     );
-  }, [map, isSuccess]);
+  }, [map, isSuccess, centerPosition]);
 
   const searchParams = useMemo(() => new URLSearchParams(location.search), [location]);
   const modalType = searchParams.get('modal');
@@ -34,6 +38,11 @@ const TreeMap = () => {
 
   const handleButtonClick = () => {
     navigate('/map?modal=submit', { state: { center: centerPosition } });
+  };
+
+  const handleCloseModal = () => {
+    closeModal();
+    navigate('/map');
   };
 
   useEffect(() => {
@@ -44,14 +53,13 @@ const TreeMap = () => {
     }
   }, [modalType, location]);
 
-  const handleCloseModal = () => {
-    closeModal();
-    navigate('/map');
-  };
-
   return (
     <>
       <div ref={mapRef} className={S.Layout} />
+      <DelayedButton delay={1000} onClick={updateCenterPosition} isLoading={isLoading}>
+        <IoRefresh size="18px" color={vars.colors.primary[700]} />
+        <p>트리 검색</p>
+      </DelayedButton>
       {modalType !== 'submit' && <FloatingButton onClick={handleButtonClick} />}
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <Modal.BackgroundSnowBall />
