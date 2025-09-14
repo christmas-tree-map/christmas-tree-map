@@ -7,7 +7,6 @@ interface DelayedButtonProps {
   layerLevel?: 'base' | 'modal';
   isLoading?: boolean;
   onClick: () => void;
-  children: React.ReactNode;
 }
 
 const LoadingDots = () => {
@@ -22,12 +21,12 @@ const LoadingDots = () => {
 
 const DelayedButton = ({
   delay = 500,
-  children,
   position = 'top',
   layerLevel = 'base',
-  isLoading = true,
+  isLoading = false,
   onClick,
-}: DelayedButtonProps) => {
+  children,
+}: React.PropsWithChildren<DelayedButtonProps>) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
