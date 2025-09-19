@@ -62,7 +62,7 @@ export const updateFeed = async ({ feedId, imageFile, content }: UpdateFeedReque
 
   formData.append('request', blob);
 
-  await requestAPI.patch(`/feed/${feedId}`, formData);
+  await requestAPI.patch<Partial<Feed>>(`/feed/${feedId}`, formData);
 };
 
 interface DeleteFeedRequest {
