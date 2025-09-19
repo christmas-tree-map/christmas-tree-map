@@ -1,5 +1,6 @@
 package com.christmas.tree.service;
 
+import com.christmas.tree.dto.TreeWithDistanceProjection;
 import java.util.List;
 
 import org.locationtech.jts.geom.Point;
@@ -18,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class TreeService {
 
-    private static final int SEARCH_RADIUS_KM = 2000;
+    private static final int SEARCH_RADIUS_M = 2000;
 
     private final TreeRepository treeRepository;
 
@@ -30,12 +31,12 @@ public class TreeService {
 
     public List<TreeGetResponse> getTreeByRange(final TreeGetRequest request) {
         final Point location = PointGenerator.generate(request.longitude(), request.latitude());
-        final List<TreeEntity> trees = treeRepository.findByLocationInRangeOrderByAsc(location, SEARCH_RADIUS_KM);
+        final List<TreeWithDistanceProjection> trees = treeRepository.findByLocationInRangeOrderByAscWithDistance(location,
+                SEARCH_RADIUS_M);
         return trees.stream()
-                .map(tree -> {
-                    final Point point = tree.getLocation();
-                    return new TreeGetResponse(tree.getId(), point.getX(), point.getY(), tree.getImageCode());
-                })
+                .map(tree ->
+                    new TreeGetResponse(tree.getId(), tree.getDistance(), tree.getLongitude(), tree.getLatitude(), tree.getImageCode())
+                )
                 .toList();
     }
 }
