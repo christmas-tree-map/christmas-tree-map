@@ -18,9 +18,13 @@ const useFeedMutation = () => {
 
   const { mutateAsync: updateFeedMutation } = useMutation({
     mutationFn: updateFeed,
-    onSuccess: (feedId, { treeId }) => {
-      queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEEDS, { treeId }] });
-      queryClient.invalidateQueries({ queryKey: [FEED_KEYS.FEED, { feedId }] });
+    onSuccess: (_, { treeId, feedId, content }) => {
+      queryClient.setQueryData<Feed[]>([FEED_KEYS.FEEDS, { treeId: Number(treeId) }], (oldFeeds?: Feed[]) =>
+        oldFeeds?.map((feed: Feed) => (feed.id === Number(feedId) ? { ...feed, content } : feed) ?? oldFeeds),
+      );
+      queryClient.setQueryData<Feed>([FEED_KEYS.FEED, { feedId }], (oldFeed?: Feed) =>
+        oldFeed ? { ...oldFeed, content } : oldFeed,
+      );
       navigate(`/map/${treeId}?modal=feeds`);
     },
   });
