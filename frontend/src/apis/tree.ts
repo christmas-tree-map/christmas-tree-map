@@ -18,6 +18,7 @@ interface GetTreesRequest {
 interface GetTreesResponse extends GetTreesRequest {
   id: number;
   imageCode: string;
+  distance: number;
 }
 
 export const getTrees = async ({ latitude, longitude }: GetTreesRequest) => {

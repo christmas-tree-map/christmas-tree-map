@@ -56,10 +56,11 @@ const useFeedSubmit = ({ imageFile, location, navigate }: UseFeedSubmitProps) =>
 
     if (!imageFile || isPasswordError || isContentError) return;
 
-    // 주변 트리 탐색 후 트리가 있다면 가장 가까운 트리 ID에 피드 제출
-    let currentTreeId = trees.length > 0 ? trees[0].id : 0;
+    // 주변 트리 탐색 후 10m이내에 트리가 있다면 가장 가까운 트리 ID에 피드 제출
+    let currentTreeId = trees.length > 0 ? trees[0].id : null;
+    const isExistingTree = trees.some((tree) => tree.distance <= 10);
 
-    if (!trees || trees.length === 0 || currentTreeId === 0) {
+    if (!trees || trees.length === 0 || !isExistingTree || currentTreeId === null) {
       currentTreeId = await addTree({
         latitude: center.latitude,
         longitude: center.longitude,
