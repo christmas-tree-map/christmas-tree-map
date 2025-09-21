@@ -12,6 +12,7 @@ const MARKER_IMAGE: Record<string, string> = {
 const useTreeMap = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<typeof kakao.maps.Map | null>(null);
+  const currentMarkers = useRef<(typeof kakao.maps.Marker)[]>([]);
 
   const initialCenter = useMemo(() => {
     const saved = sessionStorage.getItem('userLocation');
@@ -48,6 +49,12 @@ const useTreeMap = () => {
     });
     if (onClick) kakao.maps.event.addListener(marker, 'click', onClick);
     marker.setMap(map);
+    currentMarkers.current.push(marker);
+  };
+
+  const clearMarkers = () => {
+    currentMarkers.current.forEach((marker) => marker.setMap(null));
+    currentMarkers.current = [];
   };
 
   const updateCenterPosition = () => {
@@ -61,13 +68,15 @@ const useTreeMap = () => {
 
   useEffect(() => {
     initializeMap(initialCenter.latitude, initialCenter.longitude);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialCenter.latitude, initialCenter.longitude]);
 
   return {
     map,
     mapRef,
     centerPosition,
     addMarker,
+    clearMarkers,
     updateCenterPosition,
   };
 };

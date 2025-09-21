@@ -16,7 +16,7 @@ const TreeMap = () => {
   const navigate = useNavigate();
 
   const { isModalOpen, openModal, closeModal } = useModal();
-  const { map, mapRef, addMarker, centerPosition, updateCenterPosition } = useTreeMap();
+  const { map, mapRef, addMarker, centerPosition, updateCenterPosition, clearMarkers } = useTreeMap();
   const { trees, isSuccess, isLoading } = useTreesQuery(centerPosition);
 
   const handleMarkerClick = (treeId: number) => {
@@ -27,10 +27,12 @@ const TreeMap = () => {
   useEffect(() => {
     if (map === null || !isSuccess) return;
 
+    clearMarkers();
     trees.forEach((tree) =>
       addMarker(map, tree.latitude, tree.longitude, tree.imageCode, () => handleMarkerClick(tree.id)),
     );
-  }, [map, isSuccess, centerPosition]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, isSuccess, centerPosition, trees]);
 
   const searchParams = useMemo(() => new URLSearchParams(location.search), [location]);
   const modalType = searchParams.get('modal');
@@ -51,6 +53,7 @@ const TreeMap = () => {
     } else {
       closeModal();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalType, location]);
 
   return (
