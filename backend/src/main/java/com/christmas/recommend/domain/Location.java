@@ -2,7 +2,7 @@ package com.christmas.recommend.domain;
 
 import com.christmas.infrastructure.route.domain.FacilityType;
 import com.christmas.infrastructure.route.dto.RouteInfo;
-import com.christmas.infrastructure.route.dto.XY;
+import com.christmas.common.dto.Coordinate;
 import com.christmas.recommend.dto.PedestrianRoute;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,13 +51,13 @@ public class Location {
         return !raw.isEmpty();
     }
 
-    public XY extractXY() {
+    public Coordinate extractXY() {
         if (raw == null) {
             return null;
         }
         double x = raw.get("x").asDouble();
         double y = raw.get("y").asDouble();
-        return new XY(x, y);
+        return new Coordinate(x, y);
     }
 
     public String extractName() {

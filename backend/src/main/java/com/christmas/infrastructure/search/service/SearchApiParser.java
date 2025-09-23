@@ -1,6 +1,6 @@
 package com.christmas.infrastructure.search.service;
 
-import com.christmas.infrastructure.route.dto.XY;
+import com.christmas.common.dto.Coordinate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.ArrayList;
@@ -23,10 +23,10 @@ public class SearchApiParser {
         return result;
     }
 
-    public XY extractXYFromLocation(JsonNode location) {
+    public Coordinate extractXYFromLocation(JsonNode location) {
         double x = location.get("x").asDouble();
         double y = location.get("y").asDouble();
-        return new XY(x, y);
+        return new Coordinate(x, y);
     }
 
     public String extractNameFromLocation(JsonNode location) {
