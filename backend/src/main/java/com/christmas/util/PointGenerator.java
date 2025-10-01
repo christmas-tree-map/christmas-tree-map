@@ -1,4 +1,4 @@
-package com.christmas.tree.domain;
+package com.christmas.util;
 
 import java.util.Map;
 
