@@ -1,19 +1,19 @@
 package com.christmas.tree.service;
 
-import com.christmas.tree.dto.TreeWithDistanceProjection;
-import java.util.List;
-
-import org.locationtech.jts.geom.Point;
-import org.springframework.stereotype.Service;
-
-import com.christmas.tree.domain.PointGenerator;
+import com.christmas.tree.dto.TreeCluster;
+import com.christmas.tree.dto.TreeClusterGetRequest;
+import com.christmas.tree.dto.TreeClusterGetResponse;
 import com.christmas.tree.dto.TreeCreateRequest;
 import com.christmas.tree.dto.TreeGetRequest;
 import com.christmas.tree.dto.TreeGetResponse;
+import com.christmas.tree.dto.TreeWithDistanceProjection;
 import com.christmas.tree.repository.TreeEntity;
 import com.christmas.tree.repository.TreeRepository;
-
+import com.christmas.util.PointGenerator;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.locationtech.jts.geom.Point;
+import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
@@ -21,6 +21,7 @@ public class TreeService {
 
     private static final int SEARCH_RADIUS_M = 2000;
 
+    private final TreeClusterService treeClusterService;
     private final TreeRepository treeRepository;
 
     public long createTree(final TreeCreateRequest request) {
@@ -36,6 +37,19 @@ public class TreeService {
         return trees.stream()
                 .map(tree ->
                     new TreeGetResponse(tree.getId(), tree.getDistance(), tree.getLongitude(), tree.getLatitude(), tree.getImageCode())
+                )
+                .toList();
+    }
+
+    public List<TreeClusterGetResponse> getTreeByCluster(final TreeClusterGetRequest request) {
+        final List<TreeEntity> trees = treeRepository.findAllWithinBounds(request.topLeft().longitude(),
+                request.topLeft().latitude(), request.bottomRight().longitude(), request.bottomRight().latitude());
+        final List<TreeCluster> clusters = treeClusterService.toCluster(trees);
+        return clusters.stream()
+                .map(cluster -> new TreeClusterGetResponse(
+                        cluster.center().longitude(),
+                        cluster.center().longitude(),
+                        cluster.members().size())
                 )
                 .toList();
     }

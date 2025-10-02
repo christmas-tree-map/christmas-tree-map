@@ -57,6 +57,12 @@ dependencies {
 	// S3 mock
 	implementation 'io.findify:s3mock_2.12:0.2.4'
 
+	// Redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// Apache Commons Math
+	implementation 'org.apache.commons:commons-math3:3.6.1';
+
 	// Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.rest-assured:rest-assured:5.5.0'

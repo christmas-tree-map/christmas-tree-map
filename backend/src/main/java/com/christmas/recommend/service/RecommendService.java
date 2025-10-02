@@ -1,7 +1,7 @@
 package com.christmas.recommend.service;
 
 import com.christmas.infrastructure.route.dto.RouteInfo;
-import com.christmas.infrastructure.route.dto.XY;
+import com.christmas.common.dto.Coordinate;
 import com.christmas.infrastructure.search.domain.LocationCategory;
 import com.christmas.recommend.domain.Course;
 import com.christmas.recommend.domain.Location;
@@ -34,8 +34,8 @@ public class RecommendService {
 
         CourseFactory courseFactory = new CourseFactory(new RandomIntPicker());
         Course course = courseFactory.create(foods, cafes, attractions);
-        XY current = new XY(request.longitude(), request.latitude());
-        List<XY> courseRoute = course.buildRoute(current);
+        Coordinate current = new Coordinate(request.longitude(), request.latitude());
+        List<Coordinate> courseRoute = course.buildRoute(current);
 
         if (!course.isExist()) {
             return new CourseGetResponse(null, null, null, null);
@@ -67,8 +67,8 @@ public class RecommendService {
     private String findPlaceImage(Location location) {
         if (location.isExist()) {
             String placeName = location.extractName();
-            XY xy = location.extractXY();
-            return locationService.findPlaceImage(placeName, xy);
+            Coordinate coordinate = location.extractXY();
+            return locationService.findPlaceImage(placeName, coordinate);
         }
         return null;
     }
@@ -82,11 +82,11 @@ public class RecommendService {
         List<Location> randomAttractions = getRandomLocations(attractions, RECOMMEND_ATTRACTION_COUNT);
         for (Location attraction : randomAttractions) {
             String placeName = attraction.extractName();
-            XY xy = attraction.extractXY();
-            String imageUrl = locationService.findPlaceImage(placeName, xy);
+            Coordinate coordinate = attraction.extractXY();
+            String imageUrl = locationService.findPlaceImage(placeName, coordinate);
             attraction.putImageUrl(imageUrl);
 
-            List<XY> route = List.of(new XY(request.longitude(), request.latitude()), xy);
+            List<Coordinate> route = List.of(new Coordinate(request.longitude(), request.latitude()), coordinate);
             List<RouteInfo> pedestrianRoute = locationService.findPedestrianRoute(route);
             attraction.putPedestrian(pedestrianRoute.get(0));
         }

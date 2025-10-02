@@ -6,7 +6,7 @@ import com.christmas.infrastructure.image.ImageApiManager;
 import com.christmas.infrastructure.route.domain.PointType;
 import com.christmas.infrastructure.route.dto.RouteConditionDto;
 import com.christmas.infrastructure.route.dto.RouteInfo;
-import com.christmas.infrastructure.route.dto.XY;
+import com.christmas.common.dto.Coordinate;
 import com.christmas.infrastructure.route.service.RouteApiManager;
 import com.christmas.infrastructure.route.service.RouteApiParser;
 import com.christmas.infrastructure.search.domain.LocationCategory;
@@ -62,7 +62,7 @@ public class LocationService {
         return searchApiManager.findLocationsByCategory(condition);
     }
 
-    public List<RouteInfo> findPedestrianRoute(List<XY> courseRoute) {
+    public List<RouteInfo> findPedestrianRoute(List<Coordinate> courseRoute) {
         RouteConditionDto condition = makeRouteCondition(courseRoute);
         try {
             JsonNode routesRaw = routeApiManager.getPedestrianRoute(condition);
@@ -72,11 +72,11 @@ public class LocationService {
         }
     }
 
-    private RouteConditionDto makeRouteCondition(List<XY> locationsNotNull) {
+    private RouteConditionDto makeRouteCondition(List<Coordinate> locationsNotNull) {
         if (locationsNotNull.size() == 2) {
             return new RouteConditionDto(locationsNotNull.get(0), "시작 장소", locationsNotNull.get(1), "종료 장소", List.of());
         }
-        List<XY> passPlace = new ArrayList<>();
+        List<Coordinate> passPlace = new ArrayList<>();
         for (int i = 1; i < locationsNotNull.size() - 1; i++) {
             passPlace.add(locationsNotNull.get(i));
         }
@@ -84,7 +84,7 @@ public class LocationService {
                 locationsNotNull.get(locationsNotNull.size() - 1), "종료 장소", passPlace);
     }
 
-    private List<RouteInfo> getRoutes(List<XY> courseRoute, JsonNode routesDistance) {
+    private List<RouteInfo> getRoutes(List<Coordinate> courseRoute, JsonNode routesDistance) {
         RouteApiParser parser = RouteApiParser.from(routesDistance);
         if (courseRoute.size() == 2) {
             return List.of(parser.getDistanceInfo(PointType.SP, PointType.EP));
@@ -106,8 +106,8 @@ public class LocationService {
         return routeInfos;
     }
 
-    public String findPlaceImage(String placeName, XY xy) {
-        return imageApiManager.findPlaceImage(placeName, xy.x(), xy.y());
+    public String findPlaceImage(String placeName, Coordinate coordinate) {
+        return imageApiManager.findPlaceImage(placeName, coordinate.longitude(), coordinate.latitude());
     }
 
     private SearchConditionDto setConditionByKeyword(CourseGetRequest request, LocationCategory category) {

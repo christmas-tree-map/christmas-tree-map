@@ -14,7 +14,7 @@ import com.christmas.feed.repository.ImageFileRepository;
 import com.christmas.feed.repository.entity.FeedEntity;
 import com.christmas.feed.repository.entity.FeedImageFileEntity;
 import com.christmas.feed.repository.entity.ImageFileEntity;
-import com.christmas.tree.domain.PointGenerator;
+import com.christmas.util.PointGenerator;
 import com.christmas.tree.repository.TreeEntity;
 import com.christmas.tree.repository.TreeRepository;
 import org.junit.jupiter.api.Disabled;

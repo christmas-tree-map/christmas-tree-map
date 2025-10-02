@@ -2,7 +2,6 @@ package com.christmas.tree.repository;
 
 import com.christmas.tree.dto.TreeWithDistanceProjection;
 import java.util.List;
-
 import org.locationtech.jts.geom.Point;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -28,4 +27,12 @@ public interface TreeRepository extends JpaRepository<TreeEntity, Long> {
         final String wktPoint = "POINT(" + location.getY() + " " + location.getX() + ")";
         return getInRangeOrderByAscWithDistance(wktPoint, range);
     }
+
+    @Query(value = """
+            SELECT * FROM tree
+            WHERE ST_X(location) BETWEEN :brLatitude AND :tlLatitude
+              AND ST_Y(location) BETWEEN :tlLongitude AND :brLongitude;
+            """, nativeQuery = true)
+    List<TreeEntity> findAllWithinBounds(@Param("tlLongitude") double tlLongitude, @Param("tlLatitude") double tlLatitude,
+                                         @Param("brLongitude") double brLongitude, @Param("brLatitude") double brLatitude);
 }
