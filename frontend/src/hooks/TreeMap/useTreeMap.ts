@@ -13,6 +13,25 @@ const useTreeMap = () => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<typeof kakao.maps.Map | null>(null);
   const currentMarkers = useRef<(typeof kakao.maps.Marker)[]>([]);
+  const bounds = useMemo(() => {
+    const mapBounds = map?.getBounds();
+    if (!mapBounds) return null;
+
+    const sw = mapBounds.getSouthWest();
+    const ne = mapBounds.getNorthEast();
+
+    return {
+      sw: {
+        latitude: sw.getLat(),
+        longitude: sw.getLng(),
+      },
+      ne: {
+        latitude: ne.getLat(),
+        longitude: ne.getLng(),
+      },
+    };
+  }, [map]);
+  const [zoom, setZoom] = useState<number>(map?.getLevel());
 
   const initialCenter = useMemo(() => {
     const saved = sessionStorage.getItem('userLocation');
@@ -28,6 +47,11 @@ const useTreeMap = () => {
       };
       const mapInstance = new kakao.maps.Map(mapRef.current, options);
       setMap(mapInstance);
+      setZoom(mapInstance.getLevel());
+
+      kakao.maps.event.addListener(mapInstance, 'zoom_changed', () => {
+        setZoom(mapInstance.getLevel());
+      });
     }
   }, []);
 
@@ -47,9 +71,31 @@ const useTreeMap = () => {
       image: markerImage,
       clickable: true,
     });
+
     if (onClick) kakao.maps.event.addListener(marker, 'click', onClick);
+
     marker.setMap(map);
     currentMarkers.current.push(marker);
+  };
+
+  const addCustomOverlay = (
+    map: typeof kakao.maps.Map,
+    latitude: number,
+    longitude: number,
+    overlay: string,
+    onClick?: () => void,
+  ) => {
+    const customOverlayPosition = new kakao.maps.LatLng(latitude, longitude);
+    const customOverlay = new kakao.maps.CustomOverlay({
+      position: customOverlayPosition,
+      content: overlay,
+      clickable: true,
+    });
+
+    if (onClick) kakao.maps.event.addListener(customOverlay, 'click', onClick);
+
+    customOverlay.setMap(map);
+    currentMarkers.current.push(customOverlay);
   };
 
   const clearMarkers = () => {
@@ -76,8 +122,11 @@ const useTreeMap = () => {
     mapRef,
     centerPosition,
     addMarker,
+    addCustomOverlay,
     clearMarkers,
     updateCenterPosition,
+    bounds,
+    zoom,
   };
 };
 
