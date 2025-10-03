@@ -21,7 +21,7 @@ public class TreeClusterService {
     private final RandomIntPicker randomIntPicker;
 
     public List<TreeCluster> toCluster(final List<TreeEntity> trees, final int zoomLevel) {
-        if (trees.size() < 5) {
+        if (trees.isEmpty() || trees.size() < 5) {
             return trees.stream()
                     .map(tree -> new TreeCluster(new Coordinate(tree.getLocation().getX(), tree.getLocation().getY()), List.of()))
                     .toList();
