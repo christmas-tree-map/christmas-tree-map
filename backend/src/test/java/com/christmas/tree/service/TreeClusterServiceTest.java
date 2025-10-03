@@ -37,7 +37,7 @@ class TreeClusterServiceTest {
         final List<TreeEntity> trees = KOREA_COORDINATES;
 
         // when
-        final List<TreeCluster> actual = treeClusterService.toCluster(trees);
+        final List<TreeCluster> actual = treeClusterService.toCluster(trees, 2);
         for (TreeCluster tc : actual) {
             System.out.print(tc.center().longitude() + ", "+ tc.center().latitude() + ": ");
             for (TreeEntity tree : tc.members()) {
