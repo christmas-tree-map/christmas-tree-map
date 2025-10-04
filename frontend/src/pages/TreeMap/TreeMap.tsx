@@ -19,7 +19,7 @@ const TreeMap = () => {
   const location = useLocation();
 
   const { isModalOpen, openModal, closeModal } = useModal();
-  const { map, mapRef, centerPosition, updateCenterPosition, bounds, zoom } = useTreeMap();
+  const { map, mapRef, centerPosition, updatePosition, bounds, zoom } = useTreeMap();
 
   const isClusterView = zoom > CLUSTER_VIEW_THRESHOLD;
 
@@ -67,7 +67,7 @@ const TreeMap = () => {
     <>
       <div ref={mapRef} className={S.Layout} />
 
-      <DelayedButton delay={1000} onClick={updateCenterPosition} isLoading={isLoading}>
+      <DelayedButton delay={1000} onClick={updatePosition} isLoading={isLoading}>
         <IoRefresh size="18px" color={vars.colors.primary[700]} />
         <p>트리 검색</p>
       </DelayedButton>
