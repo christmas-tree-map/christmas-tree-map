@@ -46,7 +46,11 @@ export const getTreeByCluster = async ({
   bl_latitude,
   bl_longitude,
 }: GetTreeByClusterRequest) => {
-  return await requestAPI.get<GetTreeByClusterResponse[]>(
-    `/tree/cluster?zoom=${zoom}&tr_latitude=${tr_latitude}&tr_longitude=${tr_longitude}&bl_latitude=${bl_latitude}&bl_longitude=${bl_longitude}`,
-  );
+  return await requestAPI.get<GetTreeByClusterResponse[]>(`/tree/cluster`, {
+    tr_latitude,
+    tr_longitude,
+    bl_latitude,
+    bl_longitude,
+    zoom,
+  });
 };
