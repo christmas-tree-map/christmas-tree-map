@@ -4,30 +4,30 @@ import { TREE_KEYS } from '@/queries/queryKeys';
 
 interface TreeClusterParams {
   zoom: number;
-  tl_latitude: number;
-  tl_longitude: number;
-  br_latitude: number;
-  br_longitude: number;
+  tr_latitude: number;
+  tr_longitude: number;
+  bl_latitude: number;
+  bl_longitude: number;
   enabled: boolean;
 }
 
 const useTreeClustersQuery = ({
   zoom,
-  tl_latitude,
-  tl_longitude,
-  br_latitude,
-  br_longitude,
+  tr_latitude,
+  tr_longitude,
+  bl_latitude,
+  bl_longitude,
   enabled,
 }: TreeClusterParams) => {
   const { data, ...rest } = useQuery({
-    queryKey: [TREE_KEYS.TREE_CLUSTER, zoom, tl_latitude, tl_longitude, br_latitude, br_longitude],
+    queryKey: [TREE_KEYS.TREE_CLUSTER, zoom, tr_latitude, tr_longitude, bl_latitude, bl_longitude],
     queryFn: () =>
       getTreeByCluster({
         zoom,
-        tl_latitude,
-        tl_longitude,
-        br_latitude,
-        br_longitude,
+        tr_latitude,
+        tr_longitude,
+        bl_latitude,
+        bl_longitude,
       }),
     enabled,
   });

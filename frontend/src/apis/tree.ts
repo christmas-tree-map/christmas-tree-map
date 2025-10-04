@@ -27,10 +27,10 @@ export const getTrees = async ({ latitude, longitude }: GetTreesRequest) => {
 
 interface GetTreeByClusterRequest {
   zoom: number;
-  tl_latitude: number;
-  tl_longitude: number;
-  br_latitude: number;
-  br_longitude: number;
+  tr_latitude: number;
+  tr_longitude: number;
+  bl_latitude: number;
+  bl_longitude: number;
 }
 
 interface GetTreeByClusterResponse {
@@ -41,12 +41,12 @@ interface GetTreeByClusterResponse {
 
 export const getTreeByCluster = async ({
   zoom,
-  tl_latitude,
-  tl_longitude,
-  br_latitude,
-  br_longitude,
+  tr_latitude,
+  tr_longitude,
+  bl_latitude,
+  bl_longitude,
 }: GetTreeByClusterRequest) => {
   return await requestAPI.get<GetTreeByClusterResponse[]>(
-    `/tree/cluster?zoom=${zoom}&tl_latitude=${tl_latitude}&tl_longitude=${tl_longitude}&br_latitude=${br_latitude}&br_longitude=${br_longitude}`,
+    `/tree/cluster?zoom=${zoom}&tr_latitude=${tr_latitude}&tr_longitude=${tr_longitude}&bl_latitude=${bl_latitude}&bl_longitude=${bl_longitude}`,
   );
 };

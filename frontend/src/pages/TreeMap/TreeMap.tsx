@@ -30,10 +30,10 @@ const TreeMap = () => {
 
   const { treeClusters } = useTreeClustersQuery({
     zoom,
-    tl_latitude: bounds.ne.latitude,
-    tl_longitude: bounds.ne.longitude,
-    br_latitude: bounds.sw.latitude,
-    br_longitude: bounds.sw.longitude,
+    tr_latitude: bounds.ne.latitude,
+    tr_longitude: bounds.ne.longitude,
+    bl_latitude: bounds.sw.latitude,
+    bl_longitude: bounds.sw.longitude,
     enabled: isClusterView,
   });
 
