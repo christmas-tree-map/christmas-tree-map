@@ -5,13 +5,12 @@ import { TREE_KEYS } from '@/queries/queryKeys';
 interface TreesParams {
   latitude: number;
   longitude: number;
-  zoom: number;
   enabled: boolean;
 }
 
-const useTreesQuery = ({ latitude, longitude, zoom, enabled }: TreesParams) => {
+const useTreesQuery = ({ latitude, longitude, enabled }: TreesParams) => {
   const { data, isSuccess, isLoading } = useQuery({
-    queryKey: [TREE_KEYS.TREES, latitude, longitude, zoom],
+    queryKey: [TREE_KEYS.TREES, latitude, longitude],
     queryFn: () => getTrees({ latitude, longitude }),
     enabled,
   });
