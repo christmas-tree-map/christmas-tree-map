@@ -42,8 +42,8 @@ public class TreeService {
     }
 
     public List<TreeClusterGetResponse> getTreeByCluster(final TreeClusterGetRequest request) {
-        final List<TreeEntity> trees = treeRepository.findAllWithinBounds(request.topLeft().longitude(),
-                request.topLeft().latitude(), request.bottomRight().longitude(), request.bottomRight().latitude());
+        final List<TreeEntity> trees = treeRepository.findAllWithinBounds(request.topRight().longitude(),
+                request.topRight().latitude(), request.bottomLeft().longitude(), request.bottomLeft().latitude());
         final List<TreeCluster> clusters = treeClusterService.toCluster(trees, request.zoom());
         return clusters.stream()
                 .map(cluster -> new TreeClusterGetResponse(

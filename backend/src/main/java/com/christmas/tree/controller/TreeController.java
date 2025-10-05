@@ -48,12 +48,12 @@ public class TreeController implements TreeControllerDocs {
     @GetMapping("/tree/cluster")
     public ResponseEntity<List<TreeClusterGetResponse>> getTreeByCluster(
             @RequestParam(value = "zoom") int zoom,
-            @RequestParam(value = "tl_latitude") double tlLatitude,
-            @RequestParam(value = "tl_longitude") double tlLongitude,
-            @RequestParam(value = "br_latitude") double brLatitude,
-            @RequestParam(value = "br_longitude") double brLongitude
+            @RequestParam(value = "tr_latitude") double trLatitude,
+            @RequestParam(value = "tr_longitude") double trLongitude,
+            @RequestParam(value = "bl_latitude") double blLatitude,
+            @RequestParam(value = "bl_longitude") double blLongitude
     ) {
-        final TreeClusterGetRequest request = new TreeClusterGetRequest(zoom, new Coordinate(tlLongitude, tlLatitude), new Coordinate(brLongitude, brLatitude));
+        final TreeClusterGetRequest request = new TreeClusterGetRequest(zoom, new Coordinate(trLongitude, trLatitude), new Coordinate(blLongitude, blLatitude));
         final List<TreeClusterGetResponse> trees = treeService.getTreeByCluster(request);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(trees);
