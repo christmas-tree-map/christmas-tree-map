@@ -30,9 +30,9 @@ public interface TreeRepository extends JpaRepository<TreeEntity, Long> {
 
     @Query(value = """
             SELECT * FROM tree
-            WHERE ST_X(location) BETWEEN :brLatitude AND :tlLatitude
-              AND ST_Y(location) BETWEEN :tlLongitude AND :brLongitude;
+            WHERE ST_X(location) BETWEEN :blLatitude AND :trLatitude
+              AND ST_Y(location) BETWEEN :blLongitude AND :trLongitude;
             """, nativeQuery = true)
-    List<TreeEntity> findAllWithinBounds(@Param("tlLongitude") double tlLongitude, @Param("tlLatitude") double tlLatitude,
-                                         @Param("brLongitude") double brLongitude, @Param("brLatitude") double brLatitude);
+    List<TreeEntity> findAllWithinBounds(@Param("trLongitude") double trLongitude, @Param("trLatitude") double trLatitude,
+                                         @Param("blLongitude") double blLongitude, @Param("blLatitude") double blLatitude);
 }
