@@ -7,6 +7,9 @@ public record TreeGetResponse(
         @Schema(description = "트리 id", example = "1")
         long id,
 
+        @Schema(description = "현재 위치에서 트리까지의 거리")
+        double distance,
+
         @Schema(description = "트리 경도", example = "127")
         Double longitude,
 

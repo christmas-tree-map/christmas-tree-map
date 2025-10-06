@@ -1,25 +1,27 @@
 package com.christmas.tree.service;
 
-import java.util.List;
-
-import org.locationtech.jts.geom.Point;
-import org.springframework.stereotype.Service;
-
-import com.christmas.tree.domain.PointGenerator;
+import com.christmas.tree.dto.TreeCluster;
+import com.christmas.tree.dto.TreeClusterGetRequest;
+import com.christmas.tree.dto.TreeClusterGetResponse;
 import com.christmas.tree.dto.TreeCreateRequest;
 import com.christmas.tree.dto.TreeGetRequest;
 import com.christmas.tree.dto.TreeGetResponse;
+import com.christmas.tree.dto.TreeWithDistanceProjection;
 import com.christmas.tree.repository.TreeEntity;
 import com.christmas.tree.repository.TreeRepository;
-
+import com.christmas.util.PointGenerator;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.locationtech.jts.geom.Point;
+import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
 public class TreeService {
 
-    private static final int SEARCH_RADIUS_KM = 2000;
+    private static final int SEARCH_RADIUS_M = 2000;
 
+    private final TreeClusterService treeClusterService;
     private final TreeRepository treeRepository;
 
     public long createTree(final TreeCreateRequest request) {
@@ -30,12 +32,25 @@ public class TreeService {
 
     public List<TreeGetResponse> getTreeByRange(final TreeGetRequest request) {
         final Point location = PointGenerator.generate(request.longitude(), request.latitude());
-        final List<TreeEntity> trees = treeRepository.findByLocationInRangeOrderByAsc(location, SEARCH_RADIUS_KM);
+        final List<TreeWithDistanceProjection> trees = treeRepository.findByLocationInRangeOrderByAscWithDistance(location,
+                SEARCH_RADIUS_M);
         return trees.stream()
-                .map(tree -> {
-                    final Point point = tree.getLocation();
-                    return new TreeGetResponse(tree.getId(), point.getX(), point.getY(), tree.getImageCode());
-                })
+                .map(tree ->
+                    new TreeGetResponse(tree.getId(), tree.getDistance(), tree.getLongitude(), tree.getLatitude(), tree.getImageCode())
+                )
+                .toList();
+    }
+
+    public List<TreeClusterGetResponse> getTreeByCluster(final TreeClusterGetRequest request) {
+        final List<TreeEntity> trees = treeRepository.findAllWithinBounds(request.topRight().longitude(),
+                request.topRight().latitude(), request.bottomLeft().longitude(), request.bottomLeft().latitude());
+        final List<TreeCluster> clusters = treeClusterService.toCluster(trees, request.zoom());
+        return clusters.stream()
+                .map(cluster -> new TreeClusterGetResponse(
+                        cluster.center().longitude(),
+                        cluster.center().latitude(),
+                        cluster.members().size())
+                )
                 .toList();
     }
 }

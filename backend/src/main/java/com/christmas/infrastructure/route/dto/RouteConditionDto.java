@@ -1,12 +1,13 @@
 package com.christmas.infrastructure.route.dto;
 
+import com.christmas.common.dto.Coordinate;
 import java.util.List;
 
 public record RouteConditionDto(
-        XY start,
+        Coordinate start,
         String startName,
-        XY end,
+        Coordinate end,
         String endName,
-        List<XY> passList
+        List<Coordinate> passList
 ) {
 }

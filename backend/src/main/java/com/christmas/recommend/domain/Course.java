@@ -1,7 +1,7 @@
 package com.christmas.recommend.domain;
 
 import com.christmas.infrastructure.route.dto.RouteInfo;
-import com.christmas.infrastructure.route.dto.XY;
+import com.christmas.common.dto.Coordinate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -16,8 +16,8 @@ public class Course {
     private final Location attraction;
     private final Location dinner;
 
-    public List<XY> buildRoute(XY current) {
-        List<XY> positions = new ArrayList<>();
+    public List<Coordinate> buildRoute(Coordinate current) {
+        List<Coordinate> positions = new ArrayList<>();
         positions.add(current);
         if (lunch.isExist()) {
             positions.add(lunch.extractXY());
