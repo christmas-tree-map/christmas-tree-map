@@ -1,69 +1,79 @@
-import { useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { IoRefresh } from '@react-icons/all-files/io5/IoRefresh';
 import DelayedButton from '@/components/_common/DelayedButton/DelayedButton';
 import FloatingButton from '@/components/_common/FloatingButton/FloatingButton';
 import Modal from '@/components/_common/Modal/Modal';
 import useModal from '@/hooks/_common/useModal';
-import useModalContent from '@/hooks/TreeMap/useModalContent';
+import useMapMarkers from '@/hooks/TreeMap/useMapMarker';
+import { useMapModal } from '@/hooks/TreeMap/useMapModal';
 import useTreeMap from '@/hooks/TreeMap/useTreeMap';
+import useTreeClustersQuery from '@/queries/Tree/useTreeClustersQuery';
 import useTreesQuery from '@/queries/Tree/useTreesQuery';
 import { vars } from '@/styles/theme.css';
 import * as S from './TreeMap.css';
 
+const CLUSTER_VIEW_THRESHOLD = 5;
+
 const TreeMap = () => {
-  const location = useLocation();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const { isModalOpen, openModal, closeModal } = useModal();
-  const { map, mapRef, addMarker, centerPosition, updateCenterPosition, clearMarkers } = useTreeMap();
-  const { trees, isSuccess, isLoading } = useTreesQuery(centerPosition);
+  const { map, mapRef, centerPosition, updatePosition, bounds, zoom } = useTreeMap();
+
+  const isClusterView = zoom > CLUSTER_VIEW_THRESHOLD;
+
+  const { trees, isLoading } = useTreesQuery({
+    ...centerPosition,
+    enabled: !isClusterView,
+  });
+
+  const { treeClusters } = useTreeClustersQuery({
+    zoom,
+    tr_latitude: bounds.ne.latitude,
+    tr_longitude: bounds.ne.longitude,
+    bl_latitude: bounds.sw.latitude,
+    bl_longitude: bounds.sw.longitude,
+    enabled: isClusterView,
+  });
 
   const handleMarkerClick = (treeId: number) => {
     openModal();
     navigate(`/map/${treeId}?modal=feeds`);
   };
 
-  useEffect(() => {
-    if (map === null || !isSuccess) return;
+  useMapMarkers({
+    map,
+    isClusterView,
+    trees,
+    treeClusters,
+    onMarkerClick: handleMarkerClick,
+  });
 
-    clearMarkers();
-    trees.forEach((tree) =>
-      addMarker(map, tree.latitude, tree.longitude, tree.imageCode, () => handleMarkerClick(tree.id)),
-    );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [map, isSuccess, centerPosition, trees]);
+  const { modalType, modalContent, handleCloseModal } = useMapModal({
+    location,
+    openModal,
+    closeModal,
+    navigate,
+  });
 
-  const searchParams = useMemo(() => new URLSearchParams(location.search), [location]);
-  const modalType = searchParams.get('modal');
-  const modalContent = useModalContent(modalType);
-
-  const handleButtonClick = () => {
+  const handleSubmitClick = () => {
     navigate('/map?modal=submit', { state: { center: centerPosition } });
   };
 
-  const handleCloseModal = () => {
-    closeModal();
-    navigate('/map');
-  };
-
-  useEffect(() => {
-    if (modalType) {
-      openModal();
-    } else {
-      closeModal();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [modalType, location]);
+  const shouldShowFloatingButton = modalType !== 'submit';
 
   return (
     <>
       <div ref={mapRef} className={S.Layout} />
-      <DelayedButton delay={1000} onClick={updateCenterPosition} isLoading={isLoading}>
+
+      <DelayedButton delay={1000} onClick={updatePosition} isLoading={isLoading}>
         <IoRefresh size="18px" color={vars.colors.primary[700]} />
         <p>트리 검색</p>
       </DelayedButton>
-      {modalType !== 'submit' && <FloatingButton onClick={handleButtonClick} />}
+
+      {shouldShowFloatingButton && <FloatingButton onClick={handleSubmitClick} />}
+
       <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
         <Modal.BackgroundSnowBall />
         {modalContent}
