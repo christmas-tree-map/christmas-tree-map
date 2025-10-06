@@ -18,8 +18,39 @@ interface GetTreesRequest {
 interface GetTreesResponse extends GetTreesRequest {
   id: number;
   imageCode: string;
+  distance: number;
 }
 
 export const getTrees = async ({ latitude, longitude }: GetTreesRequest) => {
   return await requestAPI.get<GetTreesResponse[]>('/tree', { latitude, longitude });
+};
+
+interface GetTreeByClusterRequest {
+  zoom: number;
+  tr_latitude: number;
+  tr_longitude: number;
+  bl_latitude: number;
+  bl_longitude: number;
+}
+
+interface GetTreeByClusterResponse {
+  latitude: number;
+  longitude: number;
+  count: number;
+}
+
+export const getTreeByCluster = async ({
+  zoom,
+  tr_latitude,
+  tr_longitude,
+  bl_latitude,
+  bl_longitude,
+}: GetTreeByClusterRequest) => {
+  return await requestAPI.get<GetTreeByClusterResponse[]>(`/tree/cluster`, {
+    tr_latitude,
+    tr_longitude,
+    bl_latitude,
+    bl_longitude,
+    zoom,
+  });
 };

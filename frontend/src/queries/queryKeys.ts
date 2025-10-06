@@ -5,6 +5,7 @@ export const FEED_KEYS = {
 
 export const TREE_KEYS = {
   TREES: 'trees',
+  TREE_CLUSTER: 'treeCluster',
 };
 
 export const COURSE_KEYS = {

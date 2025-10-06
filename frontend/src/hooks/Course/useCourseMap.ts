@@ -15,15 +15,15 @@ interface UseCourseMapProps {
   isStaticMap?: boolean;
 }
 
-const MARKER_CONFIG = {
-  SIZE: new kakao.maps.Size(36, 36),
-  OPTIONS: { offset: new kakao.maps.Point(18, 36) },
-} as const;
-
 const useCourseMap = ({ courseList, mapLevel = 5, isStaticMap = false }: UseCourseMapProps) => {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const currentTooltipRef = useRef<TooltipState | null>(null);
   const [map, setMap] = useState(null);
+
+  const MARKER_CONFIG = {
+    SIZE: new kakao.maps.Size(36, 36),
+    OPTIONS: { offset: new kakao.maps.Point(18, 36) },
+  } as const;
 
   const calculateCenterCoordinates = (courses: Course[]) => {
     if (courses.length === 0) {

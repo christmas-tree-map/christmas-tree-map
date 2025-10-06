@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { FaRegStar } from '@react-icons/all-files/fa/FaRegStar';
 import { FaStar } from '@react-icons/all-files/fa/FaStar';
 import { IoRefresh } from '@react-icons/all-files/io5/IoRefresh';
 import EmptyCourseList from '@/pages/Course/CourseDetail/EmptyCourseDetail';
+import DelayedButton from '@/components/_common/DelayedButton/DelayedButton';
 import Loading from '@/components/_common/Loading/Loading';
 import ScreenOverlay from '@/components/_common/ScreenOverlay/ScreenOverlay';
 import CourseList from '@/components/Course/CourseList/CourseList';
@@ -23,7 +24,6 @@ const CourseDetail = () => {
 
   const { courseDetails, refetch, isLoading } = useCourseDetailsQuery(latitude, longitude, savedNum);
   const [isMapOpen, setIsMapOpen] = useState(false);
-  const [isButtonOpen, setIsButtonOpen] = useState(false);
 
   const { isSaved, toggleSave, displayCourseDetails } = useSaveCourse(
     keyword,
@@ -34,11 +34,6 @@ const CourseDetail = () => {
     },
     savedNum,
   );
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsButtonOpen(true), 5000);
-    return () => clearTimeout(timer);
-  }, []);
 
   if (isLoading) return <Loading variant="secondary" fullScreen />;
   if (!keyword || Object.keys(courseDetails).length === 0) return <EmptyCourseList />;
@@ -64,12 +59,10 @@ const CourseDetail = () => {
         </div>
       </div>
       <CourseList courseList={savedNum !== undefined ? displayCourseDetails : courseDetails} />
-      {isButtonOpen && (
-        <button className={S.RefreshButton} onClick={() => refetch()}>
-          <IoRefresh size="18px" color={vars.colors.secondary[700]} />
-          <p className={S.RefreshText}>다시 추천 받기</p>
-        </button>
-      )}
+      <DelayedButton onClick={refetch} delay={5000} position="bottom">
+        <IoRefresh size="18px" color={vars.colors.secondary[700]} />
+        <p className={S.RefreshText}>다시 추천 받기</p>
+      </DelayedButton>
       {isMapOpen && (
         <ScreenOverlay title="맞춤 코스 추천" isOpen={isMapOpen} closeOverlay={() => setIsMapOpen(false)}>
           <CourseMap courseList={displayCourseDetails} />
