@@ -48,7 +48,7 @@ public class TreeService {
         return clusters.stream()
                 .map(cluster -> new TreeClusterGetResponse(
                         cluster.center().longitude(),
-                        cluster.center().longitude(),
+                        cluster.center().latitude(),
                         cluster.members().size())
                 )
                 .toList();
