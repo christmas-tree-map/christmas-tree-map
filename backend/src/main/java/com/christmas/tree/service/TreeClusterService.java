@@ -40,8 +40,8 @@ public class TreeClusterService {
         return clusters.stream()
                 .map(cluster -> {
                     final Coordinate center = new Coordinate(
-                            cluster.getCenter().getPoint()[0],
-                            cluster.getCenter().getPoint()[1]
+                            cluster.getCenter().getPoint()[1],
+                            cluster.getCenter().getPoint()[0]
                     );
                     final List<TreeEntity> members = cluster.getPoints().stream()
                             .map(TreeClusterPoint::getTreeEntity)
