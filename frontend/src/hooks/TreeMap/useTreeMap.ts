@@ -96,7 +96,7 @@ const useTreeMap = () => {
     targetMap: typeof kakao.maps.Map,
     latitude: number,
     longitude: number,
-    content: string,
+    content: HTMLElement,
     onClick?: () => void,
   ) => {
     const position = new kakao.maps.LatLng(latitude, longitude);
@@ -144,6 +144,20 @@ const useTreeMap = () => {
     updateCenterPosition();
   };
 
+  const zoomIn = () => {
+    if (!map) return;
+
+    const currentLevel = map.getLevel();
+    map.setLevel(currentLevel - 1);
+  };
+
+  const zoomOut = () => {
+    if (!map) return;
+
+    const currentLevel = map.getLevel();
+    map.setLevel(currentLevel + 1);
+  };
+
   useEffect(() => {
     const initialCoordinates = locationStorage.get();
 
@@ -178,6 +192,8 @@ const useTreeMap = () => {
     updateCenterPosition,
     updateBounds,
     updatePosition,
+    zoomIn,
+    zoomOut,
   };
 };
 
