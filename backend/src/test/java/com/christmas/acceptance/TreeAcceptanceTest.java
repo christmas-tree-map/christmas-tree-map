@@ -24,7 +24,7 @@ class TreeAcceptanceTest extends AcceptanceFixture {
     @DisplayName("1. 트리 생성 api를 호출한다.")
     @Test
     void post_tree() {
-        final TreeCreateRequest request = new TreeCreateRequest(127.11, 37.51, "int_test");
+        final TreeCreateRequest request = new TreeCreateRequest(127.124300, 37.286500, "int_test");
         RestAssured
                 .given()
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -43,14 +43,22 @@ class TreeAcceptanceTest extends AcceptanceFixture {
     @DisplayName("2. 트리 조회 api를 호출한다.")
     @Test
     void get_tree() {
-        final Double longitude = 127.1;
-        final Double latitude = 37.5;
+        final Double longitude = 127.110800;
+        final Double latitude = 37.255000;
+        final Double trLongitude = 127.13055655573426;
+        final Double trLatitude = 37.29507057088285;
+        final Double blLongitude = 127.08715150311343;
+        final Double blLatitude = 37.21113323112043;
         final List<TreeGetResponse> response =
                 RestAssured
                         .given()
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .param("longitude", longitude)
                         .param("latitude", latitude)
+                        .param("tr_longitude", trLongitude)
+                        .param("tr_latitude", trLatitude)
+                        .param("bl_longitude", blLongitude)
+                        .param("bl_latitude", blLatitude)
 
                         .when()
                         .log()

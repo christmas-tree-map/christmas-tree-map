@@ -30,10 +30,11 @@ public class TreeService {
         return tree.getId();
     }
 
-    public List<TreeGetResponse> getTreeByRange(final TreeGetRequest request) {
-        final Point location = PointGenerator.generate(request.longitude(), request.latitude());
-        final List<TreeWithDistanceProjection> trees = treeRepository.findByLocationInRangeOrderByAscWithDistance(location,
-                SEARCH_RADIUS_M);
+    public List<TreeGetResponse> getTreeWithinBounds(final TreeGetRequest request) {
+        final Point now = PointGenerator.generate(request.now().longitude(), request.now().latitude());
+        final Point topRight = PointGenerator.generate(request.topRight().longitude(), request.topRight().latitude());
+        final Point bottomLeft = PointGenerator.generate(request.bottomLeft().longitude(), request.bottomLeft().latitude());
+        final List<TreeWithDistanceProjection> trees = treeRepository.findByLocationWithinBoundsOrderByAscWithDistance(now, topRight, bottomLeft);
         return trees.stream()
                 .map(tree ->
                     new TreeGetResponse(tree.getId(), tree.getDistance(), tree.getLongitude(), tree.getLatitude(), tree.getImageCode())
