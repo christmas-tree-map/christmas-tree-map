@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import Button from '@/components/_common/Button/Button';
 import SnowAnimation from '@/components/Landing/SnowAnimation/SnowAnimation';
-import { getTrees } from '@/apis/tree';
+import { getAroundTrees } from '@/apis/tree';
 import { TREE_KEYS } from '@/queries/queryKeys';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
 import Garland from '@/assets/garland.svg';
@@ -48,7 +48,7 @@ const Landing = () => {
 
     queryClient.prefetchQuery({
       queryKey: [TREE_KEYS.TREES, location.latitude, location.longitude],
-      queryFn: () => getTrees({ latitude: location.latitude, longitude: location.longitude }),
+      queryFn: () => getAroundTrees({ latitude: location.latitude, longitude: location.longitude }),
     });
   };
 

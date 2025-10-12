@@ -43,6 +43,13 @@ export const getTrees = async ({
   });
 };
 
+export const getAroundTrees = async ({ latitude, longitude }: Pick<GetTreesRequest, 'latitude' | 'longitude'>) => {
+  return await requestAPI.get<GetTreesResponse[]>('/tree', { // TODO: api 네이밍 변경
+    latitude,
+    longitude,
+  });
+};
+
 interface GetTreeByClusterRequest {
   zoom: number;
   tr_latitude: number;
