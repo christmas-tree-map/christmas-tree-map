@@ -17,15 +17,16 @@ public interface TreeRepository extends JpaRepository<TreeEntity, Long> {
             ST_X(t.location) AS latitude,
             t.image_code AS imageCode
         FROM tree t
-        WHERE ST_Distance_Sphere(t.location, ST_GeomFromText(:point, 4326)) <= :range
+        WHERE ST_X(t.location) BETWEEN :blLatitude AND :trLatitude
+              AND ST_Y(t.location) BETWEEN :blLongitude AND :trLongitude
         ORDER BY distance ASC
         """, nativeQuery = true)
-    List<TreeWithDistanceProjection> getInRangeOrderByAscWithDistance(@Param("point") String point, @Param("range") int range);
+    List<TreeWithDistanceProjection> getWithinBoundsOrderByAscWithDistance(@Param("point") String point, @Param("trLongitude") double trLongitude, @Param("trLatitude") double trLatitude,
+                                                                           @Param("blLongitude") double blLongitude, @Param("blLatitude") double blLatitude);
 
-    default List<TreeWithDistanceProjection> findByLocationInRangeOrderByAscWithDistance(@Param("location") Point location,
-                                                                                         @Param("range") int range) {
-        final String wktPoint = "POINT(" + location.getY() + " " + location.getX() + ")";
-        return getInRangeOrderByAscWithDistance(wktPoint, range);
+    default List<TreeWithDistanceProjection> findByLocationWithinBoundsOrderByAscWithDistance(Point now, Point topRight, Point bottomLeft) {
+        final String wktPoint = "POINT(" + now.getY() + " " + now.getX() + ")";
+        return getWithinBoundsOrderByAscWithDistance(wktPoint, topRight.getX(), topRight.getY(), bottomLeft.getX(), bottomLeft.getY());
     }
 
     @Query(value = """
