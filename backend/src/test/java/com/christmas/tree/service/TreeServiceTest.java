@@ -3,6 +3,8 @@ package com.christmas.tree.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
+import com.christmas.common.dto.Coordinate;
+import com.christmas.tree.dto.TreeGetRequest;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -12,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.christmas.tree.dto.TreeCreateRequest;
-import com.christmas.tree.dto.TreeGetRequest;
 import com.christmas.tree.dto.TreeGetResponse;
 
 @Transactional
@@ -34,18 +35,19 @@ class TreeServiceTest {
         assertThatCode(() -> treeService.createTree(treeCreateRequest)).doesNotThrowAnyException();
     }
 
-    @DisplayName("특정 좌표의 2km 내에 있는 트리를 반환한다.")
+    @DisplayName("범위 내에 있는 트리를 반환한다.")
     @Test
-    void get_tree_by_range() {
+    void get_tree_within_bounds() {
         // given
-        createTree(127.12, 37.52);  // 2km 밖
-        createTree(127.09, 37.49);  // 2km 안
-        final Double longitude = 127.1;
-        final Double latitude = 37.5;
-        final TreeGetRequest request = new TreeGetRequest(longitude, latitude);
+        createTree(127.1053, 37.2435);  // 범위 안
+        createTree(127.1100, 37.3000);  // 범위 밖
+        final Coordinate now = new Coordinate(127.110800, 37.255000);
+        final Coordinate topRight = new Coordinate(127.13055655573426, 37.29507057088285);
+        final Coordinate bottomLeft = new Coordinate(127.08715150311343, 37.21113323112043);
+        final TreeGetRequest request = new TreeGetRequest(now, topRight, bottomLeft);
 
         // when
-        final List<TreeGetResponse> actual = treeService.getTreeByRange(request);
+        final List<TreeGetResponse> actual = treeService.getTreeWithinBounds(request);
 
         // then
         assertThat(actual).hasSize(1);
@@ -55,19 +57,20 @@ class TreeServiceTest {
     @Test
     void get_tree_order_by_asc() {
         // given
-        final List<Double> nearest = List.of(126.978900190292, 37.57068050838813);
-        final List<Double> secondNearest = List.of(126.97762075424428, 37.5717389421641);
-        final List<Double> thirdNearest = List.of(126.98022692200705, 37.572557060470906);
+        final List<Double> nearest = List.of(127.1053, 37.2435);
+        final List<Double> secondNearest = List.of(127.1002, 37.235);
+        final List<Double> thirdNearest = List.of(127.09249999999999, 37.223);
         final List<List<Double>> treesByOrder = List.of(nearest, secondNearest, thirdNearest);
         for (List<Double> trees : treesByOrder) {
             createTree(trees.get(0), trees.get(1));
         }
-        final Double nowX = 126.97790401142962;
-        final Double nowY = 37.57085151524508;
-        final TreeGetRequest request = new TreeGetRequest(nowX, nowY);
+        final Coordinate now = new Coordinate(127.110800, 37.255000);
+        final Coordinate topRight = new Coordinate(127.13055655573426, 37.29507057088285);
+        final Coordinate bottomLeft = new Coordinate(127.08715150311343, 37.21113323112043);
+        final TreeGetRequest request = new TreeGetRequest(now, topRight, bottomLeft);
 
         // when
-        final List<TreeGetResponse> actual = treeService.getTreeByRange(request);
+        final List<TreeGetResponse> actual = treeService.getTreeWithinBounds(request);
         final List<List<Double>> actualTrees = actual.stream()
                 .map(response -> List.of(response.longitude(), response.latitude()))
                 .toList();
