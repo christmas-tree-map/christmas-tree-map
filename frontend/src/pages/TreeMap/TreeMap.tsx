@@ -25,15 +25,19 @@ const TreeMap = () => {
 
   const { trees, isLoading } = useTreesQuery({
     ...centerPosition,
+    tr_latitude: bounds.tr.latitude,
+    tr_longitude: bounds.tr.longitude,
+    bl_latitude: bounds.bl.latitude,
+    bl_longitude: bounds.bl.longitude,
     enabled: !isClusterView,
   });
 
   const { treeClusters } = useTreeClustersQuery({
     zoom,
-    tr_latitude: bounds.ne.latitude,
-    tr_longitude: bounds.ne.longitude,
-    bl_latitude: bounds.sw.latitude,
-    bl_longitude: bounds.sw.longitude,
+    tr_latitude: bounds.tr.latitude,
+    tr_longitude: bounds.tr.longitude,
+    bl_latitude: bounds.bl.latitude,
+    bl_longitude: bounds.bl.longitude,
     enabled: isClusterView,
   });
 

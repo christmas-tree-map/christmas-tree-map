@@ -13,6 +13,10 @@ export const postTree = async ({ latitude, longitude, imageCode }: PostTreeReque
 interface GetTreesRequest {
   latitude: number;
   longitude: number;
+  tr_latitude: number;
+  tr_longitude: number;
+  bl_latitude: number;
+  bl_longitude: number;
 }
 
 interface GetTreesResponse extends GetTreesRequest {
@@ -21,8 +25,22 @@ interface GetTreesResponse extends GetTreesRequest {
   distance: number;
 }
 
-export const getTrees = async ({ latitude, longitude }: GetTreesRequest) => {
-  return await requestAPI.get<GetTreesResponse[]>('/tree', { latitude, longitude });
+export const getTrees = async ({
+  latitude,
+  longitude,
+  tr_latitude,
+  tr_longitude,
+  bl_latitude,
+  bl_longitude,
+}: GetTreesRequest) => {
+  return await requestAPI.get<GetTreesResponse[]>('/tree', {
+    latitude,
+    longitude,
+    tr_latitude,
+    tr_longitude,
+    bl_latitude,
+    bl_longitude,
+  });
 };
 
 interface GetTreeByClusterRequest {
