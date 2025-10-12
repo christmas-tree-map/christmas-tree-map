@@ -1,11 +1,11 @@
 import { MouseEventHandler } from 'react';
 
-interface ClusterMarkerProps {
+interface ClusterOverlayProps {
   count: number;
   onClick: MouseEventHandler<HTMLButtonElement>;
 }
 
-const ClusterMarker = ({ count, onClick }: ClusterMarkerProps) => {
+const ClusterOverlay = ({ count, onClick }: ClusterOverlayProps) => {
   return (
     <button
       onClick={onClick}
@@ -27,4 +27,4 @@ const ClusterMarker = ({ count, onClick }: ClusterMarkerProps) => {
   );
 };
 
-export default ClusterMarker;
+export default ClusterOverlay;

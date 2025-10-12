@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { Root, createRoot } from 'react-dom/client';
-import ClusterMarker from '@/components/Tree/ClusterMarker';
+import ClusterOverlay from '@/components/Tree/ClusterOverlay';
 import useTreeMap from '@/hooks/TreeMap/useTreeMap';
 
 interface Tree {
@@ -51,7 +51,7 @@ const useMapMarkers = ({
         const container = document.createElement('div');
         const root = createRoot(container);
         root.render(
-          <ClusterMarker
+          <ClusterOverlay
             count={cluster.count}
             onClick={() => onClusterClick({ latitude: cluster.latitude, longitude: cluster.longitude })}
           />,
