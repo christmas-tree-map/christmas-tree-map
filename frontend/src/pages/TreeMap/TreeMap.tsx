@@ -19,18 +19,7 @@ const TreeMap = () => {
   const location = useLocation();
 
   const { isModalOpen, openModal, closeModal } = useModal();
-  const {
-    map,
-    mapRef,
-    centerPosition,
-    updatePosition,
-    bounds,
-    zoom,
-    zoomIn,
-    addCustomOverlay,
-    clearMarkers,
-    addMarker,
-  } = useTreeMap();
+  const { map, mapRef, centerPosition, updatePosition, bounds, zoom, zoomIn } = useTreeMap();
 
   const isClusterView = zoom > CLUSTER_VIEW_THRESHOLD;
 
@@ -58,9 +47,6 @@ const TreeMap = () => {
     isClusterView,
     trees,
     treeClusters,
-    addCustomOverlay,
-    clearMarkers,
-    addMarker,
     onMarkerClick: handleMarkerClick,
     onClusterClick: zoomIn,
   });
