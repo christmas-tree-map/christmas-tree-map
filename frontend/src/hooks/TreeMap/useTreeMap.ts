@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
 import treeImage from '@/assets/TREE_01.png';
 
@@ -65,65 +65,100 @@ const useTreeMap = () => {
   const [map, setMap] = useState<typeof kakao.maps.Map | null>(null);
   const [zoom, setZoom] = useState<number>(DEFAULT_ZOOM_LEVEL);
   const [centerPosition, setCenterPosition] = useState<Coordinates>(locationStorage.get);
-  const [bounds, setBounds] = useState<Bounds>(() => calculateMapBounds(map));
-  const currentMarkers = useRef<(typeof kakao.maps.Marker | typeof kakao.maps.CustomOverlay)[]>([]);
+  const [bounds, setBounds] = useState<Bounds>(() => calculateMapBounds(null));
+  const markersRef = useRef<(typeof kakao.maps.Marker | typeof kakao.maps.CustomOverlay)[]>([]);
 
-  const addMarker = (
-    targetMap: typeof kakao.maps.Map,
-    latitude: number,
-    longitude: number,
-    imageCode: string,
-    onClick?: () => void,
-  ) => {
-    const position = new kakao.maps.LatLng(latitude, longitude);
-    const image = createMarkerImage(imageCode);
+  useEffect(() => {
+    if (!mapRef.current || !kakao?.maps) return;
 
-    const marker = new kakao.maps.Marker({
-      position,
-      image,
-      clickable: true,
+    const initialCoordinates = locationStorage.get();
+    const mapInstance = new kakao.maps.Map(mapRef.current, {
+      center: new kakao.maps.LatLng(initialCoordinates.latitude, initialCoordinates.longitude),
+      level: DEFAULT_ZOOM_LEVEL,
     });
 
-    if (onClick) {
-      kakao.maps.event.addListener(marker, 'click', onClick);
-    }
+    setMap(mapInstance);
+    setZoom(mapInstance.getLevel());
+    setBounds(calculateMapBounds(mapInstance));
 
-    marker.setMap(targetMap);
-    currentMarkers.current.push(marker);
-  };
+    const handleZoomChange = () => {
+      setZoom(mapInstance.getLevel());
+      setBounds(calculateMapBounds(mapInstance));
+    };
 
-  const addCustomOverlay = (
-    targetMap: typeof kakao.maps.Map,
-    latitude: number,
-    longitude: number,
-    content: HTMLElement,
-    onClick?: () => void,
-  ) => {
-    const position = new kakao.maps.LatLng(latitude, longitude);
+    kakao.maps.event.addListener(mapInstance, 'zoom_changed', handleZoomChange);
 
-    const overlay = new kakao.maps.CustomOverlay({
-      position,
-      content,
-      clickable: true,
-    });
+    return () => {
+      kakao.maps.event.removeListener(mapInstance, 'zoom_changed', handleZoomChange);
+    };
+  }, []);
 
-    if (onClick) {
-      kakao.maps.event.addListener(overlay, 'click', onClick);
-    }
+  const addMarker = useCallback(
+    (
+      targetMap: typeof kakao.maps.Map,
+      latitude: number,
+      longitude: number,
+      imageCode: string,
+      onClick?: () => void,
+    ) => {
+      if (!targetMap) return;
 
-    overlay.setMap(targetMap);
-    currentMarkers.current.push(overlay);
-  };
+      const position = new kakao.maps.LatLng(latitude, longitude);
+      const image = createMarkerImage(imageCode);
 
-  const clearMarkers = () => {
-    currentMarkers.current.forEach((marker) => marker.setMap(null));
-    currentMarkers.current = [];
-  };
+      const marker = new kakao.maps.Marker({
+        position,
+        image,
+        clickable: true,
+      });
+
+      if (onClick) {
+        kakao.maps.event.addListener(marker, 'click', onClick);
+      }
+
+      marker.setMap(targetMap);
+      markersRef.current.push(marker);
+    },
+    [],
+  );
+
+  const addCustomOverlay = useCallback(
+    (
+      targetMap: typeof kakao.maps.Map,
+      latitude: number,
+      longitude: number,
+      content: HTMLElement,
+      onClick?: () => void,
+    ) => {
+      if (!targetMap) return;
+
+      const position = new kakao.maps.LatLng(latitude, longitude);
+
+      const overlay = new kakao.maps.CustomOverlay({
+        position,
+        content,
+        clickable: true,
+      });
+
+      if (onClick) {
+        kakao.maps.event.addListener(overlay, 'click', onClick);
+      }
+
+      overlay.setMap(targetMap);
+      markersRef.current.push(overlay);
+    },
+    [],
+  );
+
+  const clearMarkers = useCallback(() => {
+    markersRef.current.forEach((marker) => marker.setMap(null));
+    markersRef.current = [];
+  }, []);
 
   const updateCenterPosition = () => {
-    const center = map?.getCenter();
-    if (!center) return;
+    if (!map) return;
 
+    const center = map.getCenter();
     const coordinates: Coordinates = {
       latitude: center.getLat(),
       longitude: center.getLng(),
@@ -135,8 +170,7 @@ const useTreeMap = () => {
 
   const updateBounds = () => {
     if (!map) return;
-    const newBounds = calculateMapBounds(map);
-    setBounds(newBounds);
+    setBounds(calculateMapBounds(map));
   };
 
   const updatePosition = () => {
@@ -157,28 +191,6 @@ const useTreeMap = () => {
     const currentLevel = map.getLevel();
     map.setLevel(currentLevel + 1);
   };
-
-  useEffect(() => {
-    const initialCoordinates = locationStorage.get();
-
-    const initializeMap = (coordinates: Coordinates) => {
-      if (!mapRef.current || !kakao?.maps) return;
-
-      const mapInstance = new kakao.maps.Map(mapRef.current, {
-        center: new kakao.maps.LatLng(coordinates.latitude, coordinates.longitude),
-        level: DEFAULT_ZOOM_LEVEL,
-      });
-
-      setMap(mapInstance);
-      setZoom(mapInstance.getLevel());
-
-      kakao.maps.event.addListener(mapInstance, 'zoom_changed', () => {
-        setZoom(mapInstance.getLevel());
-      });
-    };
-
-    initializeMap(initialCoordinates);
-  }, []);
 
   return {
     map,
