@@ -21,12 +21,31 @@ public interface TreeRepository extends JpaRepository<TreeEntity, Long> {
               AND ST_Y(t.location) BETWEEN :blLongitude AND :trLongitude
         ORDER BY distance ASC
         """, nativeQuery = true)
-    List<TreeWithDistanceProjection> getWithinBoundsOrderByAscWithDistance(@Param("point") String point, @Param("trLongitude") double trLongitude, @Param("trLatitude") double trLatitude,
-                                                                           @Param("blLongitude") double blLongitude, @Param("blLatitude") double blLatitude);
+    List<TreeWithDistanceProjection> getInBoundsOrderByAscWithDistance(@Param("point") String point, @Param("trLongitude") double trLongitude, @Param("trLatitude") double trLatitude,
+                                                                       @Param("blLongitude") double blLongitude, @Param("blLatitude") double blLatitude);
 
-    default List<TreeWithDistanceProjection> findByLocationWithinBoundsOrderByAscWithDistance(Point now, Point topRight, Point bottomLeft) {
+    default List<TreeWithDistanceProjection> findByLocationInBoundsOrderByAscWithDistance(Point now, Point topRight, Point bottomLeft) {
         final String wktPoint = "POINT(" + now.getY() + " " + now.getX() + ")";
-        return getWithinBoundsOrderByAscWithDistance(wktPoint, topRight.getX(), topRight.getY(), bottomLeft.getX(), bottomLeft.getY());
+        return getInBoundsOrderByAscWithDistance(wktPoint, topRight.getX(), topRight.getY(), bottomLeft.getX(), bottomLeft.getY());
+    }
+
+    @Query(value = """
+        SELECT 
+            t.id AS id,
+            ST_Distance_Sphere(t.location, ST_GeomFromText(:point, 4326)) AS distance,
+            ST_Y(t.location) AS longitude,
+            ST_X(t.location) AS latitude,
+            t.image_code AS imageCode
+        FROM tree t
+        WHERE ST_Distance_Sphere(t.location, ST_GeomFromText(:point, 4326)) <= :range
+        ORDER BY distance ASC
+        """, nativeQuery = true)
+    List<TreeWithDistanceProjection> getWithinRadiusOrderByAscWithDistance(@Param("point") String point, @Param("range") int range);
+
+    default List<TreeWithDistanceProjection> findByLocationWithinRadiusOrderByAscWithDistance(@Param("location") Point location,
+                                                                                              @Param("range") int range) {
+        final String wktPoint = "POINT(" + location.getY() + " " + location.getX() + ")";
+        return getWithinRadiusOrderByAscWithDistance(wktPoint, range);
     }
 
     @Query(value = """
@@ -34,6 +53,6 @@ public interface TreeRepository extends JpaRepository<TreeEntity, Long> {
             WHERE ST_X(location) BETWEEN :blLatitude AND :trLatitude
               AND ST_Y(location) BETWEEN :blLongitude AND :trLongitude;
             """, nativeQuery = true)
-    List<TreeEntity> findAllWithinBounds(@Param("trLongitude") double trLongitude, @Param("trLatitude") double trLatitude,
-                                         @Param("blLongitude") double blLongitude, @Param("blLatitude") double blLatitude);
+    List<TreeEntity> findAllInBounds(@Param("trLongitude") double trLongitude, @Param("trLatitude") double trLatitude,
+                                     @Param("blLongitude") double blLongitude, @Param("blLatitude") double blLatitude);
 }

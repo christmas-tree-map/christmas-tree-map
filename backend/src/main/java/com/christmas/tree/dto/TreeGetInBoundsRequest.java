@@ -4,5 +4,5 @@ import com.christmas.common.dto.Coordinate;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "트리 조회 요청")
-public record TreeGetRequest(Coordinate now, Coordinate topRight, Coordinate bottomLeft) {
+public record TreeGetInBoundsRequest(Coordinate now, Coordinate topRight, Coordinate bottomLeft) {
 }

@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 import com.christmas.common.dto.Coordinate;
-import com.christmas.tree.dto.TreeGetRequest;
+import com.christmas.tree.dto.TreeGetInBoundsRequest;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -37,17 +37,17 @@ class TreeServiceTest {
 
     @DisplayName("범위 내에 있는 트리를 반환한다.")
     @Test
-    void get_tree_within_bounds() {
+    void get_tree_in_bounds() {
         // given
         createTree(127.1053, 37.2435);  // 범위 안
         createTree(127.1100, 37.3000);  // 범위 밖
         final Coordinate now = new Coordinate(127.110800, 37.255000);
         final Coordinate topRight = new Coordinate(127.13055655573426, 37.29507057088285);
         final Coordinate bottomLeft = new Coordinate(127.08715150311343, 37.21113323112043);
-        final TreeGetRequest request = new TreeGetRequest(now, topRight, bottomLeft);
+        final TreeGetInBoundsRequest request = new TreeGetInBoundsRequest(now, topRight, bottomLeft);
 
         // when
-        final List<TreeGetResponse> actual = treeService.getTreeWithinBounds(request);
+        final List<TreeGetResponse> actual = treeService.getTreeInBounds(request);
 
         // then
         assertThat(actual).hasSize(1);
@@ -67,10 +67,10 @@ class TreeServiceTest {
         final Coordinate now = new Coordinate(127.110800, 37.255000);
         final Coordinate topRight = new Coordinate(127.13055655573426, 37.29507057088285);
         final Coordinate bottomLeft = new Coordinate(127.08715150311343, 37.21113323112043);
-        final TreeGetRequest request = new TreeGetRequest(now, topRight, bottomLeft);
+        final TreeGetInBoundsRequest request = new TreeGetInBoundsRequest(now, topRight, bottomLeft);
 
         // when
-        final List<TreeGetResponse> actual = treeService.getTreeWithinBounds(request);
+        final List<TreeGetResponse> actual = treeService.getTreeInBounds(request);
         final List<List<Double>> actualTrees = actual.stream()
                 .map(response -> List.of(response.longitude(), response.latitude()))
                 .toList();
