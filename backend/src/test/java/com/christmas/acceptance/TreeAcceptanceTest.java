@@ -63,7 +63,7 @@ class TreeAcceptanceTest extends AcceptanceFixture {
                         .when()
                         .log()
                         .all()
-                        .get("/api/tree")
+                        .get("/api/tree/in-bounds")
 
                         .then()
                         .log()
