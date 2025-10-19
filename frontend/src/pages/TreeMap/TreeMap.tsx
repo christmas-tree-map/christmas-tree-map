@@ -7,8 +7,8 @@ import useModal from '@/hooks/_common/useModal';
 import useMapMarkers from '@/hooks/TreeMap/useMapMarkers';
 import { useMapModal } from '@/hooks/TreeMap/useMapModal';
 import useTreeMap from '@/hooks/TreeMap/useTreeMap';
+import useInBoundsTreesQuery from '@/queries/Tree/useInBoundsTreesQuery';
 import useTreeClustersQuery from '@/queries/Tree/useTreeClustersQuery';
-import useTreesQuery from '@/queries/Tree/useTreesQuery';
 import { vars } from '@/styles/theme.css';
 import * as S from './TreeMap.css';
 
@@ -23,17 +23,21 @@ const TreeMap = () => {
 
   const isClusterView = zoom > CLUSTER_VIEW_THRESHOLD;
 
-  const { trees, isLoading } = useTreesQuery({
+  const { trees, isLoading } = useInBoundsTreesQuery({
     ...centerPosition,
+    tr_latitude: bounds.tr.latitude,
+    tr_longitude: bounds.tr.longitude,
+    bl_latitude: bounds.bl.latitude,
+    bl_longitude: bounds.bl.longitude,
     enabled: !isClusterView,
   });
 
   const { treeClusters } = useTreeClustersQuery({
     zoom,
-    tr_latitude: bounds.ne.latitude,
-    tr_longitude: bounds.ne.longitude,
-    bl_latitude: bounds.sw.latitude,
-    bl_longitude: bounds.sw.longitude,
+    tr_latitude: bounds.tr.latitude,
+    tr_longitude: bounds.tr.longitude,
+    bl_latitude: bounds.bl.latitude,
+    bl_longitude: bounds.bl.longitude,
     enabled: isClusterView,
   });
 

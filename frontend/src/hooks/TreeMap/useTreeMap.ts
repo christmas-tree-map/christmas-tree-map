@@ -11,8 +11,8 @@ interface Coordinates {
 }
 
 interface Bounds {
-  sw: Coordinates;
-  ne: Coordinates;
+  tr: Coordinates;
+  bl: Coordinates;
 }
 
 const locationStorage = {
@@ -30,21 +30,21 @@ const calculateMapBounds = (map: typeof kakao.maps.Map | null): Bounds => {
   const mapBounds = map?.getBounds();
   if (!mapBounds)
     return {
-      sw: { latitude: DEFAULT_LATITUDE - 0.1, longitude: DEFAULT_LONGITUDE - 0.1 },
-      ne: { latitude: DEFAULT_LATITUDE + 0.1, longitude: DEFAULT_LONGITUDE + 0.1 },
+      tr: { latitude: DEFAULT_LATITUDE + 0.1, longitude: DEFAULT_LONGITUDE + 0.1 },
+      bl: { latitude: DEFAULT_LATITUDE - 0.1, longitude: DEFAULT_LONGITUDE - 0.1 },
     };
 
-  const sw = mapBounds.getSouthWest();
-  const ne = mapBounds.getNorthEast();
+  const tr = mapBounds.getNorthEast();
+  const bl = mapBounds.getSouthWest();
 
   return {
-    sw: {
-      latitude: sw.getLat(),
-      longitude: sw.getLng(),
+    tr: {
+      latitude: tr.getLat(),
+      longitude: tr.getLng(),
     },
-    ne: {
-      latitude: ne.getLat(),
-      longitude: ne.getLng(),
+    bl: {
+      latitude: bl.getLat(),
+      longitude: bl.getLng(),
     },
   };
 };
