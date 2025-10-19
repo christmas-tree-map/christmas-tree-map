@@ -4,7 +4,11 @@ import mockClusters from '../data/clusters.json';
 import mockTrees from '../data/trees.json';
 
 export const handlers = [
-  http.get(`${API_URL}/tree`, async () => {
+  http.get(`${API_URL}/tree/in-bounds`, async () => {
+    return HttpResponse.json(mockTrees);
+  }),
+
+  http.get(`${API_URL}/tree/near`, async () => {
     return HttpResponse.json(mockTrees);
   }),
 
