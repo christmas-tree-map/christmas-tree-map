@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Location, NavigateFunction } from 'react-router-dom';
 import useFeedMutation from '@/queries/Feed/useFeedMutation';
-import useInBoundsTreesQuery from '@/queries/Tree/useInBoundsTreesQuery';
+import useNearTreesQuery from '@/queries/Tree/useNearTreesQuery';
 import useTreeMutation from '@/queries/Tree/useTreeMutation';
 import { validateContent, validatePassword } from '@/utils/validate';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
@@ -25,7 +25,7 @@ const useFeedSubmit = ({ imageFile, location, navigate }: UseFeedSubmitProps) =>
 
   const { addFeedMutation } = useFeedMutation();
   const { addTree } = useTreeMutation();
-  const { trees } = useInBoundsTreesQuery(center);
+  const { trees } = useNearTreesQuery(center);
 
   const handleContentChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const content = event.target.value;
