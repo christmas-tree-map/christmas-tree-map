@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import { getTrees } from '@/apis/tree';
+import { getInBoundsTrees } from '@/apis/tree';
 import { TREE_KEYS } from '@/queries/queryKeys';
 
-interface TreesParams {
+interface InBoundsTreesParams {
   latitude: number;
   longitude: number;
   tr_latitude: number;
@@ -12,7 +12,7 @@ interface TreesParams {
   enabled?: boolean;
 }
 
-const useTreesQuery = ({
+const useInBoundsTreesQuery = ({
   latitude,
   longitude,
   tr_latitude,
@@ -20,14 +20,14 @@ const useTreesQuery = ({
   bl_latitude,
   bl_longitude,
   enabled = true,
-}: TreesParams) => {
+}: InBoundsTreesParams) => {
   const { data, isSuccess, isLoading } = useQuery({
     queryKey: [TREE_KEYS.TREES, latitude, longitude],
-    queryFn: () => getTrees({ latitude, longitude, tr_latitude, tr_longitude, bl_latitude, bl_longitude }),
+    queryFn: () => getInBoundsTrees({ latitude, longitude, tr_latitude, tr_longitude, bl_latitude, bl_longitude }),
     enabled,
   });
 
   return { trees: data ?? [], isSuccess, isLoading };
 };
 
-export default useTreesQuery;
+export default useInBoundsTreesQuery;

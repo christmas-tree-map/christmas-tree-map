@@ -25,7 +25,7 @@ interface GetTreesResponse extends GetTreesRequest {
   distance: number;
 }
 
-export const getTrees = async ({
+export const getInBoundsTrees = async ({
   latitude,
   longitude,
   tr_latitude,
@@ -33,7 +33,7 @@ export const getTrees = async ({
   bl_latitude,
   bl_longitude,
 }: GetTreesRequest) => {
-  return await requestAPI.get<GetTreesResponse[]>('/tree', {
+  return await requestAPI.get<GetTreesResponse[]>('/tree/in-bounds', {
     latitude,
     longitude,
     tr_latitude,
