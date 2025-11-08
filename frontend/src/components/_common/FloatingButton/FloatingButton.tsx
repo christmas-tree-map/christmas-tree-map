@@ -1,3 +1,4 @@
+import React from 'react';
 import EditIcon from '@/assets/edit.svg';
 import * as S from './FloatingButton.css';
 
@@ -9,4 +10,4 @@ const FloatingButton = ({ onClick }: React.ButtonHTMLAttributes<HTMLButtonElemen
   );
 };
 
-export default FloatingButton;
+export default React.memo(FloatingButton);
