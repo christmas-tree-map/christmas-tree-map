@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import * as S from './DelayedButton.css';
 
 interface DelayedButtonProps {
@@ -8,16 +8,6 @@ interface DelayedButtonProps {
   isLoading?: boolean;
   onClick: () => void;
 }
-
-const LoadingDots = () => {
-  return (
-    <div className={S.loadingWrapper}>
-      <span className={S.dot} />
-      <span className={S.dot} />
-      <span className={S.dot} />
-    </div>
-  );
-};
 
 const DelayedButton = ({
   delay = 500,
@@ -34,13 +24,23 @@ const DelayedButton = ({
     return () => clearTimeout(timer);
   }, [delay]);
 
+  const LoadingDots = useMemo(() => {
+    return (
+      <div className={S.loadingWrapper}>
+        <span className={S.dot} />
+        <span className={S.dot} />
+        <span className={S.dot} />
+      </div>
+    );
+  }, []);
+
   if (!isVisible) return null;
 
   return (
     <button className={`${S.DelayedButtonStyle[position]} ${S.layerLevel[layerLevel]}`} onClick={onClick}>
-      {isLoading ? <LoadingDots /> : children}
+      {isLoading ? LoadingDots : children}
     </button>
   );
 };
 
-export default DelayedButton;
+export default React.memo(DelayedButton);
