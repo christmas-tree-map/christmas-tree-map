@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from '@/constants/map';
 
 const { kakao } = window;
@@ -81,7 +81,7 @@ const useTreeMap = () => {
     };
   }, []);
 
-  const updateCenterPosition = () => {
+  const updateCenterPosition = useCallback(() => {
     if (!map) return;
 
     const center = map.getCenter();
@@ -92,31 +92,31 @@ const useTreeMap = () => {
 
     locationStorage.set(coordinates);
     setCenterPosition(coordinates);
-  };
+  }, [map]);
 
-  const updateBounds = () => {
+  const updateBounds = useCallback(() => {
     if (!map) return;
     setBounds(calculateMapBounds(map));
-  };
+  }, [map]);
 
-  const updatePosition = () => {
+  const updatePosition = useCallback(() => {
     updateBounds();
     updateCenterPosition();
-  };
+  }, [updateBounds, updateCenterPosition]);
 
-  const zoomIn = () => {
+  const zoomIn = useCallback(() => {
     if (!map) return;
 
     const currentLevel = map.getLevel();
     map.setLevel(currentLevel - 1);
-  };
+  }, [map]);
 
-  const zoomOut = () => {
+  const zoomOut = useCallback(() => {
     if (!map) return;
 
     const currentLevel = map.getLevel();
     map.setLevel(currentLevel + 1);
-  };
+  }, [map]);
 
   return {
     map,
