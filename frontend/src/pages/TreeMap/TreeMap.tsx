@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { IoRefresh } from '@react-icons/all-files/io5/IoRefresh';
 import DelayedButton from '@/components/_common/DelayedButton/DelayedButton';
@@ -41,10 +42,13 @@ const TreeMap = () => {
     enabled: isClusterView,
   });
 
-  const handleMarkerClick = (treeId: number) => {
-    openModal();
-    navigate(`/map/${treeId}?modal=feeds`);
-  };
+  const handleMarkerClick = useCallback(
+    (treeId: number) => {
+      openModal();
+      navigate(`/map/${treeId}?modal=feeds`);
+    },
+    [openModal, navigate],
+  );
 
   useMapMarkers({
     map,
@@ -62,19 +66,28 @@ const TreeMap = () => {
     navigate,
   });
 
-  const handleSubmitClick = () => {
+  const handleSubmitClick = useCallback(() => {
     navigate('/map?modal=submit', { state: { center: centerPosition } });
-  };
+  }, [centerPosition, navigate]);
 
-  const shouldShowFloatingButton = modalType !== 'submit';
+  const shouldShowFloatingButton = useMemo(() => modalType !== 'submit', [modalType]);
+
+  const delayedButtonChildren = useMemo(
+    () => (
+      <>
+        <IoRefresh size="18px" color={vars.colors.primary[700]} />
+        <p>트리 검색</p>
+      </>
+    ),
+    [],
+  );
 
   return (
     <>
       <div ref={mapRef} className={S.Layout} />
 
       <DelayedButton delay={1000} onClick={updatePosition} isLoading={isLoading}>
-        <IoRefresh size="18px" color={vars.colors.primary[700]} />
-        <p>트리 검색</p>
+        {delayedButtonChildren}
       </DelayedButton>
 
       {shouldShowFloatingButton && <FloatingButton onClick={handleSubmitClick} />}
